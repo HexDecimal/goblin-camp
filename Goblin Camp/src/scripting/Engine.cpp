@@ -58,11 +58,19 @@ namespace {
 	}
 }
 
+#if PY_MAJOR_VERSION >= 3
+PyMODINIT_FUNC PyInit_zlib();
+//PyMODINIT_FUNC PyInit_cStringIO();
+PyMODINIT_FUNC PyInit__functools();
+PyMODINIT_FUNC PyInit__weakref();
+PyMODINIT_FUNC PyInit_time();
+#else
 PyMODINIT_FUNC initzlib();
 PyMODINIT_FUNC initcStringIO();
 PyMODINIT_FUNC init_functools();
 PyMODINIT_FUNC init_weakref();
 PyMODINIT_FUNC inittime();
+#endif
 
 namespace Script {
 	const short version = 0;
@@ -71,15 +79,34 @@ namespace Script {
 		LOG("Initialising the engine.");
 		
 		Py_NoSiteFlag = 1;
+#if PY_MAJOR_VERSION >= 3
+		PyImport_AppendInittab((char*) "_weakref",  PyInit__weakref);
+		PyImport_AppendInittab((char*) "time",      PyInit_time);
+		PyImport_AppendInittab((char*) "_funtools", PyInit__functools);
+//		PyImport_AppendInittab((char*) "cStringIO", PyInit_cStringIO);
+		PyImport_AppendInittab((char*) "zlib",      PyInit_zlib);
+#else
+		PyImport_AppendInittab((char*) "_weakref",  init_weakref);
+		PyImport_AppendInittab((char*) "time",      inittime);
+		PyImport_AppendInittab((char*) "_funtools", init_functools);
+		PyImport_AppendInittab((char*) "cStringIO", initcStringIO);
+		PyImport_AppendInittab((char*) "zlib",      initzlib);
+#endif
+		ExposeAPI();
+
 		Py_InitializeEx(0);
+#if PY_MAJOR_VERSION >= 3
+		wchar_t * w_name;
+		size_t w_name_len;
+		w_name_len = mbtowc(NULL, args[0].c_str(), args[0].length());
+		w_name = (wchar_t *)malloc((w_name_len + 1) * sizeof(wchar_t));
+		if (! w_name) throw("Out of memory"); //FIXME do proper out of memory case
+		mbtowc(w_name, args[0].c_str(), args[0].length());
+		Py_SetProgramName(w_name);
+		free(w_name);
+#else
 		Py_SetProgramName(const_cast<char*>(args[0].c_str()));
-		
-		init_weakref();
-		inittime();
-		init_functools();
-		initcStringIO();
-		initzlib();
-		
+#endif
 		LOG("Python " << Py_GetVersion());
 		
 		// Don't use default search path.
@@ -93,10 +120,34 @@ namespace Script {
 			
 			std::string path = libDir.string();
 			path += pathsep;
+
+#if PY_MAJOR_VERSION >= 3
+			std::mbstate_t state = std::mbstate_t();
+			wchar_t * w_py_path = Py_GetPath();
+			char *py_path;
+			size_t py_path_len;
+			py_path_len = wcsrtombs(NULL, (const wchar_t**) &w_py_path, 0, &state);
+			py_path = (char *)malloc((py_path_len + 1) * sizeof(char));
+			wcsrtombs(py_path, (const wchar_t**) &w_py_path, py_path_len + 1, &state);
+			path += py_path; // When need common Python modules, use ones installed in the system
+			free(py_path);
+#else
 			path += Py_GetPath(); // When need common Python modules, use ones installed in the system
+#endif
 			
 			LOG("Python Library Path = " << path);
+#if PY_MAJOR_VERSION >= 3
+			wchar_t * w_path;
+			size_t w_path_len;
+			w_path_len = mbstowcs(NULL, path.c_str(), 0);
+			w_path = (wchar_t *)malloc((w_path_len + 1) * sizeof(wchar_t));
+			if (! w_path) throw("Out of memory"); //FIXME do proper out of memory case
+			mbstowcs(w_path, path.c_str(), w_path_len + 1);
+			PySys_SetPath(w_path);
+			free(w_path);
+#else
 			PySys_SetPath(const_cast<char*>(path.c_str()));
+#endif
 		}
 		
 		try {
@@ -107,9 +158,6 @@ namespace Script {
 			
 			Globals::printExcFunc    = modTB.attr("print_exception");
 			Globals::loadPackageFunc = modImp.attr("load_package");
-			
-			LOG("Exposing the API.");
-			ExposeAPI();
 			
 			LOG("Creating internal namespaces.");
 			PyImport_AddModule("__gcmods__");

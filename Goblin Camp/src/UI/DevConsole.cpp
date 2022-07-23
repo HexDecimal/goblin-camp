@@ -59,7 +59,7 @@ struct DevConsole {
 		cf.cf_flags = (CO_FUTURE_DIVISION | CO_FUTURE_ABSOLUTE_IMPORT | CO_FUTURE_PRINT_FUNCTION);
 		
 		PycString_IMPORT;
-		newStdIn  = PycStringIO->NewInput(PyString_FromString(""));
+		newStdIn  = PycStringIO->NewInput(PyUnicode_FromString(""));
 		
 		/* const_cast are workarounds against the fact that PySys_{Get,Set}Object expects
 		   a char * instead of const char *
@@ -145,7 +145,11 @@ struct DevConsole {
 			}
 			
 			py::object ns = py::import("__gcdevconsole__").attr("__dict__");
+#if PY_MAJOR_VERSION >= 3
+			PyObject *ret = PyEval_EvalCode((PyObject*)co, ns.ptr(), ns.ptr());
+#else
 			PyObject *ret = PyEval_EvalCode(co, ns.ptr(), ns.ptr());
+#endif
 			
 			if (ret == NULL) {
 				Py_DECREF(co);
