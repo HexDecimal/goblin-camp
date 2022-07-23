@@ -15,8 +15,6 @@ SET(GOBLIN_CAMP_BINDIR ${CMAKE_INSTALL_PREFIX}/games CACHE PATH "Path to Goblin 
 SET(GOBLIN_CAMP_DATA_BASE_DIR "${CMAKE_INSTALL_PREFIX}/share" CACHE PATH "Base Data Dir Path")
 SET(GOBLIN_CAMP_SHAREDIR "${GOBLIN_CAMP_DATA_BASE_DIR}/games/goblin-camp" CACHE PATH "Path to Goblin Camp shared files")
 
-ADD_SUBDIRECTORY("Goblin Camp")
-
 find_package(Boost REQUIRED COMPONENTS thread system filesystem serialization iostreams)
 
 if(${Boost_VERSION} GREATER 106699) # boost >= 1.67
@@ -37,6 +35,8 @@ else()
         endif()
     endif()
 endif()
+
+ADD_SUBDIRECTORY("Goblin Camp")
 
 find_package(SDL REQUIRED)
 find_package(SDL_image REQUIRED)
