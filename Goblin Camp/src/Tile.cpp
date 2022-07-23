@@ -22,6 +22,12 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include <iostream>
 #endif
 
+#include <boost/version.hpp>
+#if BOOST_VERSION/100 == 1074
+/* https://stackoverflow.com/questions/65179639/monero-bigsur-update-no-member-named-library-version-type-in-namespace-boos*/
+#include <boost/serialization/library_version_type.hpp>
+#endif
+
 #include <boost/algorithm/string.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/set.hpp>
