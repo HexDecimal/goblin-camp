@@ -17,7 +17,7 @@ SET(GOBLIN_CAMP_SHAREDIR "${GOBLIN_CAMP_DATA_BASE_DIR}/games/goblin-camp" CACHE 
 
 find_package(Boost REQUIRED COMPONENTS thread system filesystem serialization iostreams)
 
-find_package(Boost COMPONENTS python REQUITRED)
+find_package(Boost COMPONENTS python REQUIRED)
 find_package(Boost COMPONENTS python3)
 
 IF(${Boost_PYTHON3_FOUND})
@@ -230,11 +230,20 @@ target_link_libraries("goblin-camp"
   ${Boost_SYSTEM_LIBRARY}
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_SERIALIZATION_LIBRARY}
-  ${Boost_PYTHON_LIBRARY}
   ${Boost_IOSTREAMS_LIBRARY}
   ${ZLIB_LIBRARIES}
   ${OPENGL_LIBRARIES}
   ${PNG_LIBRARY}
 )
+
+IF(${Boost_PYTHON3_FOUND})
+  target_link_libraries("goblin-camp"
+    ${Boost_PYTHON3_LIBRARY}
+  )
+ELSE()
+  target_link_libraries("goblin-camp"
+    ${Boost_PYTHON27_LIBRARY}
+  )
+ENDIF()
 
 INSTALL(TARGETS "goblin-camp" RUNTIME DESTINATION ${GOBLIN_CAMP_BINDIR})
