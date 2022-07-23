@@ -17,30 +17,35 @@ SET(GOBLIN_CAMP_SHAREDIR "${GOBLIN_CAMP_DATA_BASE_DIR}/games/goblin-camp" CACHE 
 
 find_package(Boost REQUIRED COMPONENTS thread system filesystem serialization iostreams)
 
-if(${Boost_VERSION} GREATER 106699) # boost >= 1.67
-    find_package(Boost COMPONENTS python27 REQUIRED)
-    set(Boost_PYTHON_LIBRARY ${Boost_PYTHON27_LIBRARY})
-else()
-    # boost python suffixes are determined by distributives
-    # try different alternatives
-    find_package(Boost OPTIONAL_COMPONENTS python27)
-    if(Boost_PYTHON27_FOUND)
-        set(Boost_PYTHON_LIBRARY ${Boost_PYTHON27_LIBRARY})
-    else()
-        find_package(Boost OPTIONAL_COMPONENTS python-py27)
-        if(Boost_PYTHON-PY27_FOUND)
-            set(Boost_PYTHON_LIBRARY ${Boost_PYTHON-PY27_LIBRARY})
-        else()
-            find_package(Boost COMPONENTS python REQUIRED)
-        endif()
-    endif()
-endif()
+find_package(Boost COMPONENTS python REQUITRED)
+find_package(Boost COMPONENTS python3)
 
-ADD_SUBDIRECTORY("Goblin Camp")
+IF(${Boost_PYTHON3_FOUND})
+  find_package(PythonLibs 3)
+ELSE()
+  if(${Boost_VERSION} GREATER 106699) # boost >= 1.67
+      find_package(Boost COMPONENTS python27 REQUIRED)
+      set(Boost_PYTHON_LIBRARY ${Boost_PYTHON27_LIBRARY})
+  else()
+      # boost python suffixes are determined by distributives
+      # try different alternatives
+      find_package(Boost OPTIONAL_COMPONENTS python27)
+      if(Boost_PYTHON27_FOUND)
+          set(Boost_PYTHON_LIBRARY ${Boost_PYTHON27_LIBRARY})
+      else()
+          find_package(Boost OPTIONAL_COMPONENTS python-py27)
+          if(Boost_PYTHON-PY27_FOUND)
+              set(Boost_PYTHON_LIBRARY ${Boost_PYTHON-PY27_LIBRARY})
+          else()
+              find_package(Boost COMPONENTS python REQUIRED)
+          endif()
+      endif()
+  endif()
+  find_package(PythonLibs 2.7)
+ENDIF()
 
 find_package(SDL REQUIRED)
 find_package(SDL_image REQUIRED)
-find_package(PythonLibs 2.7)
 find_package(ZLIB)
 find_package(OpenGL REQUIRED)
 find_package(PNG REQUIRED)
@@ -49,7 +54,7 @@ include_directories(${SDL_INCLUDE_DIR})
 include_directories(${PYTHON_INCLUDE_DIRS})
 include_directories(${PNG_INCLUDE_DIR})
 
-
+ADD_SUBDIRECTORY("Goblin Camp")
 
 SET (data_SRC
 "Goblin Camp/src/data/Config.cpp"
@@ -215,6 +220,7 @@ SET (platform_SRC
 add_executable("goblin-camp" "Goblin Camp/src/platform/unix/main.cpp" "Goblin Camp/src/GCamp.cpp" ${main_SRC} ${data_SRC} ${scripting_SRC} ${libtcod_SRC} ${UI_SRC} ${tileRenderer_SRC} ${platform_SRC})
 include_directories("goblin-camp" "Goblin Camp/include")
 include_directories("goblin-camp" vendor/libtcod/include)
+include_directories("goblin-camp" "vendor/python-modules")
 
 target_link_libraries("goblin-camp"
   ${SDL_LIBRARY}
