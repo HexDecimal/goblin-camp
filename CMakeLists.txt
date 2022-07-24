@@ -44,6 +44,10 @@ ELSE()
   find_package(PythonLibs 2.7)
 ENDIF()
 
+
+if (POLICY CMP0072)
+  set(OpenGL_GL_PREFERENCE GLVND)
+endif()
 find_package(SDL REQUIRED)
 find_package(SDL_image REQUIRED)
 find_package(ZLIB)
