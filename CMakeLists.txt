@@ -241,9 +241,19 @@ IF(${Boost_PYTHON3_FOUND})
     ${Boost_PYTHON3_LIBRARY}
   )
 ELSE()
-  target_link_libraries("goblin-camp"
-    ${Boost_PYTHON27_LIBRARY}
-  )
+  IF(${Boost_PYTHON27_FOUND})
+    target_link_libraries("goblin-camp"
+      ${Boost_PYTHON27_LIBRARY}
+    )
+  ELSE()
+    # older versions of boost does not know Boost_PYTHON[NN]_FOUND and Boost_PYTHON[NN]_LIBRARY so just link to ${Boost_PYTHON_LIBRARY} it is the only one
+    # This branch can be removed later
+    IF(${Boost_PYTHON_FOUND})
+      target_link_libraries("goblin-camp"
+        ${Boost_PYTHON_LIBRARY}
+      )
+    ENDIF()
+  ENDIF()
 ENDIF()
 
 INSTALL(TARGETS "goblin-camp" RUNTIME DESTINATION ${GOBLIN_CAMP_BINDIR})
