@@ -98,10 +98,10 @@ namespace Script {
 #if PY_MAJOR_VERSION >= 3
 		wchar_t * w_name;
 		size_t w_name_len;
-		w_name_len = mbtowc(NULL, args[0].c_str(), args[0].length());
+		w_name_len = mbstowcs(NULL, args[0].c_str(), 0);
 		w_name = (wchar_t *)malloc((w_name_len + 1) * sizeof(wchar_t));
 		if (! w_name) throw("Out of memory"); //FIXME do proper out of memory case
-		mbtowc(w_name, args[0].c_str(), args[0].length());
+		mbstowcs(w_name, args[0].c_str(), w_name_len + 1);
 		Py_SetProgramName(w_name);
 		free(w_name);
 #else
