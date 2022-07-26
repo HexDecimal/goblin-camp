@@ -13,6 +13,9 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License 
 along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
+
+#if 0
+
 #include "stdafx.hpp"
 
 #include "tileRenderer/ogl/OGLTilesetRenderer.hpp"
@@ -832,4 +835,4 @@ bool OGLTilesetRenderer::InitialiseConsoleTextures() {
 	}
 	return true;
 }
-
+#endif

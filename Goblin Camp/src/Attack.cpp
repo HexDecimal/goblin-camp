@@ -33,7 +33,7 @@ Attack::Attack() : damageType(DAMAGE_BLUNT),
 {
 	damageAmount.addsub = 1;
 	damageAmount.multiplier = 1;
-	damageAmount.nb_dices = 1;
+	damageAmount.nb_rolls = 1;
 	damageAmount.nb_faces = 1;
 }
 
@@ -119,7 +119,7 @@ void Attack::save(OutputArchive& ar, const unsigned int version) const {
 	ar & damageType;
 	ar & damageAmount.addsub;
 	ar & damageAmount.multiplier;
-	ar & damageAmount.nb_dices;
+	ar & damageAmount.nb_rolls;
 	ar & damageAmount.nb_faces;
 	ar & cooldown;
 	ar & cooldownMax;
@@ -132,7 +132,7 @@ void Attack::load(InputArchive& ar, const unsigned int version) {
 	ar & damageType;
 	ar & damageAmount.addsub;
 	ar & damageAmount.multiplier;
-	ar & damageAmount.nb_dices;
+	ar & damageAmount.nb_rolls;
 	ar & damageAmount.nb_faces;
 	ar & cooldown;
 	ar & cooldownMax;

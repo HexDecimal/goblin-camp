@@ -215,7 +215,7 @@ void SpawningPool::Expand(bool message) {
 					Attack attack;
 					attack.Type(DAMAGE_MAGIC);
 					TCOD_dice_t damage;
-					damage.nb_dices = 1;
+					damage.nb_rolls = 1;
 					damage.nb_faces = 1;
 					damage.multiplier = 1;
 					damage.addsub = 100000;

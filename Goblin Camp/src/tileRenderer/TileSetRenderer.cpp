@@ -487,9 +487,9 @@ boost::shared_ptr<TilesetRenderer> CreateOGLTilesetRenderer(int width, int heigh
 boost::shared_ptr<TilesetRenderer> CreateSDLTilesetRenderer(int width, int height, TCODConsole * console, std::string tilesetName);
 
 boost::shared_ptr<TilesetRenderer> CreateTilesetRenderer(int width, int height, TCODConsole * console, std::string tilesetName) {
-	if (TCODSystem::getRenderer() == TCOD_RENDERER_SDL) {
+//	if (TCODSystem::getRenderer() == TCOD_RENDERER_SDL) {
 		return CreateSDLTilesetRenderer(width, height, console, tilesetName);
-	} else {
-		return CreateOGLTilesetRenderer(width, height, console, tilesetName);
-	}
+//	} else {
+//		return CreateOGLTilesetRenderer(width, height, console, tilesetName);
+//	}
 }

@@ -24,6 +24,10 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #ifndef STDAFX_INCLUDED
 #define STDAFX_INCLUDED
 
+
+typedef unsigned int uint32;
+typedef unsigned char uint8;
+
 // precompiled header
 #if defined(BOOST_BUILD_PCH_ENABLED) && !defined(GC_SKIP_PCH)
 

@@ -38,7 +38,7 @@ SDLTilesetRenderer::SDLTilesetRenderer(int screenWidth, int screenHeight, TCODCo
 : TilesetRenderer(screenWidth, screenHeight, mapConsole),
   mapSurface()
 {
-	TCODSystem::registerSDLRenderer(this, translucentUI);
+	TCODSystem::registerSDLRenderer(this/*, translucentUI*/);
 	Uint32 rmask, gmask, bmask, amask;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	rmask = 0xff000000;
@@ -105,7 +105,7 @@ void SDLTilesetRenderer::DrawNullTile(int screenX, int screenY) {
 
 void SDLTilesetRenderer::SetTranslucentUI(bool translucent) {
 	if (translucent != translucentUI) {
-		TCODSystem::registerSDLRenderer(this, translucent);
+		TCODSystem::registerSDLRenderer(this/*, translucent*/);
 	}
 	translucentUI = translucent;
 }
@@ -127,9 +127,9 @@ namespace {
 	}
 }
 
-void SDLTilesetRenderer::render(void *surf, void*sdl_screen) {
+void SDLTilesetRenderer::render(void *surf/*, void*sdl_screen*/) {
 	SDL_Surface *tcod = (SDL_Surface *)surf;
-	SDL_Surface *screen = (SDL_Surface *)sdl_screen;
+//	SDL_Surface *screen = (SDL_Surface *)sdl_screen;
 
 	int screenWidth = GetScreenWidth();
 	int screenHeight = GetScreenHeight();
@@ -162,5 +162,6 @@ void SDLTilesetRenderer::render(void *surf, void*sdl_screen) {
 		SDL_SetColorKey(tcod,SDL_SRCCOLORKEY, SDL_MapRGBA(tcod->format, keyColor.r, keyColor.g, keyColor.b, 255));
 	}
 	SDL_LowerBlit(tcod, &srcRect, mapSurface.get(), &dstRect);
-	SDL_LowerBlit(mapSurface.get(), &srcRect, screen, &dstRect);
+// FIXME: Why we ever needed this before tcod 1.5.1
+//	SDL_LowerBlit(mapSurface.get(), &srcRect, screen, &dstRect);
 }

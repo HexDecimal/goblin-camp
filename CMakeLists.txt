@@ -3,7 +3,10 @@ cmake_minimum_required(VERSION 2.8.9) # Do not raise it without a reason. Bump o
 # set the project name
 project(GoblinCamp C CXX)
 
-SET(CMAKE_CXX_FLAGS "-std=c++11 -DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS")  # FIXME move to add_compile_options() later
+SET(CMAKE_CXX_FLAGS "-std=c++17 -DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS")  # FIXME move to add_compile_options() later
+
+# Add the path for the script to find libtcod
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 #### Build wiht Address Sanitizer. Uncomment it manually
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fsanitize=address -g -O0")
@@ -49,19 +52,25 @@ ELSE()
 ENDIF()
 
 
-if (POLICY CMP0072)
-  set(OpenGL_GL_PREFERENCE GLVND)
-endif()
+#if (POLICY CMP0072)
+  set(OpenGL_GL_PREFERENCE LEGACY)
+#endif()
 find_package(SDL REQUIRED)
 find_package(SDL_image REQUIRED)
 find_package(ZLIB)
 find_package(OpenGL REQUIRED)
 find_package(PNG REQUIRED)
+find_package(libtcod REQUIRED)
+
 
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${PYTHON_INCLUDE_DIRS})
 include_directories(${PNG_INCLUDE_DIR})
+include_directories(${libtcod_INCLUDE_DIR})
+include_directories(${libtcod_INCLUDE_DIR}/libtcod)
 
+
+MESSAGE("+++++++++++++++ ${libtcod_INCLUDE_DIR}")
 ADD_SUBDIRECTORY("Goblin Camp")
 
 SET (data_SRC
@@ -126,56 +135,6 @@ SET (scripting_SRC
 "Goblin Camp/src/scripting/_gcampapi/PyItem.cpp"
 )
 
-SET (libtcod_SRC
-vendor/libtcod/src/bresenham_c.c
-vendor/libtcod/src/bresenham.cpp
-vendor/libtcod/src/bsp_c.c
-vendor/libtcod/src/bsp.cpp
-vendor/libtcod/src/color_c.c
-vendor/libtcod/src/color.cpp
-vendor/libtcod/src/console_c.c
-vendor/libtcod/src/console.cpp
-vendor/libtcod/src/fov_c.c
-vendor/libtcod/src/fov_circular_raycasting.c
-vendor/libtcod/src/fov.cpp
-vendor/libtcod/src/fov_diamond_raycasting.c
-vendor/libtcod/src/fov_digital.c
-vendor/libtcod/src/fov_permissive2.c
-vendor/libtcod/src/fov_permissive.c
-vendor/libtcod/src/fov_recursive_shadowcasting.c
-vendor/libtcod/src/fov_restrictive.c
-vendor/libtcod/src/heightmap_c.c
-vendor/libtcod/src/heightmap.cpp
-vendor/libtcod/src/image_c.c
-vendor/libtcod/src/image.cpp
-vendor/libtcod/src/lex_c.c
-vendor/libtcod/src/lex.cpp
-vendor/libtcod/src/list_c.c
-vendor/libtcod/src/mersenne_c.c
-vendor/libtcod/src/mersenne.cpp
-vendor/libtcod/src/mouse.cpp
-vendor/libtcod/src/namegen_c.c
-vendor/libtcod/src/namegen.cpp
-vendor/libtcod/src/noise_c.c
-vendor/libtcod/src/noise.cpp
-vendor/libtcod/src/parser_c.c
-vendor/libtcod/src/parser.cpp
-vendor/libtcod/src/path_c.c
-vendor/libtcod/src/path.cpp
-vendor/libtcod/src/sys_c.c
-vendor/libtcod/src/sys.cpp
-vendor/libtcod/src/sys_opengl_c.c
-vendor/libtcod/src/sys_sdl_c.c
-vendor/libtcod/src/sys_sdl_img_bmp.c
-vendor/libtcod/src/sys_sdl_img_png.c
-vendor/libtcod/src/tree_c.c
-vendor/libtcod/src/txtfield_c.c
-vendor/libtcod/src/txtfield.cpp
-vendor/libtcod/src/wrappers.c
-vendor/libtcod/src/zip_c.c
-vendor/libtcod/src/zip.cpp
-)
-
 SET (UI_SRC
 "Goblin Camp/src/UI/AnnounceDialog.cpp"
 "Goblin Camp/src/UI/ConstructionDialog.cpp"
@@ -227,7 +186,7 @@ SET (platform_SRC
 
 add_executable("goblin-camp" "Goblin Camp/src/platform/unix/main.cpp" "Goblin Camp/src/GCamp.cpp" ${main_SRC} ${data_SRC} ${scripting_SRC} ${libtcod_SRC} ${UI_SRC} ${tileRenderer_SRC} ${platform_SRC})
 include_directories("goblin-camp" "Goblin Camp/include")
-include_directories("goblin-camp" vendor/libtcod/include)
+#include_directories("goblin-camp" vendor/libtcod/include)
 include_directories("goblin-camp" "vendor/python-modules")
 
 target_link_libraries("goblin-camp"
@@ -242,6 +201,7 @@ target_link_libraries("goblin-camp"
   ${ZLIB_LIBRARIES}
   ${OPENGL_LIBRARIES}
   ${PNG_LIBRARY}
+  ${libtcod_LIBRARIES}
 )
 
 IF(${Boost_PYTHON3_FOUND})

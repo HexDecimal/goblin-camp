@@ -589,9 +589,10 @@ void Game::Init(bool firstTime) {
 
 	//Enabling TCOD_RENDERER_GLSL can cause GCamp to crash on exit, apparently it's because of an ATI driver issue.
 	TCOD_renderer_t renderer_type = static_cast<TCOD_renderer_t>(Config::GetCVar<int>("renderer"));
-	if (firstTime) TCODConsole::initRoot(screenWidth, screenHeight, "Goblin Camp", fullscreen, renderer_type);
+	if (firstTime) TCODConsole::initRoot(screenWidth, screenHeight, "Goblin Camp", fullscreen, /* renderer_type*/ TCOD_RENDERER_SDL);
 	TCODMouse::showCursor(true);
-	TCODConsole::setKeyboardRepeat(500, 10);
+//	TCODConsole::setKeyboardRepeat(500, 10); // FIXME! Does not exit in newer
+//	tcods
 
 	buffer = new TCODConsole(screenWidth, screenHeight);
 	ResetRenderer();
@@ -2246,7 +2247,7 @@ void Game::Damage(Coordinate pos) {
 	Attack attack;
 	attack.Type(DAMAGE_MAGIC);
 	TCOD_dice_t dice;
-	dice.nb_dices = 10;
+	dice.nb_rolls = 10;
 	dice.nb_faces = 10;
 	dice.addsub = 1000;
 	attack.AddDamage(dice);
