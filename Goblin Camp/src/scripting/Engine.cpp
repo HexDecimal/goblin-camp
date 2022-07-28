@@ -192,6 +192,12 @@ namespace Script {
 		LOG("Shutting down engine.");
 		
 		ReleaseListeners();
+
+		// Unset all global boost::python::objects to prevent crash after
+		// finalize
+		Globals::printExcFunc    = boost::python::object();
+		Globals::loadPackageFunc = boost::python::object();
+
 		Py_Finalize();
 	}
 	
