@@ -83,7 +83,7 @@ namespace Random {
 		\param[in] dice TCOD_dice_t to convert.
 	*/
 	Dice::Dice(const TCOD_dice_t& dice) :
-		dices(std::max(1U, (unsigned)dice.nb_dices)), faces(std::max(1U, (unsigned)dice.nb_faces)),
+		dices(std::max(1U, (unsigned)dice.nb_rolls)), faces(std::max(1U, (unsigned)dice.nb_faces)),
 		multiplier(dice.multiplier), offset(dice.addsub)
 	{
 	}

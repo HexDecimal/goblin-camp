@@ -159,7 +159,7 @@ void FireNode::Update() {
 							TCOD_dice_t dice;
 							dice.addsub = 1;
 							dice.multiplier = 1;
-							dice.nb_dices = 1;
+							dice.nb_rolls = 1;
 							dice.nb_faces = 1;
 							fire.Amount(dice);
 							fire.Type(DAMAGE_FIRE);

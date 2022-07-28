@@ -483,7 +483,7 @@ void NPC::UpdateStatusEffects() {
 			TCOD_dice_t dice;
 			dice.addsub = (float)statusEffectI->damage.second;
 			dice.multiplier = 1;
-			dice.nb_dices = 1;
+			dice.nb_rolls = 1;
 			dice.nb_faces = std::max(1, (int)dice.addsub / 5);
 			Attack attack;
 			attack.Amount(dice);
@@ -2184,7 +2184,7 @@ class NPCListener : public ITCODParserListener {
 		if (boost::iequals(name,"name")) { NPC::Presets[npcIndex].name = value.s; }
 		else if (boost::iequals(name,"plural")) { NPC::Presets[npcIndex].plural = value.s; }
 		else if (boost::iequals(name,"speed")) { NPC::Presets[npcIndex].stats[MOVESPEED] = value.i; }
-		else if (boost::iequals(name,"color")) { NPC::Presets[npcIndex].color = value.col; }
+		else if (boost::iequals(name,"color_")) { NPC::Presets[npcIndex].color = value.col; }
 		else if (boost::iequals(name,"graphic")) { NPC::Presets[npcIndex].graphic = value.c; }
 		else if (boost::iequals(name,"fallbackGraphicsSet")) { NPC::Presets[npcIndex].fallbackGraphicsSet = value.s; }
 		else if (boost::iequals(name,"health")) { NPC::Presets[npcIndex].health = value.i; }
@@ -2280,7 +2280,7 @@ void NPC::LoadPresets(std::string filename) {
 	TCODParserStruct *npcTypeStruct = parser.newStructure("npc_type");
 	npcTypeStruct->addProperty("name", TCOD_TYPE_STRING, true);
 	npcTypeStruct->addProperty("plural", TCOD_TYPE_STRING, false);
-	npcTypeStruct->addProperty("color", TCOD_TYPE_COLOR, true);
+	npcTypeStruct->addProperty("color_", TCOD_TYPE_COLOR, true);
 	npcTypeStruct->addProperty("graphic", TCOD_TYPE_CHAR, true);
 	npcTypeStruct->addFlag("expert");
 	const char* aiTypes[] = { "PlayerNPC", "PeacefulAnimal", "HungryAnimal", "HostileAnimal", NULL }; 
@@ -2445,7 +2445,7 @@ void NPC::UpdateVelocity() {
 								TCOD_dice_t damage;
 								damage.addsub = (float)velocity/5;
 								damage.multiplier = 1;
-								damage.nb_dices = 1;
+								damage.nb_rolls = 1;
 								damage.nb_faces = 5 + effectiveStats[NPCSIZE];
 								construct->Damage(&attack);
 							}
@@ -2529,7 +2529,7 @@ NPCPreset::NPCPreset(std::string typeNameVal) :
 	resistances[DISEASE_RES] = 75; //Pretty much every creature is somewhat resistant to disease
 	group.addsub = 0;
 	group.multiplier = 1;
-	group.nb_dices = 1;
+	group.nb_rolls = 1;
 	group.nb_faces = 1;
 }
 

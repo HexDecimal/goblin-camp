@@ -345,7 +345,7 @@ private:
 			}
 		} else if (boost::iequals(name, "graphic")) {
 			Item::Presets[itemIndex].graphic = value.i;
-		} else if (boost::iequals(name, "color")) {
+		} else if (boost::iequals(name, "color_")) {
 			Item::Presets[itemIndex].color = value.col;
 		} else if (boost::iequals(name, "fallbackGraphicsSet")) {
 			Item::Presets[itemIndex].fallbackGraphicsSet = value.s;
@@ -463,7 +463,7 @@ void Item::LoadPresets(std::string filename) {
 	TCODParserStruct* itemTypeStruct = parser.newStructure("item_type");
 	itemTypeStruct->addListProperty("category", TCOD_TYPE_STRING, true);
 	itemTypeStruct->addProperty("graphic", TCOD_TYPE_INT, true);
-	itemTypeStruct->addProperty("color", TCOD_TYPE_COLOR, true);
+	itemTypeStruct->addProperty("color_", TCOD_TYPE_COLOR, true);
 	itemTypeStruct->addListProperty("components", TCOD_TYPE_STRING, false);
 	itemTypeStruct->addProperty("containIn", TCOD_TYPE_STRING, false);
 	itemTypeStruct->addProperty("nutrition", TCOD_TYPE_FLOAT, false);
@@ -540,8 +540,8 @@ int Item::GetFaction() const { return faction; }
 
 int Item::RelativeValue() {
 	TCOD_dice_t amount = attack.Amount();
-	int minDamage = (int)(amount.nb_dices + amount.addsub);
-	int maxDamage = (int)((amount.nb_dices * amount.nb_faces) + amount.addsub);
+	int minDamage = (int)(amount.nb_rolls + amount.addsub);
+	int maxDamage = (int)((amount.nb_rolls * amount.nb_faces) + amount.addsub);
 	return (minDamage + maxDamage) / 2;
 }
 

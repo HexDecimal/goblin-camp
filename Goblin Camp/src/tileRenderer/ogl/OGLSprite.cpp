@@ -15,7 +15,10 @@ You should have received a copy of the GNU General Public License
 along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "stdafx.hpp"
 
+#if 0
+
 #include "tileRenderer/ogl/OGLSprite.hpp"
+
 
 OGLSprite::OGLSprite(OGLTilesetRenderer * const renderer, int tile)
 	: Sprite(tile),
@@ -36,3 +39,5 @@ void OGLSprite::DrawInternal(int screenX, int screenY, int tile, Corner corner) 
 		renderer->DrawSpriteCorner(screenX, screenY, tile, corner);
 	}
 }
+
+#endif
