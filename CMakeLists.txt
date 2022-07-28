@@ -52,25 +52,25 @@ ELSE()
 ENDIF()
 
 
-#if (POLICY CMP0072)
-  set(OpenGL_GL_PREFERENCE LEGACY)
-#endif()
-find_package(SDL REQUIRED)
-find_package(SDL_image REQUIRED)
+if (POLICY CMP0072)
+  set(OpenGL_GL_PREFERENCE GLVND)
+endif()
+
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 find_package(ZLIB)
 find_package(OpenGL REQUIRED)
 find_package(PNG REQUIRED)
 find_package(libtcod REQUIRED)
 
 
-include_directories(${SDL_INCLUDE_DIR})
+include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${PYTHON_INCLUDE_DIRS})
 include_directories(${PNG_INCLUDE_DIR})
 include_directories(${libtcod_INCLUDE_DIR})
 include_directories(${libtcod_INCLUDE_DIR}/libtcod)
 
 
-MESSAGE("+++++++++++++++ ${libtcod_INCLUDE_DIR}")
 ADD_SUBDIRECTORY("Goblin Camp")
 
 SET (data_SRC
@@ -190,8 +190,8 @@ include_directories("goblin-camp" "Goblin Camp/include")
 include_directories("goblin-camp" "vendor/python-modules")
 
 target_link_libraries("goblin-camp"
-  ${SDL_LIBRARY}
-  ${SDLIMAGE_LIBRARY}
+  ${SDL2_LIBRARY}
+  ${SDL2_IMAGE_LIBRARY}
   ${PYTHON_LIBRARIES}
   ${Boost_THREAD_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}

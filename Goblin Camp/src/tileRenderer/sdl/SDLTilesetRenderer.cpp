@@ -19,9 +19,14 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "tileRenderer/sdl/SDLSprite.hpp"
 #include "tileRenderer/TileSetLoader.hpp"
 
+#include <SDL.h>
+
 #include "Logger.hpp"
 #include "data/Config.hpp"
 #include "MathEx.hpp"
+
+#include<libtcod_int.h>
+
 
 boost::shared_ptr<TilesetRenderer> CreateSDLTilesetRenderer(int width, int height, TCODConsole * console, std::string tilesetName) {
 	boost::shared_ptr<SDLTilesetRenderer> sdlRenderer(new SDLTilesetRenderer(width, height, console));
@@ -52,8 +57,12 @@ SDLTilesetRenderer::SDLTilesetRenderer(int screenWidth, int screenHeight, TCODCo
 	amask = 0xff000000;
 #endif
 	SDL_Surface * temp = SDL_CreateRGBSurface(0, MathEx::NextPowerOfTwo(screenWidth), MathEx::NextPowerOfTwo(screenHeight), 32, rmask, gmask, bmask, amask);
-	SDL_SetAlpha(temp, 0, SDL_ALPHA_OPAQUE);
-	mapSurface = boost::shared_ptr<SDL_Surface>(SDL_DisplayFormat(temp), SDL_FreeSurface);
+	SDL_SetSurfaceAlphaMod(temp, SDL_ALPHA_OPAQUE);
+	TCOD_Context* context = TCOD_sys_get_internal_context();
+	SDL_Window* window = context->get_sdl_window();
+
+	// Convert surface to current window format
+	mapSurface = boost::shared_ptr<SDL_Surface>(SDL_ConvertSurfaceFormat(temp, SDL_GetWindowPixelFormat(window), 0), SDL_FreeSurface);
 	SDL_FreeSurface(temp);
 
 	if (!mapSurface)
@@ -159,7 +168,9 @@ void SDLTilesetRenderer::render(void *surf/*, void*sdl_screen*/) {
 		}
 	}
 	else {
-		SDL_SetColorKey(tcod,SDL_SRCCOLORKEY, SDL_MapRGBA(tcod->format, keyColor.r, keyColor.g, keyColor.b, 255));
+
+// FIXME port this from SDL -> SDL2
+//		SDL_SetColorKey(tcod,SDL_SRCCOLORKEY, SDL_MapRGBA(tcod->format, keyColor.r, keyColor.g, keyColor.b, 255));
 	}
 	SDL_LowerBlit(tcod, &srcRect, mapSurface.get(), &dstRect);
 // FIXME: Why we ever needed this before tcod 1.5.1

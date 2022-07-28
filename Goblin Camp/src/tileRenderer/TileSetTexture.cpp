@@ -16,7 +16,9 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "stdafx.hpp"
 
 #include <SDL.h>
-#include <SDL_image.h>
+//#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
+
 
 #include "tileRenderer/TileSetTexture.hpp"
 #include "Logger.hpp"
@@ -24,9 +26,9 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 TileSetTexture::TileSetTexture(boost::filesystem::path path, int tileW, int tileH)
 	: tileWidth(tileW), tileHeight(tileH), tileXDim(0), tileYDim(0), tileCount(0), tiles()
 {
-	SDL_Surface * temp = IMG_Load(path.string().c_str());
+	SDL_Surface * temp = IMG_Load(path.string().c_str()); //has alpha channel in it
 	if (temp != NULL) {
-		tiles = boost::shared_ptr<SDL_Surface>(SDL_DisplayFormatAlpha(temp), SDL_FreeSurface);
+		tiles = boost::shared_ptr<SDL_Surface>(SDL_ConvertSurfaceFormat(temp, SDL_PIXELFORMAT_RGBA8888, 0));
 		SDL_FreeSurface(temp);
 	}
 	if (tiles) {
