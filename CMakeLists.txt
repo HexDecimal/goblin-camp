@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 2.8.9) # Do not raise it without a reason. Bump o
 project(GoblinCamp C CXX)
 
 SET(CMAKE_CXX_FLAGS "-std=c++17 -DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS")  # FIXME move to add_compile_options() later
+#  -DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS  https://stackoverflow.com/questions/18783790/boostfilesystemcopy-file-missing-symbol-in-c11 
+# and Goblin Camp/src/data/Data.cpp fs::copy_file(source, target);
 
 # Add the path for the script to find libtcod
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
@@ -12,11 +14,6 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fsanitize=address -g -O0")
 #SET(CMAKE_CXX_COMPILER "/usr/bin/clang++-11")
 
-#  -DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS  https://stackoverflow.com/questions/18783790/boostfilesystemcopy-file-missing-symbol-in-c11 
-# and Goblin Camp/src/data/Data.cpp fs::copy_file(source, target);
-
-# add the executable
-# add_executable(Tutorial tutorial.cxx)
 
 SET(GOBLIN_CAMP_BINDIR ${CMAKE_INSTALL_PREFIX}/games CACHE PATH "Path to Goblin Camp binary")
 SET(GOBLIN_CAMP_DATA_BASE_DIR "${CMAKE_INSTALL_PREFIX}/share" CACHE PATH "Base Data Dir Path")
@@ -186,7 +183,6 @@ SET (platform_SRC
 
 add_executable("goblin-camp" "Goblin Camp/src/platform/unix/main.cpp" "Goblin Camp/src/GCamp.cpp" ${main_SRC} ${data_SRC} ${scripting_SRC} ${libtcod_SRC} ${UI_SRC} ${tileRenderer_SRC} ${platform_SRC})
 include_directories("goblin-camp" "Goblin Camp/include")
-#include_directories("goblin-camp" vendor/libtcod/include)
 include_directories("goblin-camp" "vendor/python-modules")
 
 target_link_libraries("goblin-camp"
