@@ -60,6 +60,9 @@ find_package(OpenGL REQUIRED)
 find_package(PNG REQUIRED)
 find_package(libtcod REQUIRED)
 
+# This was added for building with Debain Buster. May be it should be removed later
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${PYTHON_INCLUDE_DIRS})
@@ -198,6 +201,7 @@ target_link_libraries("goblin-camp"
   ${OPENGL_LIBRARIES}
   ${PNG_LIBRARY}
   ${libtcod_LIBRARIES}
+   Threads::Threads
 )
 
 IF(${Boost_PYTHON3_FOUND})
