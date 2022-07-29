@@ -14,6 +14,12 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fsanitize=address -g -O0")
 #SET(CMAKE_CXX_COMPILER "/usr/bin/clang++-11")
 
+IF (FORCE_PYTHON27)
+  MESSAGE("-- Trying to force python2.7 build")
+ENDIF()
+
+SET(FORCE_PYTHON27 ${FORCE_PYTHON27} CACHE BOOL "" FORCE)
+
 
 SET(GOBLIN_CAMP_BINDIR ${CMAKE_INSTALL_PREFIX}/games CACHE PATH "Path to Goblin Camp binary")
 SET(GOBLIN_CAMP_DATA_BASE_DIR "${CMAKE_INSTALL_PREFIX}/share" CACHE PATH "Base Data Dir Path")
@@ -22,7 +28,10 @@ SET(GOBLIN_CAMP_SHAREDIR "${GOBLIN_CAMP_DATA_BASE_DIR}/games/goblin-camp" CACHE 
 find_package(Boost REQUIRED COMPONENTS thread system filesystem serialization iostreams)
 
 find_package(Boost COMPONENTS python REQUIRED)
-find_package(Boost COMPONENTS python3)
+
+IF (NOT FORCE_PYTHON27)
+  find_package(Boost COMPONENTS python3)
+ENDIF()
 
 IF(${Boost_PYTHON3_FOUND})
   find_package(PythonLibs 3)
