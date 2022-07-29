@@ -188,6 +188,23 @@ add_executable("goblin-camp" "Goblin Camp/src/platform/unix/main.cpp" "Goblin Ca
 include_directories("goblin-camp" "Goblin Camp/include")
 include_directories("goblin-camp" "vendor/python-modules")
 
+IF (${Boost_PYTHON3_FOUND})
+  # touch will force install of static python lib
+  # this will solve porblem with installing python3 version over python2.7 and vice versa
+  add_custom_command (TARGET "goblin-camp"
+                      POST_BUILD
+                      COMMAND touch -h "${PROJECT_SOURCE_DIR}/Goblin Camp/lib/__gcdevconsole__.py"
+                      )
+ELSE()
+  # touch will force install of static python lib
+  # this will solve porblem with installing python3 version over python2.7 and vice versa
+  add_custom_command (TARGET "goblin-camp"
+                      POST_BUILD
+                      COMMAND touch -h "${PROJECT_SOURCE_DIR}/Goblin Camp/lib/__gcdevconsole__.py_2.7"
+                      )
+ENDIF()
+
+
 target_link_libraries("goblin-camp"
   ${SDL2_LIBRARY}
   ${SDL2_IMAGE_LIBRARY}
