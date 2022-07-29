@@ -29,11 +29,21 @@ find_package(Boost REQUIRED COMPONENTS thread system filesystem serialization io
 
 find_package(Boost COMPONENTS python REQUIRED)
 
-IF (NOT FORCE_PYTHON27)
+IF (FORCE_PYTHON27)
+  SET(USE_PYTHON27 YES)
+  SET(USE_PYTHON3 NO)
+ELSE()
   find_package(Boost COMPONENTS python3)
+  IF(${Boost_PYTHON3_FOUND})
+    SET(USE_PYTHON27 NO)
+    SET(USE_PYTHON3 YES)
+  ELSE()
+    SET(USE_PYTHON27 YES)
+    SET(USE_PYTHON3 NO)
+  ENDIF()
 ENDIF()
 
-IF(${Boost_PYTHON3_FOUND})
+IF(USE_PYTHON3)
   find_package(PythonLibs 3)
 ELSE()
   if(${Boost_VERSION} GREATER 106699) # boost >= 1.67
@@ -230,7 +240,7 @@ target_link_libraries("goblin-camp"
    Threads::Threads
 )
 
-IF(${Boost_PYTHON3_FOUND})
+IF(USE_PYTHON3})
   target_link_libraries("goblin-camp"
     ${Boost_PYTHON3_LIBRARY}
   )
