@@ -240,7 +240,7 @@ target_link_libraries("goblin-camp"
    Threads::Threads
 )
 
-IF(USE_PYTHON3})
+IF(USE_PYTHON3)
   target_link_libraries("goblin-camp"
     ${Boost_PYTHON3_LIBRARY}
   )
