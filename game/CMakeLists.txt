@@ -1,6 +1,7 @@
 ADD_SUBDIRECTORY("lib")
 
-INSTALL(FILES terminal.png DESTINATION ${GOBLIN_CAMP_SHAREDIR})
+#INSTALL(FILES terminal.png DESTINATION ${GOBLIN_CAMP_SHAREDIR})
+INSTALL(FILES terminal_x2.png DESTINATION ${GOBLIN_CAMP_SHAREDIR} RENAME terminal.png)
 
 # https://specifications.freedesktop.org/menu-spec/menu-spec-latest.html#paths
 # FIXME may be made it dependant on $XDG_DATA_DIRS later
