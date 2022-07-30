@@ -1,3 +1,25 @@
+Goblin Camp Changelog
+
+-- version 0.22 (2022-07-31) --
+
+Main goal of this release is to make Goblin Camp build and run on modern systems. No new
+features added. Main changes:
+
+* Build system changed to Cmake. Jam build files was removed;
+* Fix building with modern Boost library. Boost code embedded into GC distribution was removed;
+* Added support for python 3.x. Now you can build GC both with python 2.7 and 3.x;
+* Fix building with modern tcod library. Old tcod embedded into GC distribution was removed;
+* Switched from SDL to SDL2 (forced by tcod library);
+* Added building option to disable threads in GC. Might be useful for debugging;
+* Code refactoring: changed directory structure a bit; removed DOS line feeds;
+* Added larger bitmap font by default, to make game playable on modern screens with high resolution.
+
+Thanks to:
+
+* Noel Maersk, who tried to run goblincamp-ng, some of his tricks were reused here;
+* O01eg (aka O02eg) for helping with GC and answering my question at linux.org.ru;
+* Kyle Benesch (aka HexDecimal), current developer of tcod, for help with porting to new version of tcod.
+
 -- Version 0.21 --
 
 A bugfix release, mostly with fixes and improvements from contributors: a bunch of fixes from
