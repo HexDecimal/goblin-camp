@@ -18,7 +18,9 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include <utility>
 #include <list>
 
+#if GCAMP_USE_THREADS
 #include <boost/thread/shared_mutex.hpp>
+#endif
 #include <boost/multi_array.hpp>
 #include <boost/unordered_set.hpp>
 #include <libtcod.hpp>
@@ -157,8 +159,9 @@ public:
 	void Update();
 	
 	Coordinate FindRangedAdvantage(const Coordinate&);
-
+#if GCAMP_USE_THREADS
 	mutable boost::shared_mutex cacheMutex;
+#endif
 	void UpdateCache();
 	void TileChanged(const Coordinate&);
 };

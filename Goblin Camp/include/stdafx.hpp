@@ -28,6 +28,11 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 typedef unsigned int uint32;
 typedef unsigned char uint8;
 
+// Use threads by default
+#ifndef GCAMP_USE_THREADS
+#define GCAMP_USE_THREADS 1
+#endif
+
 // precompiled header
 #if defined(BOOST_BUILD_PCH_ENABLED) && !defined(GC_SKIP_PCH)
 
@@ -73,7 +78,9 @@ typedef unsigned char uint8;
 #	endif
 #		include <boost/python/detail/wrap_python.hpp>
 #		include <boost/python.hpp>
+#if GCAMP_USE_THREADS
 #		include <boost/thread/thread.hpp>
+#endif
 #		include <boost/multi_array.hpp>
 #		include <boost/shared_ptr.hpp>
 #		include <boost/weak_ptr.hpp>

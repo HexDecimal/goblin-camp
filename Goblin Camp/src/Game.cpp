@@ -26,7 +26,9 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/weak_ptr.hpp>
 #include <boost/serialization/vector.hpp>
+#if GCAMP_USE_THREADS
 #include <boost/thread.hpp>
+#endif
 #include <boost/date_time/posix_time/posix_time_duration.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/python/detail/wrap_python.hpp>
@@ -496,6 +498,7 @@ namespace {
 	const unsigned savingSize  = sizeof saving  / sizeof saving[0];
 	
 	void DrawProgressScreen(int x, int y, int spin, bool isLoading) {
+#if GCAMP_USE_THREADS
 		boost::lock_guard<boost::mutex> lock(Game::loadingScreenMutex);
 		
 		SDL_PumpEvents();
@@ -508,10 +511,13 @@ namespace {
 		TCODConsole::root->clear();
 		TCODConsole::root->print(x, y, loadingMsg.c_str());
 		TCODConsole::root->flush();
+#endif
 	}
 }
 
+#if GCAMP_USE_THREADS
 boost::mutex Game::loadingScreenMutex;
+#endif
 
 void Game::ProgressScreen(boost::function<void(void)> blockingCall, bool isLoading) {
 	// this runs blocking call in a separate thread while spinning on the main one
@@ -521,6 +527,7 @@ void Game::ProgressScreen(boost::function<void(void)> blockingCall, bool isLoadi
 	// locking Game::loadingScreenMutex first!
 	//
 	// XXX heavily experimental
+#if GCAMP_USE_THREADS
 	boost::promise<void> promise;
 	boost::unique_future<void> future(promise.get_future());
 	
@@ -532,7 +539,9 @@ void Game::ProgressScreen(boost::function<void(void)> blockingCall, bool isLoadi
 	
 	boost::thread thread([&]() {
 		try {
+#endif
 			blockingCall();
+#if GCAMP_USE_THREADS
 			promise.set_value();
 		} catch (const std::exception& e) {
 			promise.set_exception(boost::copy_exception(e));
@@ -547,9 +556,13 @@ void Game::ProgressScreen(boost::function<void(void)> blockingCall, bool isLoadi
 	if (future.has_exception()) {
 		future.get();
 	}
+#endif
 }
 
+
+
 void Game::ErrorScreen() {
+#if GCAMP_USE_THREADS
 	boost::lock_guard<boost::mutex> lock(loadingScreenMutex);
 	
 	Game *game = Game::Inst();
@@ -564,6 +577,7 @@ void Game::ErrorScreen() {
 	TCODConsole::root->print(game->screenWidth / 2, game->screenHeight / 2 + 1, "Press any key to exit the game.");
 	TCODConsole::root->flush();
 	TCODConsole::waitForKeypress(true);
+#endif
 	exit(255);
 }
 

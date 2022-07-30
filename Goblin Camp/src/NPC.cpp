@@ -18,7 +18,9 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include <cstdlib>
 #include <string>
 #include <boost/serialization/split_member.hpp>
+#if GCAMP_USE_THREADS
 #include <boost/thread/thread.hpp>
+#endif
 #include <boost/multi_array.hpp>
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
@@ -145,8 +147,10 @@ NPC::NPC(Coordinate pos, boost::function<bool(boost::shared_ptr<NPC>)> findJob,
 }
 
 NPC::~NPC() {
+#if GCAMP_USE_THREADS
 	pathMutex.lock(); /* In case a pathing thread is active we need to wait until we can lock the pathMutex,
 					  because it signals that the thread has finished */
+#endif
 	map->NPCList(pos)->erase(uid);
 	if (squad.lock()) squad.lock()->Leave(uid);
 
@@ -154,7 +158,9 @@ NPC::~NPC() {
 	else if (boost::iequals(NPC::NPCTypeToString(type), "goblin")) Game::Inst()->GoblinCount(-1);
 	else if (NPC::Presets[type].tags.find("localwildlife") != NPC::Presets[type].tags.end()) Game::Inst()->PeacefulFaunaCount(-1);
 
-    pathMutex.unlock();
+#if GCAMP_USE_THREADS
+	pathMutex.unlock();
+#endif
 	delete path;
 }
 
@@ -1443,8 +1449,11 @@ TaskResult NPC::Move(TaskResult oldResult) {
 	}
 	while (nextMove > 100) {
 		nextMove -= 100;
+#if GCAMP_USE_THREADS
 		boost::mutex::scoped_try_lock pathLock(pathMutex);
-		if (pathLock.owns_lock()) {
+		if (pathLock.owns_lock())
+#endif
+		{
 			if (nopath) {nopath = false; return TASKFAILFATAL;}
 			if (pathIndex < path->size() && pathIndex >= 0) {
 				//Get next move
@@ -1483,10 +1492,15 @@ TaskResult NPC::Move(TaskResult oldResult) {
 	return oldResult;
 }
 
+#if GCAMP_USE_THREADS
 unsigned int NPC::pathingThreadCount = 0;
 boost::mutex NPC::threadCountMutex;
+#endif
+
 void NPC::findPath(Coordinate target) {
+#if GCAMP_USE_THREADS
 	pathMutex.lock();
+#endif
 	findPathWorking = true;
 	pathIsDangerous = false;
 	pathIndex = 0;
@@ -1494,6 +1508,7 @@ void NPC::findPath(Coordinate target) {
 	delete path;
 	path = new TCODPath(map->Width(), map->Height(), map, static_cast<void*>(this));
 
+#if GCAMP_USE_THREADS
 	threadCountMutex.lock();
 	if (pathingThreadCount < 12) {
 		++pathingThreadCount;
@@ -1503,8 +1518,11 @@ void NPC::findPath(Coordinate target) {
 	} else {
 		threadCountMutex.unlock();
 		pathMutex.unlock();
+#endif
 		tFindPath(path, pos.X(), pos.Y(), target.X(), target.Y(), this, false);
+#if GCAMP_USE_THREADS
 	}
+#endif
 }
 
 bool NPC::IsPathWalkable() {
@@ -1619,8 +1637,10 @@ boost::weak_ptr<Entity> NPC::currentEntity() const {
 
 
 void tFindPath(TCODPath *path, int x0, int y0, int x1, int y1, NPC* npc, bool threaded) {
+#if GCAMP_USE_THREADS
 	boost::mutex::scoped_lock pathLock(npc->pathMutex);
 	boost::shared_lock<boost::shared_mutex> readCacheLock(npc->map->cacheMutex);
+#endif
 	npc->nopath = !path->compute(x0, y0, x1, y1);
 
 	//TODO factorize with path walkability test
@@ -1634,11 +1654,13 @@ void tFindPath(TCODPath *path, int x0, int y0, int x1, int y1, NPC* npc, bool th
 	}
 
 	npc->findPathWorking = false;
+#if GCAMP_USE_THREADS
 	if (threaded) {
 		NPC::threadCountMutex.lock();
 		--NPC::pathingThreadCount;
 		NPC::threadCountMutex.unlock();
 	}
+#endif
 }
 
 bool NPC::GetSquadJob(boost::shared_ptr<NPC> npc) {

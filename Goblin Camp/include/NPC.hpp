@@ -18,7 +18,9 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include <queue>
 #include <list>
 
+#if GCAMP_USE_THREADS
 #include <boost/thread/thread.hpp>
+#endif
 #include <boost/multi_array.hpp>
 #include <boost/function.hpp>
 #include <boost/weak_ptr.hpp>
@@ -118,7 +120,9 @@ class NPC : public Entity {
 	int taskIndex;
 	int orderIndex;
 
+#if GCAMP_USE_THREADS
 	boost::mutex pathMutex;
+#endif
 	TCODPath *path;
 	int pathIndex;
 	bool nopath;
@@ -288,10 +292,11 @@ public:
 	static bool JobManagerFinder(boost::shared_ptr<NPC>);
 	static void PlayerNPCReact(boost::shared_ptr<NPC>);
 	static void AnimalReact(boost::shared_ptr<NPC>);
-	
+
+#if GCAMP_USE_THREADS
 	static unsigned int pathingThreadCount;
 	static boost::mutex threadCountMutex;
-
+#endif
 	void AddTrait(Trait);
 	void RemoveTrait(Trait);
 	bool HasTrait(Trait) const;

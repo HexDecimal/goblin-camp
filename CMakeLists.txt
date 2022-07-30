@@ -17,15 +17,28 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 IF (FORCE_PYTHON27)
   MESSAGE("-- Trying to force python2.7 build")
 ENDIF()
-
 SET(FORCE_PYTHON27 ${FORCE_PYTHON27} CACHE BOOL "" FORCE)
 
+IF (NOT DEFINED USE_THREADS)
+  SET(USE_THREADS 1) # Default value
+ENDIF()
+SET(USE_THREADS ${USE_THREADS} CACHE BOOL "" FORCE)
+
+IF (USE_THREADS)
+  MESSAGE("-- Using threads")
+ELSE()
+  MESSAGE("-- Using no threads")
+ENDIF()
 
 SET(GOBLIN_CAMP_BINDIR ${CMAKE_INSTALL_PREFIX}/games CACHE PATH "Path to Goblin Camp binary")
 SET(GOBLIN_CAMP_DATA_BASE_DIR "${CMAKE_INSTALL_PREFIX}/share" CACHE PATH "Base Data Dir Path")
 SET(GOBLIN_CAMP_SHAREDIR "${GOBLIN_CAMP_DATA_BASE_DIR}/games/goblin-camp" CACHE PATH "Path to Goblin Camp shared files")
 
-find_package(Boost REQUIRED COMPONENTS thread system filesystem serialization iostreams)
+find_package(Boost REQUIRED COMPONENTS system filesystem serialization iostreams)
+
+IF (USE_THREADS)
+  find_package(Boost REQUIRED COMPONENTS thread)
+ENDIF()
 
 find_package(Boost COMPONENTS python REQUIRED)
 
@@ -207,6 +220,13 @@ add_executable("goblin-camp" "Goblin Camp/src/platform/unix/main.cpp" "Goblin Ca
 include_directories("goblin-camp" "Goblin Camp/include")
 include_directories("goblin-camp" "vendor/python-modules")
 
+IF (USE_THREADS)
+  target_compile_definitions("goblin-camp" PRIVATE GCAMP_USE_THREADS=1)
+ELSE()
+  target_compile_definitions("goblin-camp" PRIVATE GCAMP_USE_THREADS=0)
+ENDIF()
+
+
 IF (${Boost_PYTHON3_FOUND})
   # touch will force install of static python lib
   # this will solve porblem with installing python3 version over python2.7 and vice versa
@@ -228,7 +248,6 @@ target_link_libraries("goblin-camp"
   ${SDL2_LIBRARY}
   ${SDL2_IMAGE_LIBRARY}
   ${PYTHON_LIBRARIES}
-  ${Boost_THREAD_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_SERIALIZATION_LIBRARY}
@@ -239,6 +258,12 @@ target_link_libraries("goblin-camp"
   ${libtcod_LIBRARIES}
    Threads::Threads
 )
+
+IF (USE_THREADS)
+  target_link_libraries("goblin-camp"
+    ${Boost_THREAD_LIBRARY}
+  )
+ENDIF()
 
 IF(USE_PYTHON3)
   target_link_libraries("goblin-camp"

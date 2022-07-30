@@ -21,7 +21,9 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include <boost/multi_array.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#if GCAMP_USE_THREADS
 #include <boost/thread/mutex.hpp>
+#endif
 
 #include <libtcod.hpp>
 
@@ -119,8 +121,9 @@ public:
 	void LoadConfig(std::string);
 	void Init(bool firstTime);
 	void ResetRenderer();
-	
+#if GCAMP_USE_THREADS
 	static boost::mutex loadingScreenMutex;
+#endif
 	static void ProgressScreen(boost::function<void(void)>, bool isLoading);
 	static void LoadingScreen(boost::function<void(void)> fn) {
 		ProgressScreen(fn, true);
