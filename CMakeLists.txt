@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 2.8.9) # Do not raise it without a reason. Bump o
 # set the project name
 project(GoblinCamp C CXX)
 
+SET(GCAMP_VERSION "0.22")
+SET(GCAMP_VERSION_IS_RELEASE NO)
+
 SET(CMAKE_CXX_FLAGS "-std=c++17 -DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS")  # FIXME move to add_compile_options() later
 #  -DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS  https://stackoverflow.com/questions/18783790/boostfilesystemcopy-file-missing-symbol-in-c11 
 # and Goblin Camp/src/data/Data.cpp fs::copy_file(source, target);
@@ -222,7 +225,10 @@ IF (USE_THREADS)
 ELSE()
   target_compile_definitions("goblin-camp" PRIVATE GCAMP_USE_THREADS=0)
 ENDIF()
-
+target_compile_definitions("goblin-camp" PRIVATE GCAMP_VERSION=\"${GCAMP_VERSION}\")
+IF (GCAMP_VERSION_IS_RELEASE)
+  target_compile_definitions("goblin-camp" PRIVATE GCAMP_VERSION_IS_RELEASE=1)
+ENDIF()
 
 IF (${Boost_PYTHON3_FOUND})
   # touch will force install of static python lib
