@@ -75,8 +75,8 @@ namespace Config {
 		using boost::assign::insert;
 		
 		insert(Globals::cvars)
-			("resolutionX",  "800")
-			("resolutionY",  "600")
+			("resolutionX",  "1600")
+			("resolutionY",  "900")
 			("fullscreen",   "0")
 			("renderer",     "0")
 			("useTileset",   "0")
