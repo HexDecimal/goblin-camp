@@ -34,12 +34,13 @@ SET(GOBLIN_CAMP_BINDIR ${CMAKE_INSTALL_PREFIX}/games CACHE PATH "Path to Goblin 
 SET(GOBLIN_CAMP_DATA_BASE_DIR "${CMAKE_INSTALL_PREFIX}/share" CACHE PATH "Base Data Dir Path")
 SET(GOBLIN_CAMP_SHAREDIR "${GOBLIN_CAMP_DATA_BASE_DIR}/games/goblin-camp" CACHE PATH "Path to Goblin Camp shared files")
 
-find_package(Boost REQUIRED COMPONENTS system filesystem serialization iostreams)
 
-IF (USE_THREADS)
+find_package(Boost REQUIRED)
+IF (USE_THREADS OR ( ${Boost_VERSION} LESS 106701) ) # for boost 1.67 we have to find threads anyway for some reason
   find_package(Boost REQUIRED COMPONENTS thread)
 ENDIF()
 
+find_package(Boost REQUIRED COMPONENTS system filesystem serialization iostreams)
 find_package(Boost COMPONENTS python REQUIRED)
 
 IF (FORCE_PYTHON27)
@@ -91,10 +92,6 @@ find_package(ZLIB)
 find_package(OpenGL REQUIRED)
 find_package(PNG REQUIRED)
 find_package(libtcod REQUIRED)
-
-# This was added for building with Debain Buster. May be it should be removed later
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${PYTHON_INCLUDE_DIRS})
@@ -256,7 +253,6 @@ target_link_libraries("goblin-camp"
   ${OPENGL_LIBRARIES}
   ${PNG_LIBRARY}
   ${libtcod_LIBRARIES}
-   Threads::Threads
 )
 
 IF (USE_THREADS)
