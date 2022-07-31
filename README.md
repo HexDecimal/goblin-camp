@@ -44,7 +44,7 @@ For other systems you should figure out how to get them.
 #### Building
 
 ```
-git clone https://gitlab.com/dhyannataraj/goblin-camp.git -b v0.22
+git clone https://gitlab.com/dhyannataraj/goblin-camp.git
 mkdir goblin-camp/_build/
 cd goblin-camp/_build/
 cmake ..
