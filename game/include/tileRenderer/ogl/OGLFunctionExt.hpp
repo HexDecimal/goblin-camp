@@ -16,7 +16,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #pragma once
 
 #include <boost/noncopyable.hpp>
-#include <SDL/SDL_opengl.h>
+#include <SDL2/SDL_opengl.h>
 
 namespace OGLFunctionExtension {
 	GLhandleARB glCreateShaderObjectARB(GLenum shaderType);

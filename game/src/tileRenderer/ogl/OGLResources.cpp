@@ -20,7 +20,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Logger.hpp"
 #include <boost/scoped_array.hpp>
 
-#include <SDL/SDL_opengl.h>
+#include <SDL2/SDL_opengl.h>
 #include "tileRenderer/ogl/OGLFunctionExt.hpp"
 
 using namespace OGLFunctionExtension;
