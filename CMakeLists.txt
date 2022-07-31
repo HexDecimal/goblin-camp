@@ -257,7 +257,6 @@ target_link_libraries("goblin-camp"
   ${Boost_IOSTREAMS_LIBRARY}
   ${ZLIB_LIBRARIES}
   ${OPENGL_LIBRARIES}
-  ${PNG_LIBRARY}
   ${libtcod_LIBRARIES}
 )
 
