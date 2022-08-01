@@ -46,6 +46,8 @@ public:
 	virtual MenuResult Update(int x, int y, bool clicked, TCOD_key_t key)
 	{return (x >= _x && x < _x + height && y >= _y && y < _y + height) ? MENUHIT : NOMENUHIT;}
 	int Height() { return height; }
+	int Width()  { return width; }
+
 	bool Visible() { return !visible || visible(); }
 	void SetVisible(boost::function<bool()> nvisible) { visible = nvisible; }
 	virtual void GetTooltip(int x, int y, Tooltip *tooltip) { if(getTooltip) getTooltip(x, y, tooltip); }

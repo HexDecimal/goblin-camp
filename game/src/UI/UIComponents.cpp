@@ -438,9 +438,13 @@ UIContainer::~UIContainer() {
 }
 
 Dialog::Dialog(Drawable *ncontents, std::string ntitle, int nwidth, int nheight):
-	Panel(nwidth, nheight), title(ntitle), contents(ncontents)
+	Panel(std::min(nwidth, Game::Inst()->ScreenWidth()), std:: min(nheight, Game::Inst()->ScreenHeight())) , title(ntitle), contents(ncontents)
 {
-	_x = (Game::Inst()->ScreenWidth() - nwidth) / 2;
+	// Dialogs can't be bigger than screen
+	nwidth = std::min(nwidth, Game::Inst()->ScreenWidth());
+	nheight = std::min(nheight, Game::Inst()->ScreenHeight());
+
+	_x = (Game::Inst()->ScreenWidth()  - nwidth)  / 2;
 	_y = (Game::Inst()->ScreenHeight() - nheight) / 2;
 }
 

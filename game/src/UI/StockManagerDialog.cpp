@@ -93,16 +93,16 @@ public:
 
 StockManagerDialog::StockManagerDialog(): Dialog(0, "Stock Manager", 68, 75), filter("")
 {
-	contents = new UIContainer(std::vector<Drawable *>(), 0, 0, 68, 75);
+	contents = new UIContainer(std::vector<Drawable *>(), 0, 0, Width(), Height());
 
-	static_cast<UIContainer*>(contents)->AddComponent(new Label("Filter", 34, 1));
-	static_cast<UIContainer*>(contents)->AddComponent(new TextBox(1, 2, 66, &filter));
+	static_cast<UIContainer*>(contents)->AddComponent(new Label("Filter", Width() / 2, 1));
+	static_cast<UIContainer*>(contents)->AddComponent(new TextBox(1, 2, Width() - 2, &filter));
 
-	Grid *grid = new Grid(std::vector<Drawable *>(), 4, 0, 0, 68, 71);
+	Grid *grid = new Grid(std::vector<Drawable *>(), 4, 0, 0, Width(), Height() - 4);
 	for (std::set<ItemType>::iterator it = StockManager::Inst()->Producables()->begin(); it != StockManager::Inst()->Producables()->end(); it++) {
 		grid->AddComponent(new StockPanel(*it, this));
 	}
-	static_cast<UIContainer*>(contents)->AddComponent(new ScrollPanel(0, 3, 68, 72, grid, false, 4));
+	static_cast<UIContainer*>(contents)->AddComponent(new ScrollPanel(0, 3, Width(), Height() - 3, grid, false, 4));
 }
 
 Dialog* StockManagerDialog::StocksDialog() {
