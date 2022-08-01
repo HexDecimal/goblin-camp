@@ -87,7 +87,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = "Goblin Camp/src" "Goblin Camp/include"
+INPUT                  = "game/src" "game/include"
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.cpp *.hpp *.cpp_in
 RECURSIVE              = YES
