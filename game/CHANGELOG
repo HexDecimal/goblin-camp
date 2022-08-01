@@ -1,6 +1,10 @@
 Goblin Camp Changelog
 
--- version 0.23 (future release) --
+-- version 0.221 (2022-08-01) --
+
+Bugfix release
+
+* Fix problem with StockManager Dialog bigger than screen size (ddf18716)
 
 -- version 0.22 (2022-07-31) --
 

@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 2.8.9) # Do not raise it without a reason. Bump o
 # set the project name
 project(GoblinCamp C CXX)
 
-SET(GCAMP_VERSION "0.23")
-SET(GCAMP_VERSION_IS_RELEASE NO)
+SET(GCAMP_VERSION "0.221")
+SET(GCAMP_VERSION_IS_RELEASE YES)
 
 SET(CMAKE_CXX_FLAGS "-std=c++17 -DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS")  # FIXME move to add_compile_options() later
 #  -DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS  https://stackoverflow.com/questions/18783790/boostfilesystemcopy-file-missing-symbol-in-c11 
