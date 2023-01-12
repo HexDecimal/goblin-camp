@@ -1,5 +1,5 @@
 /* Copyright 2011 Ilkka Halila
-             2020-2022 Nikolay Shaplov (aka dhyan.nataraj)
+             2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -44,7 +44,7 @@ SDLTilesetRenderer::SDLTilesetRenderer(int screenWidth, int screenHeight, TCODCo
 : TilesetRenderer(screenWidth, screenHeight, mapConsole),
   mapSurface()
 {
-	TCODSystem::registerSDLRenderer(this/*, translucentUI*/);
+	TCODSystem::registerSDLRenderer(this/*, translucentUI*/);  // FIXME translucentUI came from tcod 1.5.x times. Later should find out how to remove it properly
 	Uint32 rmask, gmask, bmask, amask;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 	rmask = 0xff000000;
@@ -137,9 +137,13 @@ namespace {
 	}
 }
 
-void SDLTilesetRenderer::render(void *surf/*, void*sdl_screen*/) {
+void SDLTilesetRenderer::render(void *surf) {
 	SDL_Surface *tcod = (SDL_Surface *)surf;
-//	SDL_Surface *screen = (SDL_Surface *)sdl_screen;
+
+	/* This seems to be nasty and obsolte way to get window's screen for rendering, but it will do for now*/
+	TCOD_Context* context = TCOD_sys_get_internal_context();
+	SDL_Window* window = context->get_sdl_window();
+	SDL_Surface *screen = SDL_GetWindowSurface(window);
 
 	int screenWidth = GetScreenWidth();
 	int screenHeight = GetScreenHeight();
@@ -169,11 +173,8 @@ void SDLTilesetRenderer::render(void *surf/*, void*sdl_screen*/) {
 		}
 	}
 	else {
-
-// FIXME port this from SDL -> SDL2
-//		SDL_SetColorKey(tcod,SDL_SRCCOLORKEY, SDL_MapRGBA(tcod->format, keyColor.r, keyColor.g, keyColor.b, 255));
+		SDL_SetColorKey(tcod,SDL_TRUE, SDL_MapRGBA(tcod->format, keyColor.r, keyColor.g, keyColor.b, 255));
 	}
-	SDL_LowerBlit(tcod, &srcRect, mapSurface.get(), &dstRect);
-// FIXME: Why we ever needed this before tcod 1.5.1
-//	SDL_LowerBlit(mapSurface.get(), &srcRect, screen, &dstRect);
+	SDL_BlitSurface(tcod, &srcRect, mapSurface.get(), &dstRect);
+	SDL_BlitSurface(mapSurface.get(), &srcRect, screen, &dstRect);
 }

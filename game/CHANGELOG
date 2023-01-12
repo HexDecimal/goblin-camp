@@ -2,6 +2,10 @@ Goblin Camp Changelog
 
 -- version 0.23 (future release) --
 
+* Fix support for graphical tiles in SDL2:
+  - Basic functionality restored. It works only with no-threads, 8x8 font, and does not work right. But nevertheless
+    shows images and does not crash.
+
 -- version 0.221 (2022-08-01) --
 
 Bugfix release

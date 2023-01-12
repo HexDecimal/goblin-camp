@@ -1,5 +1,5 @@
 /* Copyright 2011 Ilkka Halila
-             2020-2022 Nikolay Shaplov (aka dhyan.nataraj)
+             2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ public:
 	void DrawSprite(int screenX, int screenY, boost::shared_ptr<TileSetTexture> texture, int tile) const;
 	void DrawSpriteCorner(int screenX, int screenY, boost::shared_ptr<TileSetTexture> texture, int tile, Corner corner) const;
 
-	void render(void *sdlSurface/*, void*sdlScreen*/);
+	void render(void *sdlSurface);
 
 	void SetTranslucentUI(bool translucent);
 protected:
