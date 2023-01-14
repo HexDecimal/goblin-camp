@@ -25,6 +25,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Logger.hpp"
 #include "data/Config.hpp"
 #include "MathEx.hpp"
+#include "Game.hpp"
 
 #include<libtcod_int.h>
 
@@ -175,6 +176,12 @@ void SDLTilesetRenderer::render(void *surf) {
 	else {
 		SDL_SetColorKey(tcod,SDL_TRUE, SDL_MapRGBA(tcod->format, keyColor.r, keyColor.g, keyColor.b, 255));
 	}
-	SDL_BlitSurface(tcod, &srcRect, mapSurface.get(), &dstRect);
-	SDL_BlitSurface(mapSurface.get(), &srcRect, screen, &dstRect);
+	/* If we are in Loading screen thread we should not do complex SDL rendering */
+	/* FIXME this is a hack, we need better way to do it */
+	if (Game::loadingScreenMutex.try_lock())
+	{
+		SDL_BlitSurface(tcod, &srcRect, mapSurface.get(), &dstRect);
+		SDL_BlitSurface(mapSurface.get(), &srcRect, screen, &dstRect);
+		Game::loadingScreenMutex.unlock();
+	}
 }
