@@ -39,6 +39,7 @@ namespace Logger {
 			"C++ (`" << fs::path(file).filename().string() << "` @ " <<
 			line << "), `" << function << "`:\n\t"
 		;
+		log.flush();
 		return log;
 	}
 	
