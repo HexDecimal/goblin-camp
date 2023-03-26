@@ -6,7 +6,7 @@ Goblin Camp Changelog
   - Basic functionality restored. It works only with no-threads, 8x8 font, and does not work right. But nevertheless
     shows images and does not crash (2e1e9d63).
   - Hopefully fixed problems with rendering Loading screen in threads mode in SDL2 renderer (5d773831)
-  - Fix problem with cursor position calculation in SDL2 renderer
+  - Fix problem with cursor position calculation in SDL2 renderer (020252a8)
 
 -- version 0.221 (2022-08-01) --
 

@@ -628,7 +628,7 @@ void Game::ResetRenderer(int width, int height) {
 		if (width == -1)
 			width = old_width;
 		if (height == -1)
-			height == old_height;
+			height = old_height;
 	}
 	renderer.reset();
 
