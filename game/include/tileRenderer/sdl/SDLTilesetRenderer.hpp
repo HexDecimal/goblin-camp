@@ -22,7 +22,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 class SDLTilesetRenderer : public TilesetRenderer, public ITCODSDLRenderer
 {
 public:
-	explicit SDLTilesetRenderer(int screenWidth, int screenHeight, TCODConsole * mapConsole = 0);
+	explicit SDLTilesetRenderer(TCODConsole * mapConsole = 0);
 	~SDLTilesetRenderer();
 
 	Sprite_ptr CreateSprite(boost::shared_ptr<TileSetTexture> tilesetTexture, int tile);

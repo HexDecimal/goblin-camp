@@ -1,4 +1,5 @@
 /* Copyright 2011 Ilkka Halila
+             2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -25,7 +26,7 @@ class TilesetRenderer : public MapRenderer
 {
 	friend class DrawConstructionVisitor;
 public:
-	explicit TilesetRenderer(int screenWidth, int screenHeight, TCODConsole * mapConsole = 0);
+	explicit TilesetRenderer(TCODConsole * mapConsole = 0);
 	virtual ~TilesetRenderer() = 0;
 
 	virtual Sprite_ptr CreateSprite(boost::shared_ptr<TileSetTexture> tilesetTexture, int tile) = 0;
@@ -40,8 +41,6 @@ public:
 	void PreparePrefabs();
 	float ScrollRate() const;
 
-	int GetScreenWidth() const;
-	int GetScreenHeight() const;
 	TCODColor GetKeyColor() const;
 
 	void SetCursorMode(CursorType mode);
@@ -87,7 +86,6 @@ protected:
 
 private:
 	// the font characters size
-	int screenWidth, screenHeight;
 	TCODColor keyColor;
 };
 
@@ -96,4 +94,4 @@ template <typename IterT> Sprite_ptr TilesetRenderer::CreateSprite(boost::shared
 	return spriteFactory->CreateSprite(tilesetTexture, tiles, connectionMap, frameRate, frameCount);
 }
 
-boost::shared_ptr<TilesetRenderer> CreateTilesetRenderer(int width, int height, TCODConsole * console, std::string tilesetName);
+boost::shared_ptr<TilesetRenderer> CreateTilesetRenderer(TCODConsole * console, std::string tilesetName);

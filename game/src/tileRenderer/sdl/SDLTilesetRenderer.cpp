@@ -30,8 +30,8 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include<libtcod_int.h>
 
 
-boost::shared_ptr<TilesetRenderer> CreateSDLTilesetRenderer(int width, int height, TCODConsole * console, std::string tilesetName) {
-	boost::shared_ptr<SDLTilesetRenderer> sdlRenderer(new SDLTilesetRenderer(width, height, console));
+boost::shared_ptr<TilesetRenderer> CreateSDLTilesetRenderer(TCODConsole * console, std::string tilesetName) {
+	boost::shared_ptr<SDLTilesetRenderer> sdlRenderer(new SDLTilesetRenderer(console));
 	boost::shared_ptr<TileSet> tileset = TileSetLoader::LoadTileSet(sdlRenderer, tilesetName);
 	if (tileset.get() != 0 && sdlRenderer->SetTileset(tileset)) {
 		return sdlRenderer;
@@ -41,8 +41,8 @@ boost::shared_ptr<TilesetRenderer> CreateSDLTilesetRenderer(int width, int heigh
 }
 
 
-SDLTilesetRenderer::SDLTilesetRenderer(int screenWidth, int screenHeight, TCODConsole * mapConsole)
-: TilesetRenderer(screenWidth, screenHeight, mapConsole),
+SDLTilesetRenderer::SDLTilesetRenderer(TCODConsole * mapConsole)
+: TilesetRenderer(mapConsole),
   mapSurface()
 {
 	TCODSystem::registerSDLRenderer(this/*, translucentUI*/);  // FIXME translucentUI came from tcod 1.5.x times. Later should find out how to remove it properly
@@ -58,6 +58,14 @@ SDLTilesetRenderer::SDLTilesetRenderer(int screenWidth, int screenHeight, TCODCo
 	bmask = 0x00ff0000;
 	amask = 0xff000000;
 #endif
+
+	// FIXME, not really nice solution as we create maximum size window surface
+	// Window can't (hopefully) be bigger than screen
+	// We should better have it exact size we need.
+	// Should be fixed later.
+	int screenWidth, screenHeight;
+	TCODSystem::getCurrentResolution(&screenWidth, &screenHeight);
+
 	SDL_Surface * temp = SDL_CreateRGBSurface(0, MathEx::NextPowerOfTwo(screenWidth), MathEx::NextPowerOfTwo(screenHeight), 32, rmask, gmask, bmask, amask);
 	SDL_SetSurfaceAlphaMod(temp, SDL_ALPHA_OPAQUE);
 	TCOD_Context* context = TCOD_sys_get_internal_context();
@@ -146,14 +154,12 @@ void SDLTilesetRenderer::render(void *surf) {
 	SDL_Window* window = context->get_sdl_window();
 	SDL_Surface *screen = SDL_GetWindowSurface(window);
 
-	int screenWidth = GetScreenWidth();
-	int screenHeight = GetScreenHeight();
 	TCODColor keyColor = GetKeyColor();
 
 	SDL_Rect srcRect = {
 		0, 0,
-		static_cast<Uint16>(screenWidth),
-		static_cast<Uint16>(screenHeight)
+		static_cast<Uint16>(viewportWidth),
+		static_cast<Uint16>(viewportHeight)
 	};
 	SDL_Rect dstRect = srcRect;
 	
@@ -163,8 +169,8 @@ void SDLTilesetRenderer::render(void *surf) {
 		{
 			SDL_LockSurface(tcod);
 		}
-		for (int x = 0; x < screenWidth; ++x) {
-			for (int y = 0; y < screenHeight; ++y) {
+		for (int x = 0; x < viewportWidth; ++x) {
+			for (int y = 0; y < viewportHeight; ++y) {
 				setPixelAlpha(tcod,x,y, keyColorVal);
 			}
 		}

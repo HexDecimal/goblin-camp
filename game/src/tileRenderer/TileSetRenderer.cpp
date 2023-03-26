@@ -1,5 +1,5 @@
 /* Copyright 2011 Ilkka Halila
-             2020-2022 Nikolay Shaplov (aka dhyan.nataraj)
+             2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -20,10 +20,11 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "MapMarker.hpp"
 #include "Game.hpp"
 #include "MathEx.hpp"
+#include "Logger.hpp"
 
 #include "tileRenderer/DrawConstructionVisitor.hpp"
- 
-TilesetRenderer::TilesetRenderer(int resolutionX, int resolutionY, TCODConsole * mapConsole) 
+
+TilesetRenderer::TilesetRenderer(TCODConsole * mapConsole)
 : tcodConsole(mapConsole),
   permutationTable(10, 473U),
   tileSet(),
@@ -40,10 +41,8 @@ TilesetRenderer::TilesetRenderer(int resolutionX, int resolutionY, TCODConsole *
   tilesY(0),
   cursorMode(Cursor_None),
   cursorHint(-1),
-  screenWidth(resolutionX), 
-  screenHeight(resolutionY),
   keyColor(TCODColor::magenta)
-{ 
+{
 }
 
 TilesetRenderer::~TilesetRenderer() {}
@@ -174,18 +173,18 @@ void TilesetRenderer::PreparePrefabs()
 }
 
 Coordinate TilesetRenderer::TileAt(int x, int y, float focusX, float focusY, int viewportX, int viewportY, int viewportW, int viewportH) const {
-	if (viewportW == -1) viewportW = screenWidth;
-	if (viewportH == -1) viewportH = screenHeight;
+	if (viewportW == -1) viewportW = viewportWidth;
+	if (viewportH == -1) viewportH = viewportHeight;
 
 	float left = focusX * tileSet->TileWidth() - viewportW * 0.5f;
 	float up = focusY * tileSet->TileHeight() - viewportH * 0.5f;
-	
+
 	return Coordinate(FloorToInt::convert((left + x) / tileSet->TileWidth()), FloorToInt::convert((up + y) / tileSet->TileHeight()));
 }
 
 void TilesetRenderer::DrawMap(Map* mapToDraw, float focusX, float focusY, int viewportX, int viewportY, int viewportW, int viewportH) {
-	if (viewportW == -1) viewportW = screenWidth;
-	if (viewportH == -1) viewportH = screenHeight;
+	if (viewportW == -1) viewportW = viewportWidth;
+	if (viewportH == -1) viewportH = viewportHeight;
 
 	// Merge viewport to console (because the console is composed of discrete tiles, expand to fill the space used to render the world).
 	if (tcodConsole != 0) {
@@ -463,14 +462,6 @@ bool TilesetRenderer::SetTileset(boost::shared_ptr<TileSet> newTileset) {
 	return TilesetChanged();
 }
 
-int TilesetRenderer::GetScreenWidth() const {
-	return screenWidth;
-}
-
-int TilesetRenderer::GetScreenHeight() const {
-	return screenHeight;
-}
-
 TCODColor TilesetRenderer::GetKeyColor() const {
 	return keyColor;
 }
@@ -484,12 +475,12 @@ void TilesetRenderer::SetTranslucentUI(bool translucent) {
 }
 
 // Define these in their relevant cpps.
-boost::shared_ptr<TilesetRenderer> CreateOGLTilesetRenderer(int width, int height, TCODConsole * console, std::string tilesetName);
-boost::shared_ptr<TilesetRenderer> CreateSDLTilesetRenderer(int width, int height, TCODConsole * console, std::string tilesetName);
+//boost::shared_ptr<TilesetRenderer> CreateOGLTilesetRenderer(int width, int height, TCODConsole * console, std::string tilesetName);
+boost::shared_ptr<TilesetRenderer> CreateSDLTilesetRenderer(TCODConsole * console, std::string tilesetName);
 
-boost::shared_ptr<TilesetRenderer> CreateTilesetRenderer(int width, int height, TCODConsole * console, std::string tilesetName) {
+boost::shared_ptr<TilesetRenderer> CreateTilesetRenderer(TCODConsole * console, std::string tilesetName) {
 //	if (TCODSystem::getRenderer() == TCOD_RENDERER_SDL) {
-		return CreateSDLTilesetRenderer(width, height, console, tilesetName);
+		return CreateSDLTilesetRenderer(console, tilesetName);
 //	} else {
 //		return CreateOGLTilesetRenderer(width, height, console, tilesetName);
 //	}

@@ -1,5 +1,5 @@
 /* Copyright 2010-2011 Ilkka Halila
-             2020-2022 Nikolay Shaplov (aka dhyan.nataraj)
+             2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -121,7 +121,7 @@ public:
 	int ScreenHeight() const;
 	void LoadConfig(std::string);
 	void Init(bool firstTime);
-	void ResetRenderer();
+	void ResetRenderer(int width=-1, int height=-1);
 #if GCAMP_USE_THREADS
 	static boost::mutex loadingScreenMutex;
 #endif

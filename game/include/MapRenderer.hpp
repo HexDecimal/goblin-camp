@@ -1,4 +1,5 @@
 /* Copyright 2010-2011 Ilkka Halila
+             2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -45,6 +46,9 @@ enum CursorType
 
 class MapRenderer : private boost::noncopyable
 {
+protected:
+	int viewportWidth = -1; /*viewport (window) size in pixels*/
+	int viewportHeight = -1;
 public:
 	virtual ~MapRenderer() = 0;
 
@@ -76,9 +80,11 @@ public:
 	virtual void SetCursorMode(const NPCPreset& preset) = 0;
 	virtual void SetCursorMode(const ItemPreset& preset) = 0;
 	virtual void SetCursorMode(int other) = 0;
-	
+
 	virtual void DrawCursor(const Coordinate& pos, bool placeable) = 0;
 	virtual void DrawCursor(const Coordinate& start, const Coordinate& end, bool placeable) = 0;
 
 	virtual void SetTranslucentUI(bool translucent) = 0;
+	void SetViewportSize(int width, int height);
+	void GetViewportSize(int& width, int& height);
 };

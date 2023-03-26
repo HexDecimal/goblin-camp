@@ -1,5 +1,5 @@
 /* Copyright 2010-2011 Ilkka Halila
-             2020-2022 Nikolay Shaplov (aka dhyan.nataraj)
+             2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -610,7 +610,7 @@ void Game::Init(bool firstTime) {
 //	tcods
 
 	buffer = new TCODConsole(screenWidth, screenHeight);
-	ResetRenderer();
+	ResetRenderer(width, height);
 
 	events = boost::shared_ptr<Events>(new Events(Map::Inst()));
 	
@@ -619,18 +619,24 @@ void Game::Init(bool firstTime) {
 	camY = 180;
 }
 
-void Game::ResetRenderer() {
+void Game::ResetRenderer(int width, int height) {
 	// For now just recreate the whole renderer
-	int width, height;
-	TCODSystem::getCurrentResolution(&width, &height);
 
+	int old_width, old_height;
+	if (renderer) {
+		renderer->GetViewportSize(old_width, old_height);
+		if (width == -1)
+			width = old_width;
+		if (height == -1)
+			height == old_height;
+	}
 	renderer.reset();
 
 	if (Config::GetCVar<bool>("useTileset")) {
 		std::string tilesetName = Config::GetStringCVar("tileset");
 		if (tilesetName.size() == 0) tilesetName = "default";
-	
-		boost::shared_ptr<TilesetRenderer> tilesetRenderer(CreateTilesetRenderer(width, height, buffer, tilesetName));
+
+		boost::shared_ptr<TilesetRenderer> tilesetRenderer(CreateTilesetRenderer(buffer, tilesetName));
 
 		if (tilesetRenderer) {
 			renderer = tilesetRenderer;
@@ -640,6 +646,8 @@ void Game::ResetRenderer() {
 	} else {
 		renderer = boost::shared_ptr<MapRenderer>(new TCODMapRenderer(buffer));
 	}
+
+	renderer->SetViewportSize(width, height);
 
 	buffer->setDirty(0,0,buffer->getWidth(), buffer->getHeight());
 	if (running) {
