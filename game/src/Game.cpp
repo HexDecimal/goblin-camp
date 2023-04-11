@@ -650,9 +650,7 @@ void Game::ResetRenderer(int width, int height) {
 	renderer->SetViewportSize(width, height);
 
 	buffer->setDirty(0,0,buffer->getWidth(), buffer->getHeight());
-	if (running) {
-		renderer->PreparePrefabs();
-	}
+	renderer->PreparePrefabs(); // Update tile hints and other stuff
 	renderer->SetTranslucentUI(Config::GetCVar<bool>("translucentUI"));
 }
 
