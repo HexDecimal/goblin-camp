@@ -7,7 +7,8 @@ Goblin Camp Changelog
     shows images and does not crash (2e1e9d63).
   - Hopefully fixed problems with rendering Loading screen in threads mode in SDL2 renderer (5d773831)
   - Fix problem with cursor position calculation in SDL2 renderer (020252a8)
-  - Fix problem with not all tile icons have been shown, unless tileset is reloaded while game is already running
+  - Fix problem with not all tile icons have been shown, unless tileset is reloaded while game is already running (4309f1a8)
+* Added double sized version of Default Tileset to play on screens with high DPI
 
 -- version 0.221 (2022-08-01) --
 

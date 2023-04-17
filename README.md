@@ -18,7 +18,7 @@ add build files for your system, please contact the maintainer and submit merge-
 
 ### Linux
 
-####Building libtcod
+#### Building libtcod
 
 First you will need relatively new version of [https://github.com/libtcod/libtcod](tcod library)
 Goblin Camp is known to work with `libctod` v.1.19.0 and higher. But to build libctod in some older
@@ -76,4 +76,4 @@ Game code is licensed under GNU/GPL v.3 or later. For more info see  [game/COPYI
 
 2010-2011 Originally created in by Ilkka Halila (aka Generic Container), gencontain@gmail.com; Twitter: ihalila
 
-2020-2022 Brought back to live and maintained by Nikolay Shaplov (aka dhyan.nataraj), dhyan@nataraj.su; Matrix: @dhyan:nataraj.su
+2020-2023 Brought back to live and maintained by Nikolay Shaplov (aka dhyan.nataraj), dhyan@nataraj.su; Matrix: @dhyan:nataraj.su
