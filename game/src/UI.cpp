@@ -56,7 +56,6 @@ menuOpen(false),
 	mbuttonPressed(false),
 	rbuttonPressed(false),
 	keyHelpTextColor(0),
-	draggingViewport(false),
 	draggingPlacement(false),
 	textMode(false),
 	inputString(std::string("")),
@@ -279,9 +278,9 @@ void UI::HandleMouse() {
 
 	currentMenu->Update(mouseInput.cx, mouseInput.cy, false, NO_KEY);
 
-	if (lbuttonPressed) {
-		if (draggingViewport) {
-			draggingViewport = false;
+	if (lbuttonPressed) { // When Left Button is actually released (name is confusing)
+		if (_state == UI_DRAG_VIEWPORT) {
+			_state = UINORMAL; // Button is released, go back to normal
 		} else {
 			menuResult = NOMENUHIT;
 			if(!draggingPlacement) {
@@ -429,9 +428,16 @@ void UI::HandleMouse() {
 		menuHistory.pop_back();
 	}
 
-	if (newMouseInput.lbutton && _state == UINORMAL) {
-		Game::Inst()->MoveCam(-(newMouseInput.dx / 3.0f), -(newMouseInput.dy / 3.0f));
-		if (newMouseInput.dx > 0 || newMouseInput.dy > 0) draggingViewport = true;
+	 if (newMouseInput.lbutton) { // Left button is being held down
+		if (_state == UINORMAL) {
+			if (newMouseInput.dx != 0 || newMouseInput.dy != 0)
+			{
+				_state = UI_DRAG_VIEWPORT;
+			}
+		}
+		if (_state == UI_DRAG_VIEWPORT) {
+			Game::Inst()->MoveCam(-(newMouseInput.dx / 3.0f), -(newMouseInput.dy / 3.0f));
+		}
 	}
 
 	lbuttonPressed = false;

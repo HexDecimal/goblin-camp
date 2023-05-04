@@ -29,8 +29,9 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 enum UIState {
 	UINORMAL,		 // No selection highlights
 	UIPLACEMENT,
-	UIABPLACEMENT, 
-	UIRECTPLACEMENT,  
+	UIABPLACEMENT,
+	UIRECTPLACEMENT,
+	UI_DRAG_VIEWPORT,
 	UICOUNT
 };
 
@@ -60,7 +61,6 @@ private:
 	bool lbuttonPressed, mbuttonPressed, rbuttonPressed;
 	TCOD_mouse_t oldMouseInput;
 	int keyHelpTextColor;
-	bool draggingViewport;
 	bool draggingPlacement;
 	SideBar sideBar;
 	bool textMode;
