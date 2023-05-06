@@ -485,3 +485,14 @@ boost::shared_ptr<TilesetRenderer> CreateTilesetRenderer(TCODConsole * console, 
 //		return CreateOGLTilesetRenderer(width, height, console, tilesetName);
 //	}
 }
+
+int TilesetRenderer::GetTileHeight()
+{
+	return tileSet->TileHeight();
+}
+
+int TilesetRenderer::GetTileWidth()
+{
+	return tileSet->TileWidth();
+}
+

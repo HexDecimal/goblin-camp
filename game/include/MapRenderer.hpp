@@ -87,4 +87,7 @@ public:
 	virtual void SetTranslucentUI(bool translucent) = 0;
 	void SetViewportSize(int width, int height);
 	void GetViewportSize(int& width, int& height);
+
+	virtual int GetTileHeight() = 0;
+	virtual int GetTileWidth() = 0;
 };

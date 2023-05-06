@@ -1,4 +1,5 @@
 /* Copyright 2010-2011 Ilkka Halila
+             2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -433,10 +434,16 @@ void UI::HandleMouse() {
 			if (newMouseInput.dx != 0 || newMouseInput.dy != 0)
 			{
 				_state = UI_DRAG_VIEWPORT;
+				/* Saving position of Mouse and Cam, at the point where dragging have been started */
+				dragViewportStartCamX = Game::Inst()->camX;
+				dragViewportStartCamY = Game::Inst()->camY;
+				dragViewportStartMouseX = oldMouseInput.x;
+				dragViewportStartMouseY = oldMouseInput.y;
 			}
 		}
 		if (_state == UI_DRAG_VIEWPORT) {
-			Game::Inst()->MoveCam(-(newMouseInput.dx / 3.0f), -(newMouseInput.dy / 3.0f));
+			Game::Inst()->camX = dragViewportStartCamX - (newMouseInput.x - dragViewportStartMouseX) / (float) Game::Inst()->Renderer()->GetTileWidth();
+			Game::Inst()->camY = dragViewportStartCamY - (newMouseInput.y - dragViewportStartMouseY) / (float) Game::Inst()->Renderer()->GetTileHeight();
 		}
 	}
 

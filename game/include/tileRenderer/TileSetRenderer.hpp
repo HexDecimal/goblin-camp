@@ -72,7 +72,7 @@ protected:
 	int startTileX, startTileY; // Top-left tile
 	int tilesX, tilesY; // Num tiles to render in this window
 	CursorType cursorMode;
-	int cursorHint;	
+	int cursorHint;
 	
 	void DrawTerrain			(int screenX, int screenY, Coordinate pos) const;
 	void DrawFilth				(int screenX, int screenY, Coordinate pos) const;
@@ -83,6 +83,9 @@ protected:
 	void DrawNPCs() const;
 	void DrawSpells() const;
 	void DrawFires() const;
+
+	virtual int GetTileHeight() override;
+	virtual int GetTileWidth() override;
 
 private:
 	// the font characters size

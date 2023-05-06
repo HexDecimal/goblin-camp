@@ -1,4 +1,5 @@
 /* Copyright 2010-2011 Ilkka Halila
+             2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -237,3 +238,19 @@ void TCODMapRenderer::DrawCursor(const Coordinate& pos, bool placeable) {
 }
 
 void TCODMapRenderer::SetTranslucentUI(bool) {}
+
+
+int TCODMapRenderer::GetTileHeight()
+{
+	int charX, charY;
+	TCODSystem::getCharSize(&charX, &charY);
+	return charY;
+}
+
+int TCODMapRenderer::GetTileWidth()
+{
+	int charX, charY;
+	TCODSystem::getCharSize(&charX, &charY);
+	return charX;
+}
+

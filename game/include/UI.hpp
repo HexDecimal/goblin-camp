@@ -1,4 +1,5 @@
 /* Copyright 2010-2011 Ilkka Halila
+             2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -67,6 +68,8 @@ private:
 	std::string inputString;
 	int inputStringLimit;
 	std::string extraTooltip;
+	float dragViewportStartCamX, dragViewportStartCamY;  // Position of the camera when viewport dragging started
+	int dragViewportStartMouseX, dragViewportStartMouseY; // Position of the mouse when viewport dragging started
 
 	boost::weak_ptr<Entity> GetEntity(const Coordinate&);
 	int DrawShortcutHelp(TCODConsole *console, int x, int y, std::string shortcut);

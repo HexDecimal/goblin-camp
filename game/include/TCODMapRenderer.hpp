@@ -1,4 +1,5 @@
 /* Copyright 2010-2011 Ilkka Halila
+             2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -37,6 +38,9 @@ public:
 	void DrawCursor(const Coordinate& start, const Coordinate& end, bool placeable);
 
 	void SetTranslucentUI(bool);
+
+	virtual int GetTileHeight() override;
+	virtual int GetTileWidth() override;
 
 private:
 	TCODConsole * console;
