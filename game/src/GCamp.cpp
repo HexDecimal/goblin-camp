@@ -1,4 +1,5 @@
 /* Copyright 2010-2011 Ilkka Halila
+			 2020-2023 Nikolay Shaplov (aka dhyan.nataraj)
 This file is part of Goblin Camp.
 
 Goblin Camp is free software: you can redistribute it and/or modify
@@ -845,17 +846,20 @@ void TilesetsMenu() {
 	int listWidth = screenWidth / 3;
 
 	const std::vector<TileSetMetadata> tilesetsList = Tilesets::LoadTilesetMetadata();
-	
+
 	const int subH = static_cast<int>(tilesetsList.size());
-	TCODConsole sub(listWidth - 2, std::max(1, subH));
+	TCODConsole sub(listWidth - 2, std::max(1, subH + 1));
+
+
+	sub.setDefaultBackground(TCODColor::black);
+	sub.setAlignment(TCOD_LEFT);
+	sub.setDefaultForeground(TCODColor::azure);
 
 	int currentY = 0;
-	
+	sub.print(0, currentY, "Classical Text Mode");
+	currentY += 1;
+
 	BOOST_FOREACH(TileSetMetadata tileset, tilesetsList) {
-		sub.setDefaultBackground(TCODColor::black);
-		
-		sub.setAlignment(TCOD_LEFT);
-		sub.setDefaultForeground(TCODColor::azure);
 		sub.print(0, currentY, "%s", tileset.name.c_str());
 		currentY += 1;
 	}
@@ -865,16 +869,21 @@ void TilesetsMenu() {
 
 	int originalSelection = -1;
 	int selection = 0;
-	std::string tilesetDir = Config::GetStringCVar("tileset");
-	if (tilesetDir.size() == 0) {
-		tilesetDir = "default";
-	}
-	for (size_t i = 0; i < tilesetsList.size(); ++i) {
-		if (boost::iequals(tilesetDir, tilesetsList.at(i).path.filename().string())) {
-			selection = static_cast<int>(i);
-			originalSelection = static_cast<int>(i);
-			break;
+
+	if (Config::GetCVar<bool>("useTileset")) {
+		std::string tilesetDir = Config::GetStringCVar("tileset");
+		if (tilesetDir.size() == 0) {
+			tilesetDir = "default";
 		}
+		for (size_t i = 0; i < tilesetsList.size(); ++i) {
+			if (boost::iequals(tilesetDir, tilesetsList.at(i).path.filename().string())) {
+				selection = static_cast<int>(i + 1);
+				originalSelection = static_cast<int>(i + 1);
+				break;
+			}
+		}
+	} else {
+		selection = 0;  // Select first item: "Classical text tiles"
 	}
 
 	int scroll = 0;
@@ -897,7 +906,7 @@ void TilesetsMenu() {
 		{
 			TCODConsole::root->putChar(listWidth - 2,     1,     TCOD_CHAR_ARROW_N, TCOD_BKGND_SET);
 		}
-		if (scroll < subH - screenHeight + 3) 
+		if (scroll < subH - screenHeight + 3)
 		{
 			TCODConsole::root->putChar(listWidth - 2, screenHeight - 2, TCOD_CHAR_ARROW_S, TCOD_BKGND_SET);
 		}
@@ -905,16 +914,23 @@ void TilesetsMenu() {
 		// Right frame
 		TCODConsole::root->printFrame(listWidth, 0, screenWidth - listWidth, screenHeight, true, TCOD_BKGND_SET, "Details");
 
-		if (selection < static_cast<int>(tilesetsList.size()))
+		if (selection > 0 && selection - 1 < static_cast<int>(tilesetsList.size()))
 		{
-			TCODConsole::root->print(listWidth + 3, 2,      "Name:    %s", tilesetsList.at(selection).name.c_str());
-			TCODConsole::root->print(listWidth + 3, 4,      "Size:    %dx%d", tilesetsList.at(selection).width, tilesetsList.at(selection).height);
-			TCODConsole::root->print(listWidth + 3, 6,      "Author:  %s", tilesetsList.at(selection).author.c_str());
-			TCODConsole::root->print(listWidth + 3, 8,      "Version: %s", tilesetsList.at(selection).version.c_str());
+			TCODConsole::root->print(listWidth + 3, 2,      "Name:    %s", tilesetsList.at(selection - 1).name.c_str());
+			TCODConsole::root->print(listWidth + 3, 4,      "Size:    %dx%d", tilesetsList.at(selection - 1).width, tilesetsList.at(selection - 1).height);
+			TCODConsole::root->print(listWidth + 3, 6,      "Author:  %s", tilesetsList.at(selection - 1).author.c_str());
+			TCODConsole::root->print(listWidth + 3, 8,      "Version: %s",tilesetsList.at(selection - 1).version.c_str());
 			TCODConsole::root->print(listWidth + 3, 10,     "Description:");
-			TCODConsole::root->printRect(listWidth + 3, 12, screenWidth - listWidth - 6, screenHeight - 19, "%s", tilesetsList.at(selection).description.c_str());
+			TCODConsole::root->printRect(listWidth + 3, 12, screenWidth - listWidth - 6, screenHeight - 19, "%s", tilesetsList.at(selection - 1).description.c_str());
+		} else {
+			int charX, charY;
+			TCODSystem::getCharSize(&charX, &charY);
+
+			TCODConsole::root->print(listWidth + 3, 2,      "Name:    Classical Text Mode") ;
+			TCODConsole::root->print(listWidth + 3, 4,      "Size:    %dx%d", charX, charY );
+			TCODConsole::root->print(listWidth + 3, 6,      "Description: Use font glyphs as game tiles");
 		}
-				
+
 		// Buttons
 		int buttonDist = (screenWidth - listWidth) / 3;
 		TCODConsole::root->printFrame(listWidth + buttonDist - 4, screenHeight - 6, 8, 3);
@@ -936,7 +952,7 @@ void TilesetsMenu() {
 				}
 			}
 			else if (mouse.cx > 1 && mouse.cx < listWidth - 2 && mouse.cy > 1 && mouse.cy < screenHeight - 2
-					 && mouse.cy - 2 + scroll < static_cast<int>(tilesetsList.size())) {
+					 && mouse.cy - 2 + scroll < static_cast<int>(tilesetsList.size()) + 1) {
 				selection = scroll + mouse.cy - 2;
 			}
 
@@ -944,7 +960,12 @@ void TilesetsMenu() {
 			else if (mouse.cy >= screenHeight - 6 && mouse.cy < screenHeight - 3) {
 				if (mouse.cx >= listWidth + buttonDist - 4 && mouse.cx < listWidth + buttonDist + 4) {
 					if (selection != originalSelection) {
-						Config::SetStringCVar("tileset", tilesetsList.at(selection).path.filename().string());
+						if (selection > 0) {
+							Config::SetCVar("useTileset", true);
+							Config::SetStringCVar("tileset", tilesetsList.at(selection - 1).path.filename().string());
+						} else {
+							Config::SetCVar("useTileset", false);
+						}
 					}
 					Game::Inst()->ResetRenderer();
 					return;
