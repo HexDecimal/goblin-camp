@@ -39,7 +39,6 @@ public:
 
 	void DrawMap(Map* map, float focusX, float focusY, int viewportX, int viewportY, int viewportW, int viewportH) ;
 	void PreparePrefabs();
-	float ScrollRate() const;
 
 	TCODColor GetKeyColor() const;
 

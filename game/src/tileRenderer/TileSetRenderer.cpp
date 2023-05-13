@@ -289,10 +289,6 @@ void TilesetRenderer::DrawMap(Map* mapToDraw, float focusX, float focusY, int vi
 	PostDrawMap();
 }
 
-float TilesetRenderer::ScrollRate() const {
-	return 16.0f / (tileSet->TileWidth() + tileSet->TileHeight());
-}
-
 void TilesetRenderer::SetCursorMode(CursorType mode) {
 	cursorMode = mode;
 	cursorHint = -1;

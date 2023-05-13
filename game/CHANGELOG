@@ -9,7 +9,8 @@ Goblin Camp Changelog
   - Fix problem with cursor position calculation in SDL2 renderer (020252a8)
   - Fix problem with not all tile icons have been shown, unless tileset is reloaded while game is already running (4309f1a8)
   - Fix drag-n-drop camera movement ratio for graphical tiles (925ff077 and b4770736)
-  - Add "Classical Text Mode" item to tileset list to switch text-only mode on and off
+  - Add "Classical Text Mode" item to tileset list to switch text-only mode on and off (c47d4f1c)
+  - Fix keyboard scrolling rate for big graphical tiles
 * Added double sized version of Default Tileset to play on screens with high DPI (11f2623f)
 
 -- version 0.221 (2022-08-01) --

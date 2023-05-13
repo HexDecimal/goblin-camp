@@ -25,11 +25,10 @@ public:
 	~TCODMapRenderer();
 
 	void PreparePrefabs();
-	
+
 	Coordinate TileAt(int screenX, int screenY, float focusX, float focusY, int viewportX, int viewportY, int viewportW , int viewportH) const;
 	void DrawMap(Map* map, float focusX, float focusY, int viewportX, int viewportY, int viewportW, int viewportH) ;
-	float ScrollRate() const;
-	
+
 	void SetCursorMode(CursorType mode);
 	void SetCursorMode(const NPCPreset& preset);
 	void SetCursorMode(const ItemPreset& preset);
