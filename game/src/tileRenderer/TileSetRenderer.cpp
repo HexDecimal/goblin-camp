@@ -41,7 +41,7 @@ TilesetRenderer::TilesetRenderer(TCODConsole * mapConsole)
   tilesY(0),
   cursorMode(Cursor_None),
   cursorHint(-1),
-  keyColor(TCODColor::magenta)
+  keyColor(Color::magenta)
 {
 }
 
@@ -201,7 +201,7 @@ void TilesetRenderer::DrawMap(Map* mapToDraw, float focusX, float focusY, int vi
 
 		for (int x = offsetX; x < offsetX + sizeX; x++) {
 			for (int y = offsetY; y < offsetY + sizeY; y++) {
-				tcodConsole->putCharEx(x, y, ' ', TCODColor::black, keyColor);
+				tcodConsole->putCharEx(x, y, ' ', Color::black, keyColor);
 			}
 		}
 	}

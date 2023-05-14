@@ -35,6 +35,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "StatusEffect.hpp"
 #include "Squad.hpp"
 #include "Attack.hpp"
+#include "Color.hpp"
 
 #include "data/Serialization.hpp"
 
@@ -229,7 +230,7 @@ public:
 	virtual void GetTooltip(int x, int y, Tooltip *tooltip);
 	void speed(unsigned int);
 	unsigned int speed() const;
-	void color(TCODColor,TCODColor=TCODColor::black);
+	void color(TCODColor,TCODColor=Color::black);
 	void graphic(int);
 
 	int GetGraphicsHint() const;

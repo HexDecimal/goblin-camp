@@ -21,6 +21,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Logger.hpp"
 #include "data/Mods.hpp"
 #include "data/Paths.hpp"
+#include "Color.hpp"
 
 TileSetMetadata::TileSetMetadata()
 	: path(),

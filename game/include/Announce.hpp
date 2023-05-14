@@ -23,13 +23,14 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "Coordinate.hpp"
 #include "UI/UIComponents.hpp"
+#include "Color.hpp"
 
 #define ANNOUNCE_MAX_LENGTH 71
 #define ANNOUNCE_HEIGHT 10
 
 class AnnounceMessage {
 public:
-	AnnounceMessage(std::string, TCODColor = TCODColor::white, Coordinate = Coordinate(-1,-1));
+	AnnounceMessage(std::string, TCODColor = Color::white, Coordinate = Coordinate(-1,-1));
 	std::stringstream result;
 	std::string msg;
 	int counter;
@@ -50,7 +51,7 @@ private:
 public:
 	static Announce* Inst();
 	static void Reset();
-	void AddMsg(std::string, TCODColor = TCODColor::white, const Coordinate& = undefined);
+	void AddMsg(std::string, TCODColor = Color::white, const Coordinate& = undefined);
 	void Update();
 	MenuResult Update(int, int, bool);
 	void Draw(TCODConsole*);

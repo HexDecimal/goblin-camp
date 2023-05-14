@@ -27,6 +27,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Announce.hpp"
 #include "Stats.hpp"
 #include "Camp.hpp"
+#include "Color.hpp"
 
 SpawningPool::SpawningPool(ConstructionType type, const Coordinate& target) : Construction(type, target),
 	dumpFilth(false),
@@ -199,7 +200,7 @@ void SpawningPool::Expand(bool message) {
 
 	if (location != undefined) {
 		++expansion;
-		if (message) Announce::Inst()->AddMsg("The spawning pool expands", TCODColor::darkGreen, location);
+		if (message) Announce::Inst()->AddMsg("The spawning pool expands", Color::darkGreen, location);
 		a = Coordinate::min(a, location);
 		b = Coordinate::max(b, location);
 
@@ -243,7 +244,7 @@ void SpawningPool::Expand(bool message) {
 		corruptionLeft += 2000 * std::min(expansion, (unsigned int)100);
 
 	} else {
-		if (message) Announce::Inst()->AddMsg("The spawning pool bubbles ominously", TCODColor::darkGreen, Position());
+		if (message) Announce::Inst()->AddMsg("The spawning pool bubbles ominously", Color::darkGreen, Position());
 		corruptionLeft += 4000 * std::min(expansion, (unsigned int)100);
 	}
 
@@ -310,12 +311,12 @@ void SpawningPool::Spawn() {
 
 		if (goblin) {
 			Game::Inst()->CreateNPC(spawnLocation, NPC::StringToNPCType("goblin"));
-			Announce::Inst()->AddMsg("A goblin crawls out of the spawning pool", TCODColor::green, spawnLocation);
+			Announce::Inst()->AddMsg("A goblin crawls out of the spawning pool", Color::green, spawnLocation);
 		}
 
 		if (orc) {
 			Game::Inst()->CreateNPC(spawnLocation, NPC::StringToNPCType("orc"));
-			Announce::Inst()->AddMsg("An orc claws its way out of the spawning pool", TCODColor::green, spawnLocation);
+			Announce::Inst()->AddMsg("An orc claws its way out of the spawning pool", Color::green, spawnLocation);
 		}
 
 	}

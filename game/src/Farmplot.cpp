@@ -31,6 +31,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "GCamp.hpp"
 #include "JobManager.hpp"
 #include "StockManager.hpp"
+#include "Color.hpp"
 
 FarmPlot::FarmPlot(ConstructionType type, int symbol, Coordinate target) : Stockpile(type, symbol, target),
 	tilled(false),
@@ -61,13 +62,13 @@ void FarmPlot::Draw(Coordinate upleft, TCODConsole* console) {
 				screeny = y - upleft.Y();
 				if (screenx >= 0 && screenx < console->getWidth() && screeny >= 0 &&
 					screeny < console->getHeight()) {
-						console->setCharForeground(screenx, screeny, TCODColor::darkAmber);
+						console->setCharForeground(screenx, screeny, Color::darkAmber);
 						console->setChar(screenx, screeny, (graphic[1]));
 
 						if (!containers[p]->empty()) {
 							boost::weak_ptr<Item> item = containers[p]->GetFirstItem();
 							if (item.lock()) {
-								console->putCharEx(screenx, screeny, item.lock()->GetGraphic(), item.lock()->Color(), TCODColor::black);
+								console->putCharEx(screenx, screeny, item.lock()->GetGraphic(), item.lock()->Color(), Color::black);
 							}
 						}
 

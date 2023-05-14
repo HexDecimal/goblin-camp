@@ -23,6 +23,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "MapMarker.hpp"
 #include "Game.hpp"
 #include "MathEx.hpp"
+#include "Color.hpp"
 
 TCODMapRenderer::TCODMapRenderer(TCODConsole * mapConsole) :
 	console(mapConsole),
@@ -89,12 +90,12 @@ void TCODMapRenderer::DrawMap(Map* map, float focusX, float focusY, int viewport
 					boost::weak_ptr<WaterNode> wwater = map->GetWater(xy);
 					if (boost::shared_ptr<WaterNode> water = wwater.lock()) {
 						if (water->Depth() > 0)
-							minimap.putCharEx(x-screenDeltaX, y-screenDeltaY, water->GetGraphic(), water->GetColor(), TCODColor::black);
+							minimap.putCharEx(x-screenDeltaX, y-screenDeltaY, water->GetGraphic(), water->GetColor(), Color::black);
 					}
 					boost::weak_ptr<FilthNode> wfilth = map->GetFilth(xy);
 					if (boost::shared_ptr<FilthNode> filth = wfilth.lock()) {
 						if (filth->Depth() > 0)
-							minimap.putCharEx(x-screenDeltaX, y-screenDeltaY, filth->GetGraphic(), filth->GetColor(), TCODColor::black);
+							minimap.putCharEx(x-screenDeltaX, y-screenDeltaY, filth->GetGraphic(), filth->GetColor(), Color::black);
 					}
 					int natNum = map->GetNatureObject(xy);
 					if (natNum >= 0) {
@@ -106,7 +107,7 @@ void TCODMapRenderer::DrawMap(Map* map, float focusX, float focusY, int viewport
 				}
 			}
 			else {
-				minimap.putCharEx(x-screenDeltaX,y-screenDeltaY, TCOD_CHAR_BLOCK3, TCODColor::black, TCODColor::white);
+				minimap.putCharEx(x-screenDeltaX,y-screenDeltaY, TCOD_CHAR_BLOCK3, Color::black, Color::white);
 			}
 		}
 	}
@@ -133,7 +134,7 @@ void TCODMapRenderer::DrawMap(Map* map, float focusX, float focusY, int viewport
 		int markerY = markeri->second.Y();
 		if (markerX >= upleft.X() && markerX < upleft.X() + viewportW
 			&& markerY >= upleft.Y() && markerY < upleft.Y() + viewportH) {
-				minimap.putCharEx(markerX - upleft.X(), markerY - upleft.Y(), markeri->second.Graphic(), markeri->second.Color(), TCODColor::black);
+				minimap.putCharEx(markerX - upleft.X(), markerY - upleft.Y(), markeri->second.Graphic(), markeri->second.Color(), Color::black);
 		}
 	}
 
@@ -218,8 +219,8 @@ void TCODMapRenderer::DrawCursor(const Coordinate& start, const Coordinate& end,
 	{
 		for (int y = std::max(0, start.Y() - upleft.Y()); y <= std::min(console->getHeight() - 1, end.Y() - upleft.Y()); ++y)
 		{
-			if (!placeable) console->putCharEx(x, y, cursorChar, TCODColor::red, TCODColor::black);
-			else console->putCharEx(x, y, cursorChar, TCODColor::green, TCODColor::black);
+			if (!placeable) console->putCharEx(x, y, cursorChar, Color::red, Color::black);
+			else console->putCharEx(x, y, cursorChar, Color::green, Color::black);
 		}
 	}
 }
@@ -228,8 +229,8 @@ void TCODMapRenderer::DrawCursor(const Coordinate& pos, bool placeable) {
 	if (pos.X() - upleft.X() >= 0 && pos.X() - upleft.X() < console->getWidth()
 		&& pos.Y() - upleft.Y() >= 0 && pos.Y() - upleft.Y() < console->getHeight())
 	{
-		if (!placeable) console->putCharEx(pos.X() - upleft.X(),pos.Y() - upleft.Y(), cursorChar, TCODColor::red, TCODColor::black);
-		else console->putCharEx(pos.X() - upleft.X(), pos.Y() - upleft.Y(), cursorChar, TCODColor::green, TCODColor::black);
+		if (!placeable) console->putCharEx(pos.X() - upleft.X(),pos.Y() - upleft.Y(), cursorChar, Color::red, Color::black);
+		else console->putCharEx(pos.X() - upleft.X(), pos.Y() - upleft.Y(), cursorChar, Color::green, Color::black);
 	}
 }
 

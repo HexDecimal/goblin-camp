@@ -31,6 +31,7 @@ namespace py = boost::python;
 #include "scripting/Engine.hpp"
 #include "Logger.hpp"
 #include "Game.hpp"
+#include "Color.hpp"
 
 // +-------[ DEV CONSOLE ]--------------------------+
 // | output                                       ^ |
@@ -102,11 +103,11 @@ struct DevConsole {
 		
 		canvas.clear();
 		canvas.setAlignment(TCOD_LEFT);
-		canvas.setDefaultBackground(TCODColor::black);
-		canvas.setDefaultForeground(TCODColor::white);
+		canvas.setDefaultBackground(Color::black);
+		canvas.setDefaultForeground(Color::white);
 		
 		canvas.print(0, 0, "[In  %d]", inputID);
-		canvas.setDefaultForeground(TCODColor::sky);
+		canvas.setDefaultForeground(Color::sky);
 		
 		unsigned y = 1;
 		BOOST_FOREACH(std::string token, inTok) {
@@ -116,9 +117,9 @@ struct DevConsole {
 		
 		++y;
 		
-		canvas.setDefaultForeground(TCODColor::white);
+		canvas.setDefaultForeground(Color::white);
 		canvas.print(0, y, "[Out %d]", inputID);
-		canvas.setDefaultForeground(error ? TCODColor::amber : TCODColor::chartreuse);
+		canvas.setDefaultForeground(error ? Color::amber : Color::chartreuse);
 		
 		++y;
 		BOOST_FOREACH(std::string token, outTok) {
@@ -213,8 +214,8 @@ void ShowDevConsole() {
 			console.input.push_back(key.c);
 		}
 		
-		c->setDefaultForeground(TCODColor::white);
-		c->setDefaultBackground(TCODColor::black);
+		c->setDefaultForeground(Color::white);
+		c->setDefaultBackground(Color::black);
 		c->printFrame(x, y, w, h, true, TCOD_BKGND_SET, "Developer console");
 		c->setAlignment(TCOD_LEFT);
 		

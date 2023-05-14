@@ -28,6 +28,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Spell.hpp"
 #include "Game.hpp"
 #include "Random.hpp"
+#include "Color.hpp"
 
 boost::unordered_map<std::string, SpellType> Spell::spellTypeNames = boost::unordered_map<std::string, SpellType>();
 std::vector<SpellPreset> Spell::Presets = std::vector<SpellPreset>();
@@ -38,7 +39,7 @@ name(vname),
 	immaterial(false),
 	graphic('?'),
 	speed(1),
-	color(TCODColor::pink),
+	color(Color::pink),
 	fallbackGraphicsSet(""),
 	graphicsHint(-1)
 {}

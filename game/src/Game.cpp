@@ -71,6 +71,7 @@ namespace py = boost::python;
 #include "tileRenderer/TileSetLoader.hpp"
 #include "tileRenderer/TileSetRenderer.hpp"
 #include "MathEx.hpp"
+#include "Color.hpp"
 
 int Game::ItemTypeCount = 0;
 int Game::ItemCatCount = 0;
@@ -146,14 +147,14 @@ int Game::PlaceConstruction(Coordinate target, ConstructionType construct) {
 						compi->lock()->Reserve(false);
 				}
 				componentList.clear();
-				Announce::Inst()->AddMsg((boost::format("Cancelled %s: insufficient [%s] in stockpiles") % Construction::Presets[construct].name % Item::ItemCategoryToString(*mati)).str(), TCODColor::red);
+				Announce::Inst()->AddMsg((boost::format("Cancelled %s: insufficient [%s] in stockpiles") % Construction::Presets[construct].name % Item::ItemCategoryToString(*mati)).str(), Color::red);
 				return -1;
 			}
 	}
 
 	if (Construction::AllowedAmount[construct] >= 0) {
 		if (Construction::AllowedAmount[construct] == 0) {
-			Announce::Inst()->AddMsg("Cannot build another "+Construction::Presets[construct].name+"!", TCODColor::red);
+			Announce::Inst()->AddMsg("Cannot build another "+Construction::Presets[construct].name+"!", Color::red);
 			return -1;
 		}
 		--Construction::AllowedAmount[construct];
@@ -506,8 +507,8 @@ namespace {
 		
 		std::string loadingMsg = (isLoading ? loading : saving)[spin % (isLoading ? loadingSize : savingSize)];
 		
-		TCODConsole::root->setDefaultForeground(TCODColor::white);
-		TCODConsole::root->setDefaultBackground(TCODColor::black);
+		TCODConsole::root->setDefaultForeground(Color::white);
+		TCODConsole::root->setDefaultBackground(Color::black);
 		TCODConsole::root->setAlignment(TCOD_CENTER);
 		TCODConsole::root->clear();
 		TCODConsole::root->print(x, y, loadingMsg.c_str());
@@ -567,8 +568,8 @@ void Game::ErrorScreen() {
 	boost::lock_guard<boost::mutex> lock(loadingScreenMutex);
 	
 	Game *game = Game::Inst();
-	TCODConsole::root->setDefaultForeground(TCODColor::white);
-	TCODConsole::root->setDefaultBackground(TCODColor::black);
+	TCODConsole::root->setDefaultForeground(Color::white);
+	TCODConsole::root->setDefaultBackground(Color::black);
 	TCODConsole::root->setAlignment(TCOD_CENTER);
 	TCODConsole::root->clear();
 	TCODConsole::root->print(
@@ -957,7 +958,7 @@ void Game::Update() {
 				if (Data::SaveGame(saveName, false))
 					Announce::Inst()->AddMsg("Autosaved");
 				else
-					Announce::Inst()->AddMsg("Failed to autosave! Refer to the logfile", TCODColor::red);
+					Announce::Inst()->AddMsg("Failed to autosave! Refer to the logfile", Color::red);
 			}
 		case Spring:
 		case LateSpring:
@@ -1918,8 +1919,8 @@ void Game::SetSquadTargetCoordinate(Order order, Coordinate target, boost::share
 	squad->AddOrder(order);
 	squad->AddTargetCoordinate(target);
 	if (autoClose) UI::Inst()->CloseMenu();
-	Announce::Inst()->AddMsg((boost::format("[%1%] guarding position (%2%,%3%)") % squad->Name() % target.X() % target.Y()).str(), TCODColor::white, target);
-	Map::Inst()->AddMarker(MapMarker(FLASHINGMARKER, 'X', target, UPDATES_PER_SECOND*5, TCODColor::azure));
+	Announce::Inst()->AddMsg((boost::format("[%1%] guarding position (%2%,%3%)") % squad->Name() % target.X() % target.Y()).str(), Color::white, target);
+	Map::Inst()->AddMarker(MapMarker(FLASHINGMARKER, 'X', target, UPDATES_PER_SECOND*5, Color::azure));
 }
 void Game::SetSquadTargetEntity(Order order, Coordinate target, boost::shared_ptr<Squad> squad) {
 	if (Map::Inst()->IsInside(target)) {
@@ -1928,7 +1929,7 @@ void Game::SetSquadTargetEntity(Order order, Coordinate target, boost::shared_pt
 			squad->AddOrder(order);
 			squad->AddTargetEntity(Game::Inst()->npcList[*npcList->begin()]);
 			UI::Inst()->CloseMenu();
-			Announce::Inst()->AddMsg((boost::format("[%1%] following %2%") % squad->Name() % Game::Inst()->npcList[*npcList->begin()]->Name()).str(), TCODColor::white, target);
+			Announce::Inst()->AddMsg((boost::format("[%1%] following %2%") % squad->Name() % Game::Inst()->npcList[*npcList->begin()]->Name()).str(), Color::white, target);
 		}
 	}
 }
@@ -2298,7 +2299,7 @@ void Game::CreateFire(Coordinate pos) {
 
 void Game::CreateFire(Coordinate pos, int temperature) {
 	if (fireList.empty()) {
-		Announce::Inst()->AddMsg("Fire!", TCODColor::red, pos);
+		Announce::Inst()->AddMsg("Fire!", Color::red, pos);
 		if (Config::GetCVar<bool>("pauseOnDanger"))
 			Game::Inst()->AddDelay(UPDATES_PER_SECOND, boost::bind(&Game::Pause, Game::Inst()));
 	}
@@ -2332,7 +2333,7 @@ void Game::StartFire(Coordinate pos) {
 	fireJob->DisregardTerritory();
 	fireJob->tasks.push_back(Task(MOVEADJACENT, pos));
 	fireJob->tasks.push_back(Task(STARTFIRE, pos));
-	fireJob->AddMapMarker(MapMarker(FLASHINGMARKER, 'F', pos, -1, TCODColor::red));
+	fireJob->AddMapMarker(MapMarker(FLASHINGMARKER, 'F', pos, -1, Color::red));
 	JobManager::Inst()->AddJob(fireJob);
 }
 

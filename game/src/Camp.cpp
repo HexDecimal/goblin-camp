@@ -36,6 +36,8 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Stats.hpp"
 #include "Faction.hpp"
 #include "SpawningPool.hpp"
+#include "Color.hpp"
+
 
 #if BOOST_VERSION >= 106700
 // Since boost 1.67 you need this to use ::next ot ::prior
@@ -170,7 +172,7 @@ void Camp::UpdateTier() {
 		}
 
 		Announce::Inst()->AddMsg("Your "+oldName+" is now " + article + " " + name + "!", 
-			positive ? TCODColor::lightGreen : TCODColor::yellow);
+			positive ? Color::lightGreen : Color::yellow);
 		Script::Event::TierChanged(tier, name);
 	}
 }
@@ -185,7 +187,7 @@ void Camp::ConstructionBuilt(int type) {
 void Camp::DisableAutoTerritory() { autoTerritory = false; }
 void Camp::ToggleAutoTerritory() {
 	autoTerritory = !autoTerritory;
-	Announce::Inst()->AddMsg((boost::format("Automatic territory handling %s") % (autoTerritory ? "enabled" : "disabled")).str(), TCODColor::cyan);
+	Announce::Inst()->AddMsg((boost::format("Automatic territory handling %s") % (autoTerritory ? "enabled" : "disabled")).str(), Color::cyan);
 }
 
 bool Camp::IsAutoTerritoryEnabled() { return autoTerritory; }

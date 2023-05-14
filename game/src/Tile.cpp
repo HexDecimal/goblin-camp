@@ -41,6 +41,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Construction.hpp"
 #include "Faction.hpp"
 #include "Trap.hpp"
+#include "Color.hpp"
 
 Tile::Tile(TileType newType, int newCost) :
 	vis(true),
@@ -52,9 +53,9 @@ Tile::Tile(TileType newType, int newCost) :
 	blocksWater(false),
 	water(boost::shared_ptr<WaterNode>()),
 	graphic('.'),
-	foreColor(TCODColor::white),
-	originalForeColor(TCODColor::white),
-	backColor(TCODColor::black),
+	foreColor(Color::white),
+	originalForeColor(Color::white),
+	backColor(Color::black),
 	natureObject(-1),
 	npcList(std::set<int>()),
 	itemList(std::set<int>()),
@@ -241,7 +242,7 @@ TCODColor Tile::GetBackColor() const {
 	if (blood)
 		result.r = std::min(255, backColor.r + blood->Depth());
 	if (marked)
-		result = result + TCODColor::darkGrey;
+		result = result + Color::darkGrey;
 	return result; 
 }
 

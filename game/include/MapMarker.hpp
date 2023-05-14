@@ -19,6 +19,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 
 #include "Coordinate.hpp"
 #include "data/Serialization.hpp"
+#include "Color.hpp"
 
 enum MarkerType {
 	FLASHINGMARKER
@@ -35,7 +36,7 @@ class MapMarker {
 	float counter;
 public:
 	MapMarker(MarkerType=FLASHINGMARKER, int graphic='?', Coordinate position=Coordinate(0,0), 
-		int duration=1, TCODColor color=TCODColor::pink);
+		int duration=1, TCODColor color=Color::pink);
 	bool Update();
 	int X() const;
 	int Y() const;

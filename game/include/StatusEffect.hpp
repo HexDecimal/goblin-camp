@@ -21,6 +21,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include <libtcod.hpp>
 
 #include "data/Serialization.hpp"
+#include "Color.hpp"
 
 enum NPCStat {
 	MOVESPEED,
@@ -78,7 +79,7 @@ struct StatusEffect {
 private:
 	GC_SERIALIZABLE_CLASS
 public:
-	StatusEffect(StatusEffectType=HUNGER, int graphic = 'Y', TCODColor=TCODColor::pink);
+	StatusEffect(StatusEffectType=HUNGER, int graphic = 'Y', TCODColor=Color::pink);
 	
 	static StatusEffectType StringToStatusEffectType(std::string);
 	static std::string StatusEffectTypeToString(StatusEffectType);

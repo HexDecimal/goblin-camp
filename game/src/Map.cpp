@@ -39,6 +39,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Faction.hpp"
 #include "Weather.hpp"
 #include "GCamp.hpp"
+#include "Color.hpp"
 
 static const int HARDCODED_WIDTH = 500;
 static const int HARDCODED_HEIGHT = 500;
@@ -209,7 +210,7 @@ int Map::GetGraphic(const Coordinate& p) const {
 }
 TCODColor Map::GetForeColor(const Coordinate& p) const { 
 	if (Map::IsInside(p)) return tile(p).GetForeColor(); 
-	return TCODColor::pink;
+	return Color::pink;
 }
 
 void Map::ForeColor(const Coordinate& p, TCODColor color) {
@@ -221,7 +222,7 @@ void Map::ForeColor(const Coordinate& p, TCODColor color) {
 
 TCODColor Map::GetBackColor(const Coordinate& p) const { 
 	if (Map::IsInside(p)) return tile(p).GetBackColor(); 
-	return TCODColor::yellow;
+	return Color::yellow;
 }
 
 void Map::SetNatureObject(const Coordinate& p, int val) { 
@@ -455,7 +456,7 @@ void Map::UpdateMarkers() {
 
 TCODColor Map::GetColor(const Coordinate& p) {
 	if (Map::IsInside(p)) return tile(p).GetForeColor();
-	return TCODColor::white;
+	return Color::white;
 }
 
 void Map::Burn(const Coordinate& p, int magnitude) {

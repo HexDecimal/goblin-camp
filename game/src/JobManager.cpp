@@ -31,6 +31,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Game.hpp"
 #include "KuhnMunkres.hpp"
 #include "StockManager.hpp"
+#include "Color.hpp"
 
 JobManager::JobManager() {
 	for (std::vector<ItemCat>::iterator i = Item::Categories.begin(); i != Item::Categories.end(); ++i) {
@@ -93,7 +94,7 @@ void JobManager::Draw(Coordinate pos, int from, int width, int height, TCODConso
 	int skip = 0;
 	int y = pos.Y();
 	boost::shared_ptr<NPC> npc;
-	TCODColor color_mappings[] = { TCODColor::green, TCODColor(0,160,60), TCODColor(175,150,50), TCODColor(165,95,0), TCODColor::grey };
+	TCODColor color_mappings[] = { Color::green, TCODColor(0,160,60), TCODColor(175,150,50), TCODColor(165,95,0), Color::grey };
 
 	for (int i=0; i<=PRIORITY_COUNT; i++) {
 		console->setDefaultForeground(color_mappings[i]);
@@ -116,13 +117,13 @@ void JobManager::Draw(Coordinate pos, int from, int width, int height, TCODConso
 				console->print(pos.X() + width - 11, y, "A-> %d", (*jobi)->Assigned());
 #endif
 				if (++y - pos.Y() >= height) {
-					console->setDefaultForeground(TCODColor::white);
+					console->setDefaultForeground(Color::white);
 					return;
 				}
 			}
 		}
 	}
-	console->setDefaultForeground(TCODColor::white);
+	console->setDefaultForeground(Color::white);
 }
 
 boost::weak_ptr<Job> JobManager::GetJob(int uid) {

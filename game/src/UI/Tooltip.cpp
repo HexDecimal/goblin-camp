@@ -18,6 +18,7 @@
 #include <libtcod.hpp>
 
 #include "UI/Tooltip.hpp"
+#include "Color.hpp"
 
 Tooltip* Tooltip::instance = 0;
 Tooltip* Tooltip::Inst() {
@@ -40,7 +41,7 @@ void Tooltip::AddEntry(TooltipEntry entry) {
 void Tooltip::Draw(int x, int y, TCODConsole *console) {
 	x += offsetX;
 	y += offsetY;
-	console->setDefaultBackground(TCODColor::darkestYellow);
+	console->setDefaultBackground(Color::darkestYellow);
 	int width = 0;
 	for(std::vector<TooltipEntry>::iterator it = entries.begin(); it != entries.end(); it++) {
 		width = std::max(width, (int)it->text.length());
@@ -56,8 +57,8 @@ void Tooltip::Draw(int x, int y, TCODConsole *console) {
 			y++;
 		}
 	}
-	console->setDefaultBackground(TCODColor::black);
-	console->setDefaultForeground(TCODColor::white);
+	console->setDefaultBackground(Color::black);
+	console->setDefaultForeground(Color::white);
 }
 
 void Tooltip::OffsetPosition(int x, int y) { offsetX = x; offsetY = y; }

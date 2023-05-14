@@ -43,6 +43,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "UI/Tooltip.hpp"
 #include "UI/JobDialog.hpp"
 #include "UI/DevConsole.hpp"
+#include "Color.hpp"
 
 UI* UI::instance = 0;
 
@@ -542,7 +543,7 @@ void UI::Draw(TCODConsole* console) {
 	Tooltip *tooltip = Tooltip::Inst();
 	tooltip->Clear();
 
-	if (extraTooltip != "") tooltip->AddEntry(TooltipEntry(extraTooltip, TCODColor::white));
+	if (extraTooltip != "") tooltip->AddEntry(TooltipEntry(extraTooltip, Color::white));
 	if (menuOpen) {
 		currentMenu->GetTooltip(mouseInput.cx, mouseInput.cy, tooltip);
 	}
@@ -610,7 +611,7 @@ int UI::DrawShortcutHelp(TCODConsole *console, int x, int y, std::string shortcu
 
 void UI::DrawTopBar(TCODConsole* console) {
 	console->setAlignment(TCOD_CENTER);
-	console->setDefaultForeground(TCODColor::white);
+	console->setDefaultForeground(Color::white);
 	console->print(console->getWidth() / 2, 0, "w(%s)  -  %s  -  Orcs: %d   Goblins: %d  -  Year %d, %s  FPS: %d", Map::Inst()->GetWindAbbreviation().c_str(),
 		Camp::Inst()->GetName().c_str(),
 		Game::Inst()->OrcCount(), Game::Inst()->GoblinCount(), 
@@ -619,14 +620,14 @@ void UI::DrawTopBar(TCODConsole* console) {
 		TCODSystem::getFps());
 
 	if (Game::Inst()->Paused()) {
-		console->setDefaultForeground(TCODColor::red);
+		console->setDefaultForeground(Color::red);
 		console->print(Game::Inst()->ScreenWidth() / 2, 1, "- - - - PAUSED - - - -");
 	}
 	console->setAlignment(TCOD_LEFT);
 
 	if (keyHelpTextColor > 0) {
 		console->setDefaultForeground(TCODColor(std::min(255, keyHelpTextColor), std::min(255, keyHelpTextColor), std::min(255, keyHelpTextColor)));
-		console->setColorControl(TCOD_COLCTRL_1, TCODColor(0, std::min(255, keyHelpTextColor), 0), TCODColor::black);
+		console->setColorControl(TCOD_COLCTRL_1, TCODColor(0, std::min(255, keyHelpTextColor), 0), Color::black);
 		int x = 10;
 		x += DrawShortcutHelp(console, x, 3, "Exit");
 		x += DrawShortcutHelp(console, x, 3, "Basics");
@@ -646,7 +647,7 @@ void UI::DrawTopBar(TCODConsole* console) {
 		x += DrawShortcutHelp(console, x, 7, "Pause");
 	}
 
-	console->setDefaultForeground(TCODColor::white);
+	console->setDefaultForeground(Color::white);
 }
 
 void UI::blueprint(const Coordinate& newBlue) {
@@ -927,7 +928,7 @@ void UI::ChooseNaturify() {
 void UI::ChooseChangeTerritory(bool add) {
 	if (Camp::Inst()->IsAutoTerritoryEnabled() && !add) {
 		Camp::Inst()->DisableAutoTerritory();
-		Announce::Inst()->AddMsg("Automatic territory handling disabled", TCODColor::cyan);
+		Announce::Inst()->AddMsg("Automatic territory handling disabled", Color::cyan);
 	}
 	UI::Inst()->state(UIRECTPLACEMENT);
 	UI::Inst()->SetRectCallback(boost::bind(&Map::SetTerritoryRectangle, Map::Inst(), _1, _2, add));

@@ -22,6 +22,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "GCamp.hpp"
 #include "Game.hpp"
 #include "Attack.hpp"
+#include "Color.hpp"
 
 //TODO: All this needs to be put into data files at some point
 
@@ -45,21 +46,21 @@ graphic(g),
 	case HUNGER:
 		name = "Hungry";
 		graphic = TCOD_CHAR_ARROW_S;
-		color = TCODColor::orange;
+		color = Color::orange;
 		cooldown = -1;
 		break;
 
 	case THIRST:
 		name = "Thirsty";
 		graphic = TCOD_CHAR_ARROW_S;
-		color = TCODColor::blue;
+		color = Color::blue;
 		cooldown = -1;
 		break;
 
 	case PANIC:
 		name = "Panicking";
 		graphic = '!';
-		color = TCODColor::white;
+		color = Color::white;
 		cooldown = UPDATES_PER_SECOND * 5;
 		contagionChance = 75;
 		break;
@@ -67,7 +68,7 @@ graphic(g),
 	case CONCUSSION:
 		name = "Concussed";
 		graphic = '?';
-		color = TCODColor::grey;
+		color = Color::grey;
 		cooldown = UPDATES_PER_SECOND * 5;
 		statChanges[MOVESPEED] = 0.5;
 		statChanges[DODGE] = 0.5;
@@ -76,7 +77,7 @@ graphic(g),
 	case DROWSY:
 		name = "Drowsy";
 		graphic = 'z';
-		color = TCODColor::lightGrey;
+		color = Color::lightGrey;
 		cooldown = -1;
 		statChanges[MOVESPEED] = 0.8;
 		statChanges[DODGE] = 0.8;
@@ -85,14 +86,14 @@ graphic(g),
 	case SLEEPING:
 		name = "Sleeping";
 		graphic = 'Z';
-		color = TCODColor::lightGrey;
+		color = Color::lightGrey;
 		cooldown = UPDATES_PER_SECOND;
 		break;
 
 	case POISON:
 		name = "Poisoned";
 		graphic = '#';
-		color = TCODColor::green;
+		color = Color::green;
 		cooldown = (int)(MONTH_LENGTH*2);
 		statChanges[STRENGTH] = 0.5;
 		statChanges[MOVESPEED] = 0.8;
@@ -102,7 +103,7 @@ graphic(g),
 	case BLEEDING:
 		name = "Bleeding";
 		graphic = '#';
-		color = TCODColor::red;
+		color = Color::red;
 		cooldown = UPDATES_PER_SECOND * 4;
 		damage.second = 4;
 		damageType = DAMAGE_SLASH;
@@ -112,7 +113,7 @@ graphic(g),
 	case FLYING:
 		name = "Flying";
 		graphic = '"';
-		color = TCODColor::lightBlue;
+		color = Color::lightBlue;
 		cooldown = -1;
 		negative=false;
 		break;
@@ -120,7 +121,7 @@ graphic(g),
 	case BADSLEEP:
 		name = "Sluggish";
 		graphic = '-';
-		color = TCODColor::grey;
+		color = Color::grey;
 		cooldown = MONTH_LENGTH*3;
 		statChanges[MOVESPEED] = 0.75;
 		statChanges[DODGE] = 0.75;
@@ -130,7 +131,7 @@ graphic(g),
 	case RAGE:
 		name = "Enraged";
 		graphic = '!';
-		color = TCODColor::red;
+		color = Color::red;
 		cooldown = UPDATES_PER_SECOND * 7;
 		statChanges[STRENGTH] = 2;
 		statChanges[DODGE] = 0.5;
@@ -140,7 +141,7 @@ graphic(g),
 	case SWIM:
 		name = "Swimming";
 		graphic = '~';
-		color = TCODColor::lightBlue;
+		color = Color::lightBlue;
 		cooldown = -1;
 		statChanges[DODGE] = 0.0;
 		statChanges[STRENGTH] = 0.75;
@@ -150,7 +151,7 @@ graphic(g),
 	case EATING:
 		name = "Eating";
 		graphic = TCOD_CHAR_ARROW_N;
-		color = TCODColor::orange;
+		color = Color::orange;
 		cooldown = -1;
 		negative=false;
 		break;
@@ -158,7 +159,7 @@ graphic(g),
 	case DRINKING:
 		name = "Drinking";
 		graphic = TCOD_CHAR_ARROW_N;
-		color = TCODColor::blue;
+		color = Color::blue;
 		cooldown = -1;
 		negative=false;
 		break;
@@ -173,7 +174,7 @@ graphic(g),
 		name = "Working";
 		cooldown = -1;
 		graphic = '+';
-		color = TCODColor::grey;
+		color = Color::grey;
 		negative=false;
 		break;
 
@@ -181,7 +182,7 @@ graphic(g),
 		name = "On fire!";
 		cooldown = UPDATES_PER_SECOND * 10;
 		graphic = '!';
-		color = TCODColor::red;
+		color = Color::red;
 		damage.second = 7;
 		damageType = DAMAGE_FIRE;
 		break;
@@ -190,7 +191,7 @@ graphic(g),
 		name = "Cracked skull";
 		cooldown = -1;
 		graphic = 168;
-		color = TCODColor::grey;
+		color = Color::grey;
 		visible = false;
 		break;
 
@@ -246,7 +247,7 @@ graphic(g),
 		name = "Tripped";
 		cooldown = UPDATES_PER_SECOND*2;
 		graphic = 31;
-		color = TCODColor::white;
+		color = Color::white;
 		statChanges[MOVESPEED] = 0.2;
 		statChanges[DODGE] = 0.2;
 		break;

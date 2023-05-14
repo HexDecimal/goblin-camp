@@ -29,6 +29,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "UI.hpp"
 #include "Game.hpp"
 #include "Stockpile.hpp"
+#include "Color.hpp"
 
 Dialog* ConstructionDialog::constructionInfoDialog = 0;
 boost::weak_ptr<Construction> ConstructionDialog::cachedConstruct = boost::weak_ptr<Construction>();
@@ -115,9 +116,9 @@ void ConstructionDialog::CancelJob(int job) {
 }
 
 void ConstructionDialog::DrawJob(ItemType category, int i, int x, int y, int width, bool selected, TCODConsole *console) {
-	console->setDefaultForeground(i == 0 ? TCODColor::white : TCODColor::grey);
+	console->setDefaultForeground(i == 0 ? Color::white : Color::grey);
 	console->print(x, y, Item::ItemTypeToString(category).c_str());
-	console->setDefaultForeground(TCODColor::white);
+	console->setDefaultForeground(Color::white);
 }
 
 void ConstructionDialog::ProductList::Draw(int x, int _y, int scroll, int width, int _height, TCODConsole *console) {
@@ -125,15 +126,15 @@ void ConstructionDialog::ProductList::Draw(int x, int _y, int scroll, int width,
 		int y = 0;
 		for (int prodi = 0; prodi < (signed int)cons->Products()->size() && y < scroll + _height; ++prodi) {
 			if (y >= scroll) {
-				console->setDefaultForeground(TCODColor::white);
+				console->setDefaultForeground(Color::white);
 				console->print(x, _y + y - scroll, "%s x%d", Item::ItemTypeToString(cons->Products(prodi)).c_str(), Item::Presets[cons->Products(prodi)].multiplier);
 			}
 			++y;
 			for (int compi = 0; compi < (signed int)Item::Components(cons->Products(prodi)).size() && y < scroll + _height; ++compi) {
 				if (y >= scroll) {
-					console->setDefaultForeground(TCODColor::white);
+					console->setDefaultForeground(Color::white);
 					console->putChar(x + 1, _y + y - scroll, compi+1 < (signed int)Item::Components(cons->Products(prodi)).size() ? TCOD_CHAR_TEEE : TCOD_CHAR_SW, TCOD_BKGND_SET);
-					console->setDefaultForeground(TCODColor::grey);
+					console->setDefaultForeground(Color::grey);
 					console->print(x + 2, _y + y - scroll, Item::ItemCategoryToString(Item::Components(cons->Products(prodi), compi)).c_str());
 				}
 				++y;
@@ -141,7 +142,7 @@ void ConstructionDialog::ProductList::Draw(int x, int _y, int scroll, int width,
 			++y;
 		}
 	}
-	console->setDefaultForeground(TCODColor::white);
+	console->setDefaultForeground(Color::white);
 }
 
 int ConstructionDialog::ProductList::TotalHeight() {

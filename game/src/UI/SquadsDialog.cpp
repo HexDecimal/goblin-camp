@@ -33,6 +33,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "UI/Frame.hpp"
 #include "Announce.hpp"
 #include "MapMarker.hpp"
+#include "Color.hpp"
 
 SquadsDialog* SquadsDialog::squadDialog = 0;
 SquadsDialog* SquadsDialog::SquadDialog() {
@@ -88,15 +89,15 @@ SquadsDialog* SquadsDialog::SquadDialog() {
 
 void SquadsDialog::DrawSquad(std::pair<std::string, boost::shared_ptr<Squad> > squadi, int i, int x, int y, int width, bool selected, TCODConsole *console) {
 	console->setBackgroundFlag(TCOD_BKGND_SET);
-	console->setDefaultBackground(selected ? TCODColor::blue : TCODColor::black);
+	console->setDefaultBackground(selected ? Color::blue : Color::black);
 	console->print(x, y, "%s (%d/%d)", squadi.first.c_str(), squadi.second->MemberCount(),
 		squadi.second->MemberLimit());    
-	console->setDefaultBackground(TCODColor::black);
+	console->setDefaultBackground(Color::black);
 }
 
 void SquadsDialog::GetSquadTooltip(std::pair<std::string, boost::shared_ptr<Squad> > squadi, Tooltip *tooltip) {
-	tooltip->AddEntry(TooltipEntry(squadi.first, TCODColor::white));
-	tooltip->AddEntry(TooltipEntry((boost::format(" Priority: %d") % squadi.second->Priority()).str(), TCODColor::grey));
+	tooltip->AddEntry(TooltipEntry(squadi.first, Color::white));
+	tooltip->AddEntry(TooltipEntry((boost::format(" Priority: %d") % squadi.second->Priority()).str(), Color::grey));
 
 	if(squadi.second->GetGeneralOrder() != NOORDER) {
 		std::string order;
@@ -114,10 +115,10 @@ void SquadsDialog::GetSquadTooltip(std::pair<std::string, boost::shared_ptr<Squa
 			//unreachable as we tested '!= NOORDER'
 			assert(false);
 		}
-		tooltip->AddEntry(TooltipEntry((boost::format(" Orders: %s") % order).str(), TCODColor::grey));
+		tooltip->AddEntry(TooltipEntry((boost::format(" Orders: %s") % order).str(), Color::grey));
 	}
-	tooltip->AddEntry(TooltipEntry((boost::format(" Weapon: %s") % Item::ItemCategoryToString(squadi.second->Weapon())).str(), TCODColor::grey));
-	tooltip->AddEntry(TooltipEntry((boost::format(" Armor: %s") % Item::ItemCategoryToString(squadi.second->Armor())).str(), TCODColor::grey));
+	tooltip->AddEntry(TooltipEntry((boost::format(" Weapon: %s") % Item::ItemCategoryToString(squadi.second->Weapon())).str(), Color::grey));
+	tooltip->AddEntry(TooltipEntry((boost::format(" Armor: %s") % Item::ItemCategoryToString(squadi.second->Armor())).str(), Color::grey));
 }
 
 boost::shared_ptr<Squad> SquadsDialog::GetSquad(int i) {
@@ -283,7 +284,7 @@ void SquadsDialog::RefreshMarkers() {
 	if (squad) {
 		int orderIndex = 0;
 		do { 
-			markers.push_back(Map::Inst()->AddMarker(MapMarker(FLASHINGMARKER, 'X', squad->TargetCoordinate(orderIndex), -1, TCODColor::azure)));
+			markers.push_back(Map::Inst()->AddMarker(MapMarker(FLASHINGMARKER, 'X', squad->TargetCoordinate(orderIndex), -1, Color::azure)));
 			squad->GetOrder(orderIndex);
 		} while (orderIndex != 0);
 	}

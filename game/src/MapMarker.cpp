@@ -20,6 +20,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "MapMarker.hpp"
 #include "Random.hpp"
 #include "Coordinate.hpp"
+#include "Color.hpp"
 
 MapMarker::MapMarker(MarkerType t, int g, Coordinate pos, int d, TCODColor c) : type(t), 
 	origColor(c), color(c), duration(d), graphic(g),
@@ -28,7 +29,7 @@ x(pos.X()), y(pos.Y()), counter(0.0f) {
 
 bool MapMarker::Update() {
 	if (duration > 0) --duration;
-	color = TCODColor::lerp(origColor, TCODColor::white, std::abs(std::sin(counter)));
+	color = TCODColor::lerp(origColor, Color::white, std::abs(std::sin(counter)));
 	counter += 0.1f;
 	if (counter > boost::math::constants::pi<float>()) counter = 0.0f;
 	return duration != 0;

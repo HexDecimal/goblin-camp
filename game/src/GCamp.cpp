@@ -48,6 +48,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Weather.hpp"
 #include "StockManager.hpp"
 #include "JobManager.hpp"
+#include "Color.hpp"
 
 #include "Version.hpp"
 
@@ -136,7 +137,7 @@ int GCMain(std::vector<std::string>& args) {
 void MainLoop() {
 	Game* game = Game::Inst();
 	if (!game->Running()) {
-		Announce::Inst()->AddMsg("Press 'h' for keyboard shortcuts", TCODColor::cyan);
+		Announce::Inst()->AddMsg("Press 'h' for keyboard shortcuts", Color::cyan);
 	}
 	game->Running(true);
 
@@ -249,7 +250,7 @@ void StartNewGame() {
 		int corpseuid = game->CreateItem(corpseLoc[c], Item::StringToItemType("corpse"));
 		boost::shared_ptr<Item> corpse = game->itemList[corpseuid];
 		corpse->Name("Corpse(Human woodsman)");
-		corpse->Color(TCODColor::white);
+		corpse->Color(Color::white);
 		for (int i = 0; i < 6; ++i)
 			game->CreateBlood(Random::ChooseInRadius(corpseLoc[c], 2));
 	}
@@ -336,8 +337,8 @@ int MainMenu() {
 	while (!exit) {
 		key = TCODConsole::checkForKeypress(TCOD_KEY_RELEASED);
 
-		TCODConsole::root->setDefaultForeground(TCODColor::white);
-		TCODConsole::root->setDefaultBackground(TCODColor::black);
+		TCODConsole::root->setDefaultForeground(Color::white);
+		TCODConsole::root->setDefaultBackground(Color::black);
 		TCODConsole::root->clear();
 
 		TCODConsole::root->printFrame(edgex, edgey, width, height, true, TCOD_BKGND_DEFAULT, "Main Menu");
@@ -345,23 +346,23 @@ int MainMenu() {
 		TCODConsole::root->setAlignment(TCOD_CENTER);
 		TCODConsole::root->setBackgroundFlag(TCOD_BKGND_SET);
 
-		TCODConsole::root->setDefaultForeground(TCODColor::celadon);
+		TCODConsole::root->setDefaultForeground(Color::celadon);
 		TCODConsole::root->print(edgex+width/2, edgey-3, Globals::gameVersion);
-		TCODConsole::root->setDefaultForeground(TCODColor::white);
+		TCODConsole::root->setDefaultForeground(Color::white);
 
 		for (unsigned int idx = 0; idx < entryCount; ++idx) {
 			const MainMenuEntry& entry = entries[idx];
 
 			if (selected == (idx * 2)) {
-				TCODConsole::root->setDefaultForeground(TCODColor::black);
-				TCODConsole::root->setDefaultBackground(TCODColor::white);
+				TCODConsole::root->setDefaultForeground(Color::black);
+				TCODConsole::root->setDefaultBackground(Color::white);
 			} else {
-				TCODConsole::root->setDefaultForeground(TCODColor::white);
-				TCODConsole::root->setDefaultBackground(TCODColor::black);
+				TCODConsole::root->setDefaultForeground(Color::white);
+				TCODConsole::root->setDefaultBackground(Color::black);
 			}
 
 			if (!entry.isActive()) {
-				TCODConsole::root->setDefaultForeground(TCODColor::grey);
+				TCODConsole::root->setDefaultForeground(Color::grey);
 			}
 
 			TCODConsole::root->print(edgex + width / 2, edgey + ((idx + 1) * 2), entry.label);
@@ -446,11 +447,11 @@ void LoadMenu() {
 
 		for (int i = 0; i < static_cast<int>(list.size()); ++i) {
 			if (selected == i) {
-				TCODConsole::root->setDefaultForeground(TCODColor::black);
-				TCODConsole::root->setDefaultBackground(TCODColor::white);
+				TCODConsole::root->setDefaultForeground(Color::black);
+				TCODConsole::root->setDefaultBackground(Color::white);
 			} else {
-				TCODConsole::root->setDefaultForeground(TCODColor::white);
-				TCODConsole::root->setDefaultBackground(TCODColor::black);
+				TCODConsole::root->setDefaultForeground(Color::white);
+				TCODConsole::root->setDefaultBackground(Color::black);
 			}
 			
 			std::string label = list[i].filename;
@@ -458,7 +459,7 @@ void LoadMenu() {
 				label = label.substr(0, 17) + "...";
 			}
 			TCODConsole::root->print(edgex + 1, edgey + 3 + i, "%-20s", label.c_str());
-			TCODConsole::root->setDefaultForeground(TCODColor::azure);
+			TCODConsole::root->setDefaultForeground(Color::azure);
 			
 			// last modification date
 			TCODConsole::root->print(edgex + 1 + 20 + 2, edgey + 3 + i, "%-20s", list[i].date.c_str());
@@ -467,8 +468,8 @@ void LoadMenu() {
 			TCODConsole::root->print(edgex + 1 + 20 + 2 + 20 + 2, edgey + 3 + i, "%s", list[i].size.c_str());
 		}
 		
-		TCODConsole::root->setDefaultForeground(TCODColor::white);
-		TCODConsole::root->setDefaultBackground(TCODColor::black);
+		TCODConsole::root->setDefaultForeground(Color::white);
+		TCODConsole::root->setDefaultBackground(Color::black);
 
 		TCODConsole::root->flush();
 
@@ -486,8 +487,8 @@ void LoadMenu() {
 			
 			if (selected < static_cast<int>(list.size()) && selected >= 0) {
 				if (!Data::LoadGame(list[selected].filename)) {
-					TCODConsole::root->setDefaultForeground(TCODColor::white);
-					TCODConsole::root->setDefaultBackground(TCODColor::black);
+					TCODConsole::root->setDefaultForeground(Color::white);
+					TCODConsole::root->setDefaultBackground(Color::black);
 					TCODConsole::root->setAlignment(TCOD_CENTER);
 					TCODConsole::root->clear();
 					
@@ -516,8 +517,8 @@ void LoadMenu() {
 void SaveMenu() {
 	if (!Game::Inst()->Running()) return;
 	std::string saveName;
-	TCODConsole::root->setDefaultForeground(TCODColor::white);
-	TCODConsole::root->setDefaultBackground(TCODColor::black);
+	TCODConsole::root->setDefaultForeground(Color::white);
+	TCODConsole::root->setDefaultBackground(Color::black);
 	while (true) {
 		TCOD_key_t key = TCODConsole::checkForKeypress(TCOD_KEY_RELEASED);
 		if (key.c >= ' ' && key.c <= '}' && saveName.size() < 28) {
@@ -530,8 +531,8 @@ void SaveMenu() {
 		else if (key.vk == TCODK_ENTER || key.vk == TCODK_KPENTER) {
 			savesCount = -1;
 			if (!Data::SaveGame(saveName)) {
-				TCODConsole::root->setDefaultForeground(TCODColor::white);
-				TCODConsole::root->setDefaultBackground(TCODColor::black);
+				TCODConsole::root->setDefaultForeground(Color::white);
+				TCODConsole::root->setDefaultBackground(Color::black);
 				TCODConsole::root->setAlignment(TCOD_CENTER);
 				TCODConsole::root->clear();
 				
@@ -555,9 +556,9 @@ void SaveMenu() {
 		TCODConsole::root->clear();
 		TCODConsole::root->printFrame(Game::Inst()->ScreenWidth()/2-15,
 			Game::Inst()->ScreenHeight()/2-3, 30, 3, true, TCOD_BKGND_SET, "Save name");
-		TCODConsole::root->setDefaultBackground(TCODColor::darkGrey);
+		TCODConsole::root->setDefaultBackground(Color::darkGrey);
 		TCODConsole::root->rect(Game::Inst()->ScreenWidth()/2-14, Game::Inst()->ScreenHeight()/2-2, 28, 1, true);
-		TCODConsole::root->setDefaultBackground(TCODColor::black);
+		TCODConsole::root->setDefaultBackground(Color::black);
 		TCODConsole::root->print(Game::Inst()->ScreenWidth()/2,
 			Game::Inst()->ScreenHeight()/2-2, "%s", saveName.c_str());
 		TCODConsole::root->flush();
@@ -639,8 +640,8 @@ void SettingsMenu() {
 
 		TCODConsole::root->clear();
 
-		TCODConsole::root->setDefaultForeground(TCODColor::white);
-		TCODConsole::root->setDefaultBackground(TCODColor::black);
+		TCODConsole::root->setDefaultForeground(Color::white);
+		TCODConsole::root->setDefaultBackground(Color::black);
 
 		TCODConsole::root->printFrame(x, y, w, h, true, TCOD_BKGND_SET, "Settings");
 		TCODConsole::root->print(x + 1, y + 1, "ENTER to save changes, ESC to discard.");
@@ -649,51 +650,51 @@ void SettingsMenu() {
 
 		for (unsigned int idx = 0; idx < fieldCount; ++idx) {
 			if (focus == &fields[idx]) {
-				TCODConsole::root->setDefaultForeground(TCODColor::green);
+				TCODConsole::root->setDefaultForeground(Color::green);
 			}
 			TCODConsole::root->print(x + 1, currentY, fields[idx].label);
 
-			TCODConsole::root->setDefaultForeground(TCODColor::white);
-			TCODConsole::root->setDefaultBackground(TCODColor::darkGrey);
+			TCODConsole::root->setDefaultForeground(Color::white);
+			TCODConsole::root->setDefaultBackground(Color::darkGrey);
 			TCODConsole::root->rect(x + 3, currentY + 1, w - 7, 1, true);
 			TCODConsole::root->print(x + 3, currentY + 1, "%s", fields[idx].value->c_str());
-			TCODConsole::root->setDefaultBackground(TCODColor::black);
+			TCODConsole::root->setDefaultBackground(Color::black);
 
 			currentY += 3;
 		}
 
-		TCODConsole::root->setDefaultForeground((fullscreen ? TCODColor::green : TCODColor::grey));
+		TCODConsole::root->setDefaultForeground((fullscreen ? Color::green : Color::grey));
 		TCODConsole::root->print(x + 1, currentY, "Fullscreen mode");
 
 		currentY += 2;
-		TCODConsole::root->setDefaultForeground((tutorial ? TCODColor::green : TCODColor::grey));
+		TCODConsole::root->setDefaultForeground((tutorial ? Color::green : Color::grey));
 		TCODConsole::root->print(x + 1, currentY, "Tutorial");
 
 		currentY += 2;
-		TCODConsole::root->setDefaultForeground((translucentUI ? TCODColor::green : TCODColor::grey));
+		TCODConsole::root->setDefaultForeground((translucentUI ? Color::green : Color::grey));
 		TCODConsole::root->print(x + 1, currentY, "Translucent UI");
 
 		currentY += 2;
-		TCODConsole::root->setDefaultForeground((compressSaves ? TCODColor::green : TCODColor::grey));
+		TCODConsole::root->setDefaultForeground((compressSaves ? Color::green : Color::grey));
 		TCODConsole::root->print(x + 1, currentY, "Compress saves");
 
 		currentY += 2;
-		TCODConsole::root->setDefaultForeground((autosave ? TCODColor::green : TCODColor::grey));
+		TCODConsole::root->setDefaultForeground((autosave ? Color::green : Color::grey));
 		TCODConsole::root->print(x + 1, currentY, "Autosave");
 
 		currentY += 2;
-		TCODConsole::root->setDefaultForeground((pauseOnDanger ? TCODColor::green : TCODColor::grey));
+		TCODConsole::root->setDefaultForeground((pauseOnDanger ? Color::green : Color::grey));
 		TCODConsole::root->print(x + 1, currentY, "Pause on danger");
 
 		currentY += 2;
-		TCODConsole::root->setDefaultForeground(TCODColor::white);
+		TCODConsole::root->setDefaultForeground(Color::white);
 		TCODConsole::root->print(x + 1, currentY, "Renderer");
 
 		for (unsigned int idx = 0; idx < rendererCount; ++idx) {
 			if (renderer == renderers[idx].renderer && useTileset == renderers[idx].useTileset) {
-				TCODConsole::root->setDefaultForeground(TCODColor::green);
+				TCODConsole::root->setDefaultForeground(Color::green);
 			} else {
-				TCODConsole::root->setDefaultForeground(TCODColor::grey);
+				TCODConsole::root->setDefaultForeground(Color::grey);
 			}
 			TCODConsole::root->print(x + 3, currentY + idx + 1, renderers[idx].label);
 		}
@@ -780,14 +781,14 @@ void ModsMenu() {
 	int currentY = 0;
 	
 	BOOST_FOREACH(Mods::Metadata mod, modList) {
-		sub.setDefaultBackground(TCODColor::black);
+		sub.setDefaultBackground(Color::black);
 		
 		sub.setAlignment(TCOD_CENTER);
-		sub.setDefaultForeground(TCODColor::azure);
+		sub.setDefaultForeground(Color::azure);
 		sub.print(w / 2, currentY, "%s", mod.mod.c_str());
 		
 		sub.setAlignment(TCOD_LEFT);
-		sub.setDefaultForeground(TCODColor::white);
+		sub.setDefaultForeground(Color::white);
 		sub.print(3, currentY + 2, "Name:    %s", mod.name.c_str());
 		sub.print(3, currentY + 4, "Author:  %s", mod.author.c_str());
 		sub.print(3, currentY + 6, "Version: %s", mod.version.c_str());
@@ -807,8 +808,8 @@ void ModsMenu() {
 
 		TCODConsole::root->clear();
 
-		TCODConsole::root->setDefaultForeground(TCODColor::white);
-		TCODConsole::root->setDefaultBackground(TCODColor::black);
+		TCODConsole::root->setDefaultForeground(Color::white);
+		TCODConsole::root->setDefaultBackground(Color::black);
 
 		TCODConsole::root->printFrame(x, y, w, h, true, TCOD_BKGND_SET, "Loaded mods");
 		TCODConsole::blit(&sub, 0, scroll, w - 2, h - 3, TCODConsole::root, x + 1, y + 2);
@@ -851,9 +852,9 @@ void TilesetsMenu() {
 	TCODConsole sub(listWidth - 2, std::max(1, subH + 1));
 
 
-	sub.setDefaultBackground(TCODColor::black);
+	sub.setDefaultBackground(Color::black);
 	sub.setAlignment(TCOD_LEFT);
-	sub.setDefaultForeground(TCODColor::azure);
+	sub.setDefaultForeground(Color::azure);
 
 	int currentY = 0;
 	sub.print(0, currentY, "Classical Text Mode");
@@ -895,8 +896,8 @@ void TilesetsMenu() {
 
 		TCODConsole::root->clear();
 
-		TCODConsole::root->setDefaultForeground(TCODColor::white);
-		TCODConsole::root->setDefaultBackground(TCODColor::black);
+		TCODConsole::root->setDefaultForeground(Color::white);
+		TCODConsole::root->setDefaultBackground(Color::black);
 
 		// Left frame
 		TCODConsole::root->printFrame(0, 0, listWidth, screenHeight, true, TCOD_BKGND_SET, "Tilesets");
@@ -1014,22 +1015,22 @@ void KeysMenu() {
 		
 		TCODConsole::root->clear();
 		
-		TCODConsole::root->setDefaultForeground(TCODColor::white);
-		TCODConsole::root->setDefaultBackground(TCODColor::black);
+		TCODConsole::root->setDefaultForeground(Color::white);
+		TCODConsole::root->setDefaultBackground(Color::black);
 		
 		TCODConsole::root->printFrame(x, y, w, h, true, TCOD_BKGND_SET, "Keys");
 		TCODConsole::root->print(x + 1, y + 1, "ENTER to save changes, ESC to discard.");
 		
 		for (int idx = 0; idx < static_cast<int>(labels.size()); ++idx) {
 			if (focus == idx) {
-				TCODConsole::root->setDefaultForeground(TCODColor::green);
+				TCODConsole::root->setDefaultForeground(Color::green);
 			}
 			TCODConsole::root->print(x + 1, y + idx + 3, labels[idx].c_str());
 			
 			char key = keyMap[labels[idx]];
 			TCODConsole::root->print(x + w - 6, y + idx + 3, (key == ' ' ? "[SPC]" : "[ %c ]"), key);
 			
-			TCODConsole::root->setDefaultForeground(TCODColor::white);
+			TCODConsole::root->setDefaultForeground(Color::white);
 		}
 		
 		mouse = TCODMouse::getStatus();

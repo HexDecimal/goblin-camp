@@ -34,6 +34,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "StockManager.hpp"
 #include "Attack.hpp"
 #include "Faction.hpp"
+#include "Color.hpp"
 
 std::vector<ItemPreset> Item::Presets = std::vector<ItemPreset>();
 std::vector<ItemCat> Item::Categories = std::vector<ItemCat>();
@@ -732,7 +733,7 @@ std::string ItemCat::GetName() {
 }
 
 ItemPreset::ItemPreset() : graphic('?'),
-	color(TCODColor::pink),
+	color(Color::pink),
 	name("Preset default"),
 	categories(std::set<ItemCategory>()),
 	nutrition(-1),

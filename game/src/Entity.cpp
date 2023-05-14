@@ -30,6 +30,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Entity.hpp"
 #include "Map.hpp"
 #include "Faction.hpp"
+#include "Color.hpp"
 
 FlightPath::FlightPath(Coordinate c) : coord(c), height(-1) {}
 
@@ -68,7 +69,7 @@ int Entity::GetFaction() const { return faction; }
 void Entity::SetFaction(int val) { faction = val; }
 
 void Entity::GetTooltip(int x, int y, Tooltip *tooltip) {
-	tooltip->AddEntry(TooltipEntry(name, TCODColor::white));
+	tooltip->AddEntry(TooltipEntry(name, Color::white));
 }
 
 int Entity::GetVelocity() { return velocity; }

@@ -32,6 +32,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "JobManager.hpp"
 #include "Job.hpp"
 #include "Stats.hpp"
+#include "Color.hpp"
 
 FireNode::FireNode(const Coordinate& pos, int vtemp) : pos(pos), temperature(vtemp) {
 	color.r = Random::Generate(225, 255);
@@ -60,7 +61,7 @@ void FireNode::Draw(Coordinate upleft, TCODConsole* console) {
 
 	if (screenX >= 0 && screenX < console->getWidth() &&
 		screenY >= 0 && screenY < console->getHeight()) {
-			console->putCharEx(screenX, screenY, graphic, color, TCODColor::black);
+			console->putCharEx(screenX, screenY, graphic, color, Color::black);
 	}
 }
 

@@ -25,6 +25,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "Construction.hpp"
 #include "Game.hpp"
 #include "Stockpile.hpp"
+#include "Color.hpp"
 
 Container::Container(
 	Coordinate pos, ItemType type, int capValue, int faction, std::vector<boost::weak_ptr<Item> > components,
@@ -125,7 +126,7 @@ void Container::GetTooltip(int x, int y, Tooltip *tooltip) {
 	for (std::set<boost::weak_ptr<Item> >::iterator itemi = items.begin(); itemi != items.end(); ++itemi) {
 		if (itemi->lock()) capacityUsed += std::max(1, itemi->lock()->GetBulk());
 	}
-	tooltip->AddEntry(TooltipEntry((boost::format("%s - %d items (%d/%d)") % name % size() % capacityUsed % (capacity + capacityUsed)).str(), TCODColor::white));
+	tooltip->AddEntry(TooltipEntry((boost::format("%s - %d items (%d/%d)") % name % size() % capacityUsed % (capacity + capacityUsed)).str(), Color::white));
 }
 
 void Container::TranslateContainerListeners() {
