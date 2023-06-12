@@ -343,29 +343,30 @@ int MainMenu() {
 
 		TCODConsole::root->printFrame(edgex, edgey, width, height, true, TCOD_BKGND_DEFAULT, "Main Menu");
 
-		TCODConsole::root->setAlignment(TCOD_CENTER);
-		TCODConsole::root->setBackgroundFlag(TCOD_BKGND_SET);
-
 		TCODConsole::root->setDefaultForeground(Color::celadon);
-		TCODConsole::root->print(edgex+width/2, edgey-3, Globals::gameVersion);
-		TCODConsole::root->setDefaultForeground(Color::white);
+		tcod::print(*TCODConsole::root, {edgex+width/2, edgey-3},
+					Globals::gameVersion,
+					Color::celadon, Color::black, TCOD_CENTER);
 
 		for (unsigned int idx = 0; idx < entryCount; ++idx) {
+			TCOD_ColorRGB bg,fg;
+
 			const MainMenuEntry& entry = entries[idx];
 
 			if (selected == (idx * 2)) {
-				TCODConsole::root->setDefaultForeground(Color::black);
-				TCODConsole::root->setDefaultBackground(Color::white);
+				fg = Color::black;
+				bg = Color::white;
 			} else {
-				TCODConsole::root->setDefaultForeground(Color::white);
-				TCODConsole::root->setDefaultBackground(Color::black);
+				fg = Color::white;
+				bg = Color::black;
 			}
 
 			if (!entry.isActive()) {
-				TCODConsole::root->setDefaultForeground(Color::grey);
+				fg = Color::grey;
 			}
-
-			TCODConsole::root->print(edgex + width / 2, edgey + ((idx + 1) * 2), entry.label);
+			tcod::print(*TCODConsole::root, {edgex + width / 2, edgey + ((idx + 1) * 2)},
+						entry.label,
+						fg, bg, TCOD_CENTER);
 
 			if (key.c == entry.shortcut && entry.isActive()) {
 				exit     = (entry.function == NULL);
@@ -439,37 +440,41 @@ void LoadMenu() {
 		
 		TCODConsole::root->clear();
 
+		TCODConsole::root->setDefaultForeground(Color::white);
+		TCODConsole::root->setDefaultBackground(Color::black);
 		TCODConsole::root->printFrame(edgex, edgey, width, height, true, TCOD_BKGND_SET, "Saved games");
-		
-		TCODConsole::root->setAlignment(TCOD_CENTER);
-		TCODConsole::root->print(edgex + (width / 2), edgey + 1, "ESC to cancel.");
+
+		tcod::print(*TCODConsole::root, {edgex + width/2, edgey + 1},
+					"ESC to cancel" ,
+					 Color::white, Color::black, TCOD_CENTER);
+
 		TCODConsole::root->setAlignment(TCOD_LEFT);
 
 		for (int i = 0; i < static_cast<int>(list.size()); ++i) {
+			TCOD_ColorRGB bg,fg;
 			if (selected == i) {
-				TCODConsole::root->setDefaultForeground(Color::black);
-				TCODConsole::root->setDefaultBackground(Color::white);
+				fg = Color::black;
+				bg = Color::white;
 			} else {
-				TCODConsole::root->setDefaultForeground(Color::white);
-				TCODConsole::root->setDefaultBackground(Color::black);
+				fg = Color::white;
+				bg = Color::black;
 			}
-			
+
 			std::string label = list[i].filename;
 			if (label.size() > 20) {
 				label = label.substr(0, 17) + "...";
 			}
-			TCODConsole::root->print(edgex + 1, edgey + 3 + i, "%-20s", label.c_str());
-			TCODConsole::root->setDefaultForeground(Color::azure);
-			
+
+			tcod::print(*TCODConsole::root, {edgex + 1, edgey + 3 + i},
+						tcod::stringf("%-20s", label.c_str()), fg, bg);
+
 			// last modification date
-			TCODConsole::root->print(edgex + 1 + 20 + 2, edgey + 3 + i, "%-20s", list[i].date.c_str());
-			
+			tcod::print(*TCODConsole::root, {edgex + 1 + 20 + 2, edgey + 3 + i},
+						 tcod::stringf( "%-20s", list[i].date.c_str()), Color::azure, bg);
 			// filesize
-			TCODConsole::root->print(edgex + 1 + 20 + 2 + 20 + 2, edgey + 3 + i, "%s", list[i].size.c_str());
+			tcod::print(*TCODConsole::root, {edgex + 1 + 20 + 2 + 20 + 2, edgey + 3 + i},
+						 list[i].size, Color::azure, bg);
 		}
-		
-		TCODConsole::root->setDefaultForeground(Color::white);
-		TCODConsole::root->setDefaultBackground(Color::black);
 
 		TCODConsole::root->flush();
 
@@ -484,24 +489,21 @@ void LoadMenu() {
 
 		if (!mouseStatus.lbutton && lButtonDown) {
 			lButtonDown = false;
-			
+
 			if (selected < static_cast<int>(list.size()) && selected >= 0) {
 				if (!Data::LoadGame(list[selected].filename)) {
-					TCODConsole::root->setDefaultForeground(Color::white);
-					TCODConsole::root->setDefaultBackground(Color::black);
-					TCODConsole::root->setAlignment(TCOD_CENTER);
 					TCODConsole::root->clear();
-					
-					TCODConsole::root->print(
-						Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2,
-						"Could not load the game. Refer to the logfile."
-					);
-					
-					TCODConsole::root->print(
-						Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2 + 1,
-						"Press any key to return to the main menu."
-					);
-					
+
+					tcod::print(*TCODConsole::root,
+							{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2,},
+							"Could not load the game. Refer to the logfile",
+							Color::white, Color::black, TCOD_CENTER);
+
+					tcod::print(*TCODConsole::root,
+							{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2 + 1,},
+							"Press any key to return to the main menu",
+							Color::white, Color::black, TCOD_CENTER);
+
 					TCODConsole::root->flush();
 					TCODConsole::waitForKeypress(true);
 					return;
