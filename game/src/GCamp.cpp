@@ -495,12 +495,12 @@ void LoadMenu() {
 					TCODConsole::root->clear();
 
 					tcod::print(*TCODConsole::root,
-							{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2,},
+							{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2},
 							"Could not load the game. Refer to the logfile",
 							Color::white, Color::black, TCOD_CENTER);
 
 					tcod::print(*TCODConsole::root,
-							{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2 + 1,},
+							{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2 + 1},
 							"Press any key to return to the main menu",
 							Color::white, Color::black, TCOD_CENTER);
 
@@ -519,8 +519,6 @@ void LoadMenu() {
 void SaveMenu() {
 	if (!Game::Inst()->Running()) return;
 	std::string saveName;
-	TCODConsole::root->setDefaultForeground(Color::white);
-	TCODConsole::root->setDefaultBackground(Color::black);
 	while (true) {
 		TCOD_key_t key = TCODConsole::checkForKeypress(TCOD_KEY_RELEASED);
 		if (key.c >= ' ' && key.c <= '}' && saveName.size() < 28) {
@@ -537,17 +535,17 @@ void SaveMenu() {
 				TCODConsole::root->setDefaultBackground(Color::black);
 				TCODConsole::root->setAlignment(TCOD_CENTER);
 				TCODConsole::root->clear();
-				
-				TCODConsole::root->print(
-					Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2,
-					"Could not save the game. Refer to the logfile."
-				);
-				
-				TCODConsole::root->print(
-					Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2 + 1,
-					"Press any key to return to the main menu."
-				);
-				
+
+				tcod::print(*TCODConsole::root,
+						{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2},
+						"Could not save the game. Refer to the logfile",
+						Color::white, Color::black, TCOD_CENTER);
+
+				tcod::print(*TCODConsole::root,
+						{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2 + 1},
+						"Press any key to return to the main menu",
+						Color::white, Color::black, TCOD_CENTER);
+
 				TCODConsole::root->flush();
 				TCODConsole::waitForKeypress(true);
 				return;
@@ -555,14 +553,18 @@ void SaveMenu() {
 			break;
 		}
 
+		TCODConsole::root->setDefaultForeground(Color::white);
+		TCODConsole::root->setDefaultBackground(Color::black);
 		TCODConsole::root->clear();
 		TCODConsole::root->printFrame(Game::Inst()->ScreenWidth()/2-15,
 			Game::Inst()->ScreenHeight()/2-3, 30, 3, true, TCOD_BKGND_SET, "Save name");
-		TCODConsole::root->setDefaultBackground(Color::darkGrey);
+
+		TCODConsole::root->setDefaultBackground(Color::darkGrey); /*FIXME this one does not seem to work*/
 		TCODConsole::root->rect(Game::Inst()->ScreenWidth()/2-14, Game::Inst()->ScreenHeight()/2-2, 28, 1, true);
-		TCODConsole::root->setDefaultBackground(Color::black);
-		TCODConsole::root->print(Game::Inst()->ScreenWidth()/2,
-			Game::Inst()->ScreenHeight()/2-2, "%s", saveName.c_str());
+
+		tcod::print(*TCODConsole::root,
+					{Game::Inst()->ScreenWidth()/2, Game::Inst()->ScreenHeight()/2 - 2},
+					saveName, Color::white, Color::black, TCOD_CENTER);
 		TCODConsole::root->flush();
 
 	}
@@ -597,7 +599,7 @@ void SettingsMenu() {
 
 	TCODConsole::root->setAlignment(TCOD_LEFT);
 
-	const int w = 40;
+	const int w = 39;
 	const int h = 29;
 	const int x = Game::Inst()->ScreenWidth()/2 - (w / 2);
 	const int y = Game::Inst()->ScreenHeight()/2 - (h / 2);
@@ -646,59 +648,74 @@ void SettingsMenu() {
 		TCODConsole::root->setDefaultBackground(Color::black);
 
 		TCODConsole::root->printFrame(x, y, w, h, true, TCOD_BKGND_SET, "Settings");
-		TCODConsole::root->print(x + 1, y + 1, "ENTER to save changes, ESC to discard.");
+		tcod::print(*TCODConsole::root,
+					{x + 1, y + 1,},
+					"ENTER to save changes, ESC to discard",
+					Color::white, Color::black, TCOD_LEFT);
 
 		int currentY = y + 3;
+
+		TCOD_ColorRGB fg;
+		TCOD_ColorRGB bg = Color::black;
 
 		for (unsigned int idx = 0; idx < fieldCount; ++idx) {
 			if (focus == &fields[idx]) {
 				TCODConsole::root->setDefaultForeground(Color::green);
+				fg = Color::green;
+			} else {
+				fg = Color::white;
 			}
-			TCODConsole::root->print(x + 1, currentY, fields[idx].label);
+
+			tcod::print(*TCODConsole::root, {x + 1, currentY},
+						fields[idx].label, fg, bg, TCOD_LEFT);
 
 			TCODConsole::root->setDefaultForeground(Color::white);
 			TCODConsole::root->setDefaultBackground(Color::darkGrey);
+
 			TCODConsole::root->rect(x + 3, currentY + 1, w - 7, 1, true);
-			TCODConsole::root->print(x + 3, currentY + 1, "%s", fields[idx].value->c_str());
+			fg = Color::white;
+
+			tcod::print(*TCODConsole::root, {x + 3, currentY + 1},
+						fields[idx].value->c_str(), fg, bg, TCOD_LEFT);
+
 			TCODConsole::root->setDefaultBackground(Color::black);
 
 			currentY += 3;
 		}
-
-		TCODConsole::root->setDefaultForeground((fullscreen ? Color::green : Color::grey));
-		TCODConsole::root->print(x + 1, currentY, "Fullscreen mode");
-
-		currentY += 2;
-		TCODConsole::root->setDefaultForeground((tutorial ? Color::green : Color::grey));
-		TCODConsole::root->print(x + 1, currentY, "Tutorial");
+		fg = fullscreen ? Color::green : Color::grey;
+		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Fullscreen mode", fg, bg, TCOD_LEFT);
 
 		currentY += 2;
-		TCODConsole::root->setDefaultForeground((translucentUI ? Color::green : Color::grey));
-		TCODConsole::root->print(x + 1, currentY, "Translucent UI");
+		fg = tutorial ? Color::green : Color::grey;
+		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Tutorial", fg, bg, TCOD_LEFT);
 
 		currentY += 2;
-		TCODConsole::root->setDefaultForeground((compressSaves ? Color::green : Color::grey));
-		TCODConsole::root->print(x + 1, currentY, "Compress saves");
+		fg = translucentUI ? Color::green : Color::grey;
+		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Translucent UI", fg, bg, TCOD_LEFT);
 
 		currentY += 2;
-		TCODConsole::root->setDefaultForeground((autosave ? Color::green : Color::grey));
-		TCODConsole::root->print(x + 1, currentY, "Autosave");
+		fg = compressSaves ? Color::green : Color::grey;
+		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Compress saves", fg, bg, TCOD_LEFT);
 
 		currentY += 2;
-		TCODConsole::root->setDefaultForeground((pauseOnDanger ? Color::green : Color::grey));
-		TCODConsole::root->print(x + 1, currentY, "Pause on danger");
+		fg = autosave ? Color::green : Color::grey;
+		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Autosave", fg, bg, TCOD_LEFT);
 
 		currentY += 2;
-		TCODConsole::root->setDefaultForeground(Color::white);
-		TCODConsole::root->print(x + 1, currentY, "Renderer");
+		fg = pauseOnDanger ? Color::green : Color::grey;
+		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Pause on danger", fg, bg, TCOD_LEFT);
+
+		currentY += 2;
+		fg = Color::white;
+		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Renderer", fg, bg, TCOD_LEFT);
 
 		for (unsigned int idx = 0; idx < rendererCount; ++idx) {
 			if (renderer == renderers[idx].renderer && useTileset == renderers[idx].useTileset) {
-				TCODConsole::root->setDefaultForeground(Color::green);
+				fg = Color::green;
 			} else {
-				TCODConsole::root->setDefaultForeground(Color::grey);
+				fg = Color::grey;
 			}
-			TCODConsole::root->print(x + 3, currentY + idx + 1, renderers[idx].label);
+			tcod::print(*TCODConsole::root, {x + 3, currentY + idx + 1}, renderers[idx].label, fg, bg, TCOD_LEFT);
 		}
 
 		TCODConsole::root->flush();
@@ -745,7 +762,7 @@ void SettingsMenu() {
 			}
 		}
 	}
-	
+
 	Config::SetStringCVar("resolutionX", width);
 	Config::SetStringCVar("resolutionY", height);
 	Config::SetCVar("renderer", renderer);
