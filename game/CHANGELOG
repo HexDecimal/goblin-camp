@@ -14,7 +14,7 @@ Goblin Camp Changelog
 * Added double sized version of Default Tileset to play on screens with high DPI (11f2623f)
 * Fix libtcod deprecation warnings
   - TCODColor deprecation warnings (0adc0bca, d055503b)
-  - TCODConsole::print deprecation warnings (9d2790d9, )
+  - TCODConsole::print deprecation warnings (9d2790d9, 77b4aca6, )
 
 -- version 0.221 (2022-08-01) --
 

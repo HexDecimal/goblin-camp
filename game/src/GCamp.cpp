@@ -792,26 +792,22 @@ void ModsMenu() {
 	const int h = 20;
 	const int x = Game::Inst()->ScreenWidth()/2 - (w / 2);
 	const int y = Game::Inst()->ScreenHeight()/2 - (h / 2);
-	
+
 	const std::list<Mods::Metadata>& modList = Mods::GetLoaded();
 	const int subH = static_cast<int>(modList.size()) * 9;
 	TCODConsole sub(w - 2, std::max(1, subH));
 
 	int currentY = 0;
-	
+
 	BOOST_FOREACH(Mods::Metadata mod, modList) {
-		sub.setDefaultBackground(Color::black);
-		
-		sub.setAlignment(TCOD_CENTER);
-		sub.setDefaultForeground(Color::azure);
-		sub.print(w / 2, currentY, "%s", mod.mod.c_str());
-		
-		sub.setAlignment(TCOD_LEFT);
-		sub.setDefaultForeground(Color::white);
-		sub.print(3, currentY + 2, "Name:    %s", mod.name.c_str());
-		sub.print(3, currentY + 4, "Author:  %s", mod.author.c_str());
-		sub.print(3, currentY + 6, "Version: %s", mod.version.c_str());
-		
+		tcod::print(sub, {w / 2, currentY}, mod.mod.c_str(), Color::azure, Color::black, TCOD_CENTER);
+
+		tcod::print(sub, {3, currentY + 2}, tcod::stringf("Name:    %s", mod.name.c_str()),
+					Color::white, Color::black, TCOD_LEFT);
+		tcod::print(sub, {3, currentY + 4}, tcod::stringf("Author:  %s", mod.author.c_str()),
+					Color::white, Color::black, TCOD_LEFT);
+		tcod::print(sub, {3, currentY + 6}, tcod::stringf("Version: %s", mod.version.c_str()),
+					Color::white, Color::black, TCOD_LEFT);
 		currentY += 9;
 	}
 
@@ -876,11 +872,11 @@ void TilesetsMenu() {
 	sub.setDefaultForeground(Color::azure);
 
 	int currentY = 0;
-	sub.print(0, currentY, "Classical Text Mode");
+	tcod::print(sub, {0, currentY}, "Classical Text Mode", Color::azure, Color::black, TCOD_LEFT);
 	currentY += 1;
 
 	BOOST_FOREACH(TileSetMetadata tileset, tilesetsList) {
-		sub.print(0, currentY, "%s", tileset.name.c_str());
+		tcod::print(sub, {0, currentY}, tileset.name.c_str(), Color::azure, Color::black, TCOD_LEFT);
 		currentY += 1;
 	}
 
@@ -936,27 +932,38 @@ void TilesetsMenu() {
 
 		if (selection > 0 && selection - 1 < static_cast<int>(tilesetsList.size()))
 		{
-			TCODConsole::root->print(listWidth + 3, 2,      "Name:    %s", tilesetsList.at(selection - 1).name.c_str());
-			TCODConsole::root->print(listWidth + 3, 4,      "Size:    %dx%d", tilesetsList.at(selection - 1).width, tilesetsList.at(selection - 1).height);
-			TCODConsole::root->print(listWidth + 3, 6,      "Author:  %s", tilesetsList.at(selection - 1).author.c_str());
-			TCODConsole::root->print(listWidth + 3, 8,      "Version: %s",tilesetsList.at(selection - 1).version.c_str());
-			TCODConsole::root->print(listWidth + 3, 10,     "Description:");
+			tcod::print(*TCODConsole::root, {listWidth + 3, 2},
+					tcod::stringf("Name:    %s", tilesetsList.at(selection - 1).name.c_str()),
+					Color::white, Color::black, TCOD_LEFT);
+			tcod::print(*TCODConsole::root, {listWidth + 3, 4},
+					tcod::stringf("Size:    %dx%d", tilesetsList.at(selection - 1).width, tilesetsList.at(selection - 1).height),
+					Color::white, Color::black, TCOD_LEFT);
+			tcod::print(*TCODConsole::root, {listWidth + 3, 6},
+					tcod::stringf("Author:  %s", tilesetsList.at(selection - 1).author.c_str()),
+					Color::white, Color::black, TCOD_LEFT);
+			tcod::print(*TCODConsole::root, {listWidth + 3, 8},
+					tcod::stringf("Version: %s",tilesetsList.at(selection - 1).version.c_str()),
+					Color::white, Color::black, TCOD_LEFT);
+			tcod::print(*TCODConsole::root, {listWidth + 3, 10}, "Description:", Color::white, Color::black, TCOD_LEFT);
 			TCODConsole::root->printRect(listWidth + 3, 12, screenWidth - listWidth - 6, screenHeight - 19, "%s", tilesetsList.at(selection - 1).description.c_str());
 		} else {
 			int charX, charY;
 			TCODSystem::getCharSize(&charX, &charY);
 
-			TCODConsole::root->print(listWidth + 3, 2,      "Name:    Classical Text Mode") ;
-			TCODConsole::root->print(listWidth + 3, 4,      "Size:    %dx%d", charX, charY );
-			TCODConsole::root->print(listWidth + 3, 6,      "Description: Use font glyphs as game tiles");
+			tcod::print(*TCODConsole::root, {listWidth + 3, 2}, "Name:    Classical Text Mode", Color::white, Color::black, TCOD_LEFT);
+			tcod::print(*TCODConsole::root, {listWidth + 3, 4},
+					tcod::stringf("Size:    %dx%d", charX, charY),
+					Color::white, Color::black, TCOD_LEFT);
+			tcod::print(*TCODConsole::root, {listWidth + 3, 6}, "Description: Use font glyphs as game tiles", Color::white, Color::black, TCOD_LEFT);
 		}
 
 		// Buttons
 		int buttonDist = (screenWidth - listWidth) / 3;
 		TCODConsole::root->printFrame(listWidth + buttonDist - 4, screenHeight - 6, 8, 3);
-		TCODConsole::root->print(listWidth + buttonDist - 1, screenHeight - 5, "Ok");
+		tcod::print(*TCODConsole::root, {listWidth + buttonDist - 1,  screenHeight - 5}, "Ok", Color::white, Color::black, TCOD_LEFT);
+
 		TCODConsole::root->printFrame(listWidth + 2 * buttonDist - 4, screenHeight - 6, 8, 3);
-		TCODConsole::root->print(listWidth + 2 * buttonDist - 3, screenHeight - 5, "Cancel");
+		tcod::print(*TCODConsole::root, {listWidth + 2 * buttonDist - 3, screenHeight - 5}, "Cancel", Color::white, Color::black, TCOD_LEFT);
 		mouse = TCODMouse::getStatus();
 		if (mouse.lbutton) {
 			clicked = true;
