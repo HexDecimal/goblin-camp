@@ -1011,63 +1011,65 @@ void KeysMenu() {
 	Config::KeyMap& keyMap = Config::GetKeyMap();
 	std::vector<std::string> labels;
 	labels.reserve(keyMap.size());
-	
+
 	TCODConsole::root->setAlignment(TCOD_LEFT);
-	
-	int w = 40;
+
+	int w = 39;
 	const int h = static_cast<int>(keyMap.size()) + 4;
-	
+
 	BOOST_FOREACH(Config::KeyMap::value_type pair, keyMap) {
 		w = std::max(w, (int)pair.first.size() + 7); // 2 for borders, 5 for [ X ]
 		labels.push_back(pair.first);
 	}
-	
+
 	const int x = Game::Inst()->ScreenWidth()/2 - (w / 2);
 	const int y = Game::Inst()->ScreenHeight()/2 - (h / 2);
-	
+
 	TCOD_mouse_t mouse;
 	TCOD_key_t   key;
-	
+
 	int focus = 0;
-	
+
 	while (true) {
 		key = TCODConsole::checkForKeypress(TCOD_KEY_RELEASED);
 		if (key.vk == TCODK_ESCAPE) return;
 		else if (key.vk == TCODK_ENTER || key.vk == TCODK_KPENTER) break;
-		
+
 		if (key.c >= ' ' && key.c <= '~') {
 			keyMap[labels[focus]] = key.c;
 		}
-		
+
 		TCODConsole::root->clear();
-		
+
 		TCODConsole::root->setDefaultForeground(Color::white);
 		TCODConsole::root->setDefaultBackground(Color::black);
-		
+
 		TCODConsole::root->printFrame(x, y, w, h, true, TCOD_BKGND_SET, "Keys");
-		TCODConsole::root->print(x + 1, y + 1, "ENTER to save changes, ESC to discard.");
-		
+		tcod::print(*TCODConsole::root, {x + 1, y + 1}, "ENTER to save changes, ESC to discard", Color::white, Color::black, TCOD_LEFT);
+		TCOD_ColorRGB fg;
 		for (int idx = 0; idx < static_cast<int>(labels.size()); ++idx) {
-			if (focus == idx) {
-				TCODConsole::root->setDefaultForeground(Color::green);
-			}
-			TCODConsole::root->print(x + 1, y + idx + 3, labels[idx].c_str());
-			
+			if (focus == idx)
+				fg = Color::green;
+			else
+				fg = Color::white;
+
+			tcod::print(*TCODConsole::root, {x + 1, y + idx + 3}, labels[idx].c_str(), fg, Color::black, TCOD_LEFT);
+
 			char key = keyMap[labels[idx]];
-			TCODConsole::root->print(x + w - 6, y + idx + 3, (key == ' ' ? "[SPC]" : "[ %c ]"), key);
-			
-			TCODConsole::root->setDefaultForeground(Color::white);
+			tcod::print(*TCODConsole::root, {x + w - 6, y + idx + 3},
+					tcod::stringf((key == ' ' ? "[SPC]" : "[ %c ]"), key),
+					fg, Color::black, TCOD_LEFT);
 		}
-		
+
 		mouse = TCODMouse::getStatus();
-		
+
 		if (mouse.lbutton && mouse.cx > x && mouse.cx < x + w && mouse.cy >= y + 3 && mouse.cy < y + h - 1) {
 			focus = mouse.cy - y - 3;
 		}
-		
+
 		TCODConsole::root->flush();
 	}
-	
+
 	try {
 		Config::Save();
 	} catch (const std::exception& e) {
