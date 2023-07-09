@@ -362,8 +362,8 @@ void NPC::HandleWeariness() {
 }
 
 void NPC::Update() {
-	if (map->NPCList(pos)->size() > 1) _bgcolor = Color::darkGrey;
-	else _bgcolor = Color::black;
+	if (map->NPCList(pos)->size() > 1) _bgcolor = GCampColor::darkGrey;
+	else _bgcolor = GCampColor::black;
 
 	UpdateStatusEffects();
 	//Apply armor effects if present
@@ -703,7 +703,7 @@ MOVENEARend:
 					AddEffect(WORKING);
 					tmp = boost::static_pointer_cast<Construction>(currentEntity().lock())->Build();
 					if (tmp > 0) {
-						Announce::Inst()->AddMsg((boost::format("%s completed") % currentEntity().lock()->Name()).str(), Color::white, currentEntity().lock()->Position());
+						Announce::Inst()->AddMsg((boost::format("%s completed") % currentEntity().lock()->Name()).str(), GCampColor::white, currentEntity().lock()->Position());
 						TaskFinished(TASKSUCCESS);
 						break;
 					} else if (tmp == BUILD_NOMATERIAL) {
@@ -1556,7 +1556,7 @@ void NPC::GetTooltip(int x, int y, Tooltip *tooltip) {
 	if(faction == PLAYERFACTION && !jobs.empty()) {
 		boost::shared_ptr<Job> job = jobs.front();
 		if(job->name != "Idle") {
-			tooltip->AddEntry(TooltipEntry((boost::format("  %s") % job->name).str(), Color::grey));
+			tooltip->AddEntry(TooltipEntry((boost::format("  %s") % job->name).str(), GCampColor::grey));
 		}
 	}
 }
@@ -1599,7 +1599,7 @@ void NPC::Kill(std::string deathMessage) {
 			inventory->RemoveItem(witem);
 		}
 
-		if (deathMessage.length() > 0) Announce::Inst()->AddMsg(deathMessage, (factionPtr->IsFriendsWith(PLAYERFACTION) ? Color::red : Color::brass), Position());
+		if (deathMessage.length() > 0) Announce::Inst()->AddMsg(deathMessage, (factionPtr->IsFriendsWith(PLAYERFACTION) ? GCampColor::red : GCampColor::brass), Position());
 		
 		Stats::Inst()->deaths[NPC::NPCTypeToString(type)] += 1;
 		Stats::Inst()->AddPoints(NPC::Presets[type].health);
@@ -2154,7 +2154,7 @@ boost::weak_ptr<Squad> NPC::MemberOf() const {return squad;}
 void NPC::Escape() {
 	if (carried.lock()) {
 		Announce::Inst()->AddMsg((boost::format("%s has escaped with [%s]!") % name % carried.lock()->Name()).str(), 
-			Color::yellow, Position());
+			GCampColor::yellow, Position());
 	}
 	DestroyAllItems();
 	escaped = true;
@@ -2526,7 +2526,7 @@ NPCPreset::NPCPreset(std::string typeNameVal) :
 	typeName(typeNameVal),
 	name("AA Club"),
 	plural(""),
-	color(Color::pink),
+	color(GCampColor::pink),
 	graphic('?'),
 	expert(false),
 	health(10),

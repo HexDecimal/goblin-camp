@@ -62,13 +62,13 @@ void FarmPlot::Draw(Coordinate upleft, TCODConsole* console) {
 				screeny = y - upleft.Y();
 				if (screenx >= 0 && screenx < console->getWidth() && screeny >= 0 &&
 					screeny < console->getHeight()) {
-						console->setCharForeground(screenx, screeny, Color::darkAmber);
+						console->setCharForeground(screenx, screeny, GCampColor::darkAmber);
 						console->setChar(screenx, screeny, (graphic[1]));
 
 						if (!containers[p]->empty()) {
 							boost::weak_ptr<Item> item = containers[p]->GetFirstItem();
 							if (item.lock()) {
-								console->putCharEx(screenx, screeny, item.lock()->GetGraphic(), item.lock()->Color(), Color::black);
+								console->putCharEx(screenx, screeny, item.lock()->GetGraphic(), item.lock()->Color(), GCampColor::black);
 							}
 						}
 

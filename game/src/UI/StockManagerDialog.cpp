@@ -53,7 +53,7 @@ public:
 	
 	void _GetTooltip(int x, int y, Tooltip *tooltip) {
 		if(x >= _x && x < _x + width && y >= _y && y < _y + height - 2) { // subtract 2 from height so tooltip doesn't appear when mouse is over spinner
-			tooltip->AddEntry(TooltipEntry(Item::ItemTypeToString(itemType), Color::white));
+			tooltip->AddEntry(TooltipEntry(Item::ItemTypeToString(itemType), GCampColor::white));
 			std::string compName = "";
 			int compAmt = 0;
 			for (int compi = 0; compi < (signed int)Item::Components(itemType).size(); ++compi) {
@@ -62,14 +62,14 @@ public:
 					compAmt++;
 				} else {
 					if(compName.length() > 0) {
-						tooltip->AddEntry(TooltipEntry((boost::format(" %s x%d") % compName % compAmt).str(), Color::grey));
+						tooltip->AddEntry(TooltipEntry((boost::format(" %s x%d") % compName % compAmt).str(), GCampColor::grey));
 					}
 					compName = thisCompName;
 					compAmt = 1;
 				}
 			}
 			if(compName.length() > 0) {
-				tooltip->AddEntry(TooltipEntry((boost::format(" %s x%d") % compName % compAmt).str(), Color::grey));
+				tooltip->AddEntry(TooltipEntry((boost::format(" %s x%d") % compName % compAmt).str(), GCampColor::grey));
 			}
 		}
 	}
@@ -85,7 +85,7 @@ public:
 		console->setAlignment(TCOD_CENTER);
 		console->setDefaultForeground(Item::Presets[itemType].color);
 		console->print(x + 8, y, "%c %s", Item::Presets[itemType].graphic, Item::Presets[itemType].name.c_str());
-		console->setDefaultForeground(Color::white);
+		console->setDefaultForeground(GCampColor::white);
 		console->print(x + 8, y+1, "%d", StockManager::Inst()->TypeQuantity(itemType));
 		UIContainer::Draw(x, y, console);
 	}

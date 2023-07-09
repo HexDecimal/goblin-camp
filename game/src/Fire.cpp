@@ -61,7 +61,7 @@ void FireNode::Draw(Coordinate upleft, TCODConsole* console) {
 
 	if (screenX >= 0 && screenX < console->getWidth() &&
 		screenY >= 0 && screenY < console->getHeight()) {
-			console->putCharEx(screenX, screenY, graphic, color, Color::black);
+			console->putCharEx(screenX, screenY, graphic, color, GCampColor::black);
 	}
 }
 

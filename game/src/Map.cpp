@@ -210,7 +210,7 @@ int Map::GetGraphic(const Coordinate& p) const {
 }
 TCODColor Map::GetForeColor(const Coordinate& p) const { 
 	if (Map::IsInside(p)) return tile(p).GetForeColor(); 
-	return Color::pink;
+	return GCampColor::pink;
 }
 
 void Map::ForeColor(const Coordinate& p, TCODColor color) {
@@ -222,7 +222,7 @@ void Map::ForeColor(const Coordinate& p, TCODColor color) {
 
 TCODColor Map::GetBackColor(const Coordinate& p) const { 
 	if (Map::IsInside(p)) return tile(p).GetBackColor(); 
-	return Color::yellow;
+	return GCampColor::yellow;
 }
 
 void Map::SetNatureObject(const Coordinate& p, int val) { 
@@ -456,7 +456,7 @@ void Map::UpdateMarkers() {
 
 TCODColor Map::GetColor(const Coordinate& p) {
 	if (Map::IsInside(p)) return tile(p).GetForeColor();
-	return Color::white;
+	return GCampColor::white;
 }
 
 void Map::Burn(const Coordinate& p, int magnitude) {

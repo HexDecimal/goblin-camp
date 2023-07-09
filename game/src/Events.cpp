@@ -150,7 +150,7 @@ void Events::SpawnHostileMonsters() {
 		GenerateEdgeCoordinates(map, a, b);
 
 		Game::Inst()->CreateNPCs(hostileSpawnCount, monsterType, a, b);
-		Announce::Inst()->AddMsg(msg, Color::red, Coordinate((a.X() + b.X()) / 2, (a.Y() + b.Y()) / 2));
+		Announce::Inst()->AddMsg(msg, GCampColor::red, Coordinate((a.X() + b.X()) / 2, (a.Y() + b.Y()) / 2));
 		timeSinceHostileSpawn = 0;
 		if (Config::GetCVar<bool>("pauseOnDanger")) 
 			Game::Inst()->AddDelay(UPDATES_PER_SECOND, boost::bind(&Game::Pause, Game::Inst()));
@@ -393,7 +393,7 @@ void Events::SpawnMigratingAnimals() {
 		msg = (boost::format("A %s migration is occurring outside your %s.") % NPC::Presets[monsterType].name
 			% Camp::Inst()->GetName()).str();
 		
-		Announce::Inst()->AddMsg(msg, Color::green, (a+b)/2);
+		Announce::Inst()->AddMsg(msg, GCampColor::green, (a+b)/2);
 #if DEBUG
 		std::cout << "Migration underway.\n";
 #endif

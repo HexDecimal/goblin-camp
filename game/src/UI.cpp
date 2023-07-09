@@ -543,7 +543,7 @@ void UI::Draw(TCODConsole* console) {
 	Tooltip *tooltip = Tooltip::Inst();
 	tooltip->Clear();
 
-	if (extraTooltip != "") tooltip->AddEntry(TooltipEntry(extraTooltip, Color::white));
+	if (extraTooltip != "") tooltip->AddEntry(TooltipEntry(extraTooltip, GCampColor::white));
 	if (menuOpen) {
 		currentMenu->GetTooltip(mouseInput.cx, mouseInput.cy, tooltip);
 	}
@@ -611,7 +611,7 @@ int UI::DrawShortcutHelp(TCODConsole *console, int x, int y, std::string shortcu
 
 void UI::DrawTopBar(TCODConsole* console) {
 	console->setAlignment(TCOD_CENTER);
-	console->setDefaultForeground(Color::white);
+	console->setDefaultForeground(GCampColor::white);
 	console->print(console->getWidth() / 2, 0, "w(%s)  -  %s  -  Orcs: %d   Goblins: %d  -  Year %d, %s  FPS: %d", Map::Inst()->GetWindAbbreviation().c_str(),
 		Camp::Inst()->GetName().c_str(),
 		Game::Inst()->OrcCount(), Game::Inst()->GoblinCount(), 
@@ -620,14 +620,14 @@ void UI::DrawTopBar(TCODConsole* console) {
 		TCODSystem::getFps());
 
 	if (Game::Inst()->Paused()) {
-		console->setDefaultForeground(Color::red);
+		console->setDefaultForeground(GCampColor::red);
 		console->print(Game::Inst()->ScreenWidth() / 2, 1, "- - - - PAUSED - - - -");
 	}
 	console->setAlignment(TCOD_LEFT);
 
 	if (keyHelpTextColor > 0) {
 		console->setDefaultForeground(TCODColor(std::min(255, keyHelpTextColor), std::min(255, keyHelpTextColor), std::min(255, keyHelpTextColor)));
-		console->setColorControl(TCOD_COLCTRL_1, TCODColor(0, std::min(255, keyHelpTextColor), 0), Color::black);
+		console->setColorControl(TCOD_COLCTRL_1, TCODColor(0, std::min(255, keyHelpTextColor), 0), GCampColor::black);
 		int x = 10;
 		x += DrawShortcutHelp(console, x, 3, "Exit");
 		x += DrawShortcutHelp(console, x, 3, "Basics");
@@ -647,7 +647,7 @@ void UI::DrawTopBar(TCODConsole* console) {
 		x += DrawShortcutHelp(console, x, 7, "Pause");
 	}
 
-	console->setDefaultForeground(Color::white);
+	console->setDefaultForeground(GCampColor::white);
 }
 
 void UI::blueprint(const Coordinate& newBlue) {
@@ -928,7 +928,7 @@ void UI::ChooseNaturify() {
 void UI::ChooseChangeTerritory(bool add) {
 	if (Camp::Inst()->IsAutoTerritoryEnabled() && !add) {
 		Camp::Inst()->DisableAutoTerritory();
-		Announce::Inst()->AddMsg("Automatic territory handling disabled", Color::cyan);
+		Announce::Inst()->AddMsg("Automatic territory handling disabled", GCampColor::cyan);
 	}
 	UI::Inst()->state(UIRECTPLACEMENT);
 	UI::Inst()->SetRectCallback(boost::bind(&Map::SetTerritoryRectangle, Map::Inst(), _1, _2, add));

@@ -70,21 +70,21 @@ void Menu::Draw(int x, int y, TCODConsole* console) {
 	console->setBackgroundFlag(TCOD_BKGND_SET);
 	//Draw the menu entries
 	for (int i = 0; i < (signed int)choices.size(); ++i) {
-		console->setDefaultBackground(Color::black);
+		console->setDefaultBackground(GCampColor::black);
 		if (UI::Inst()->KeyHelpTextColor() > 0) {
 			console->setDefaultForeground(TCODColor(0,std::min(255, UI::Inst()->KeyHelpTextColor()),0));
 			console->print(x, y+1+(i*2), boost::lexical_cast<std::string>(i+1).c_str());
 		}
-		if (choices[i].enabled) console->setDefaultForeground(Color::white);
-		else console->setDefaultForeground(Color::grey);
+		if (choices[i].enabled) console->setDefaultForeground(GCampColor::white);
+		else console->setDefaultForeground(GCampColor::grey);
 		if (_selected == i) {
-			console->setDefaultBackground(Color::white);
-			console->setDefaultForeground(Color::darkerGrey);
+			console->setDefaultBackground(GCampColor::white);
+			console->setDefaultForeground(GCampColor::darkerGrey);
 		}
 		console->print(x+1, y+1+(i*2), choices[i].label.c_str());
 	}
-	console->setDefaultForeground(Color::white);
-	console->setDefaultBackground(Color::black);
+	console->setDefaultForeground(GCampColor::white);
+	console->setDefaultBackground(GCampColor::black);
 }
 
 MenuResult Menu::Update(int x, int y, bool clicked, const TCOD_key_t key) {
@@ -303,7 +303,7 @@ void Menu::GetTooltip(int x, int y, Tooltip *tooltip) {
 				if (y < (signed int)choices.size() && choices[y].tooltip != "") {
 					tooltip->OffsetPosition((_x + width) - x - 1, 0);
 					for (unsigned int i = 0; i < choices[y].tooltip.length(); i += 25) {
-						tooltip->AddEntry(TooltipEntry(choices[y].tooltip.substr(i, 25), Color::white));
+						tooltip->AddEntry(TooltipEntry(choices[y].tooltip.substr(i, 25), GCampColor::white));
 					}
 				}
 			}

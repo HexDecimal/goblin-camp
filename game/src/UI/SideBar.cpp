@@ -56,7 +56,7 @@ MenuResult SideBar::Update(int x, int y, bool clicked) {
 
 void SideBar::Draw(TCODConsole* console) {
 	if (entity.lock()) {
-		console->setDefaultForeground(Color::white);
+		console->setDefaultForeground(GCampColor::white);
 		int edgeX = console->getWidth();
 		leftX = edgeX - width;
 		topY = std::max(0,(console->getHeight() - height) / 2);
@@ -66,7 +66,7 @@ void SideBar::Draw(TCODConsole* console) {
 			contents->Draw(edgeX - (width-1), topY+14, console);
 		}
 		
-		console->setDefaultForeground(Color::white);
+		console->setDefaultForeground(GCampColor::white);
 		console->printFrame(edgeX - width, topY, width, height, false, TCOD_BKGND_DEFAULT, entity.lock()->Name().c_str());
 		Game::Inst()->Draw(console, entity.lock()->Center().X() + 0.5f, entity.lock()->Center().Y() + 0.5f, false, edgeX - (width - 4), topY + 2, 11, 11);
 		
@@ -82,14 +82,14 @@ void SideBar::Draw(TCODConsole* console) {
 			for (int i = 0; i < health; ++i) {
 				console->setChar(edgeX - (width-2), topY+12-i, 231);
 				TCODColor color;
-				if (health > 7) color = Color::green;
-				else if (health > 3) color = Color::yellow;
-				else color = Color::red;
+				if (health > 7) color = GCampColor::green;
+				else if (health > 3) color = GCampColor::yellow;
+				else color = GCampColor::red;
 				console->setCharForeground(edgeX - (width-2), topY+12-i, color);
 			}
 		}
 	}
-	console->setDefaultForeground(Color::white);
+	console->setDefaultForeground(GCampColor::white);
 }
 
 void SideBar::GetTooltip(int x, int y, Tooltip *tooltip, TCODConsole *console) {
@@ -160,13 +160,13 @@ void SideBar::SetEntity(boost::weak_ptr<Entity> ent) {
 void SideBar::DrawStatusEffect(StatusEffect effect, int i, int x, int y, int width, bool selected, TCODConsole *console) {
 	console->setDefaultForeground(effect.color);
 	console->print(x, y, "%c%s", effect.graphic, effect.name.c_str());
-	console->setDefaultForeground(Color::white);
+	console->setDefaultForeground(GCampColor::white);
 }
 
 void SideBar::DrawSeed(std::pair<ItemType, bool> seed, int i, int x, int y, int width, bool selected, TCODConsole *console) {
-	console->setDefaultForeground(seed.second ? Color::green : Color::red);
+	console->setDefaultForeground(seed.second ? GCampColor::green : GCampColor::red);
 	console->print(x, y, "%c %s", seed.second ? 225 : 224, Item::Presets[seed.first].name.substr(0, width-3).c_str());
-	console->setDefaultForeground(Color::white);
+	console->setDefaultForeground(GCampColor::white);
 }
 
 std::string SideBar::NPCSquadLabel(NPC *npc) {

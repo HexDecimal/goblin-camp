@@ -79,7 +79,7 @@ std::string Construction::ConstructionTypeToString(ConstructionType type) {
 std::vector<int> Construction::AllowedAmount = std::vector<int>();
 
 Construction::Construction(ConstructionType vtype, const Coordinate& target) : Entity(),
-	color(Color::white),
+	color(GCampColor::white),
 	type(vtype),
 	producer(false),
 	progress(0),
@@ -102,7 +102,7 @@ Construction::Construction(ConstructionType vtype, const Coordinate& target) : E
 	stockpile = Construction::Presets[type].tags[STOCKPILE];
 	farmplot = Construction::Presets[type].tags[FARMPLOT];
 	condition = 0-maxCondition;
-	if (Construction::Presets[type].color != Color::black) color = Construction::Presets[type].color;
+	if (Construction::Presets[type].color != GCampColor::black) color = Construction::Presets[type].color;
 }
 
 Construction::~Construction() {
@@ -162,7 +162,7 @@ void Construction::Draw(Coordinate upleft, TCODConsole* console) {
 	if (screenx + width - 1 >= 0 && screenx < console->getWidth() && screeny + height - 1 >= 0 && screeny < console->getHeight()) {
 		for (int i = 1; i < (signed int)graphic.size(); ++i) {
 			if(screenx + i - 1 >= 0 && screeny >= 0 && screenx + i - 1 < console->getWidth() && screeny < console->getHeight()) {
-				if (dismantle) console->setCharBackground(screenx+i-1, screeny, Color::darkGrey);
+				if (dismantle) console->setCharBackground(screenx+i-1, screeny, GCampColor::darkGrey);
 				else console->setCharBackground(screenx+i-1, screeny,  TCODColor((int)(50 - cos(strobe) * 50), (int)(50 - cos(strobe) * 50), (int)(50 - cos(strobe) * 50)));
 
 				console->setCharForeground(screenx+i-1,screeny, color);
@@ -833,9 +833,9 @@ void Construction::Update() {
 		if (Random::Generate(Construction::Presets[type].spawnFrequency - 1) == 0) {
 			NPCType monsterType = Game::Inst()->GetRandomNPCTypeByTag(Construction::Presets[type].spawnCreaturesTag);
 			TCODColor announceColor = NPC::Presets[monsterType].tags.find("friendly") != 
-				NPC::Presets[monsterType].tags.end() ? Color::green : Color::red;
+				NPC::Presets[monsterType].tags.end() ? GCampColor::green : GCampColor::red;
 
-			if (announceColor == Color::red && Config::GetCVar<bool>("pauseOnDanger"))
+			if (announceColor == GCampColor::red && Config::GetCVar<bool>("pauseOnDanger"))
 				Game::Inst()->AddDelay(UPDATES_PER_SECOND, boost::bind(&Game::Pause, Game::Inst()));
 
 			int amount = Game::DiceToInt(NPC::Presets[monsterType].group);
@@ -953,7 +953,7 @@ ConstructionPreset::ConstructionPreset() :
 	placementType(UIPLACEMENT),
 	blocksLight(true),
 	permanent(false),
-	color(Color::black),
+	color(GCampColor::black),
 	tileReqs(std::set<TileType>()),
 	tier(0),
 	description(""),

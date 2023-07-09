@@ -46,21 +46,21 @@ graphic(g),
 	case HUNGER:
 		name = "Hungry";
 		graphic = TCOD_CHAR_ARROW_S;
-		color = Color::orange;
+		color = GCampColor::orange;
 		cooldown = -1;
 		break;
 
 	case THIRST:
 		name = "Thirsty";
 		graphic = TCOD_CHAR_ARROW_S;
-		color = Color::blue;
+		color = GCampColor::blue;
 		cooldown = -1;
 		break;
 
 	case PANIC:
 		name = "Panicking";
 		graphic = '!';
-		color = Color::white;
+		color = GCampColor::white;
 		cooldown = UPDATES_PER_SECOND * 5;
 		contagionChance = 75;
 		break;
@@ -68,7 +68,7 @@ graphic(g),
 	case CONCUSSION:
 		name = "Concussed";
 		graphic = '?';
-		color = Color::grey;
+		color = GCampColor::grey;
 		cooldown = UPDATES_PER_SECOND * 5;
 		statChanges[MOVESPEED] = 0.5;
 		statChanges[DODGE] = 0.5;
@@ -77,7 +77,7 @@ graphic(g),
 	case DROWSY:
 		name = "Drowsy";
 		graphic = 'z';
-		color = Color::lightGrey;
+		color = GCampColor::lightGrey;
 		cooldown = -1;
 		statChanges[MOVESPEED] = 0.8;
 		statChanges[DODGE] = 0.8;
@@ -86,14 +86,14 @@ graphic(g),
 	case SLEEPING:
 		name = "Sleeping";
 		graphic = 'Z';
-		color = Color::lightGrey;
+		color = GCampColor::lightGrey;
 		cooldown = UPDATES_PER_SECOND;
 		break;
 
 	case POISON:
 		name = "Poisoned";
 		graphic = '#';
-		color = Color::green;
+		color = GCampColor::green;
 		cooldown = (int)(MONTH_LENGTH*2);
 		statChanges[STRENGTH] = 0.5;
 		statChanges[MOVESPEED] = 0.8;
@@ -103,7 +103,7 @@ graphic(g),
 	case BLEEDING:
 		name = "Bleeding";
 		graphic = '#';
-		color = Color::red;
+		color = GCampColor::red;
 		cooldown = UPDATES_PER_SECOND * 4;
 		damage.second = 4;
 		damageType = DAMAGE_SLASH;
@@ -113,7 +113,7 @@ graphic(g),
 	case FLYING:
 		name = "Flying";
 		graphic = '"';
-		color = Color::lightBlue;
+		color = GCampColor::lightBlue;
 		cooldown = -1;
 		negative=false;
 		break;
@@ -121,7 +121,7 @@ graphic(g),
 	case BADSLEEP:
 		name = "Sluggish";
 		graphic = '-';
-		color = Color::grey;
+		color = GCampColor::grey;
 		cooldown = MONTH_LENGTH*3;
 		statChanges[MOVESPEED] = 0.75;
 		statChanges[DODGE] = 0.75;
@@ -131,7 +131,7 @@ graphic(g),
 	case RAGE:
 		name = "Enraged";
 		graphic = '!';
-		color = Color::red;
+		color = GCampColor::red;
 		cooldown = UPDATES_PER_SECOND * 7;
 		statChanges[STRENGTH] = 2;
 		statChanges[DODGE] = 0.5;
@@ -141,7 +141,7 @@ graphic(g),
 	case SWIM:
 		name = "Swimming";
 		graphic = '~';
-		color = Color::lightBlue;
+		color = GCampColor::lightBlue;
 		cooldown = -1;
 		statChanges[DODGE] = 0.0;
 		statChanges[STRENGTH] = 0.75;
@@ -151,7 +151,7 @@ graphic(g),
 	case EATING:
 		name = "Eating";
 		graphic = TCOD_CHAR_ARROW_N;
-		color = Color::orange;
+		color = GCampColor::orange;
 		cooldown = -1;
 		negative=false;
 		break;
@@ -159,7 +159,7 @@ graphic(g),
 	case DRINKING:
 		name = "Drinking";
 		graphic = TCOD_CHAR_ARROW_N;
-		color = Color::blue;
+		color = GCampColor::blue;
 		cooldown = -1;
 		negative=false;
 		break;
@@ -174,7 +174,7 @@ graphic(g),
 		name = "Working";
 		cooldown = -1;
 		graphic = '+';
-		color = Color::grey;
+		color = GCampColor::grey;
 		negative=false;
 		break;
 
@@ -182,7 +182,7 @@ graphic(g),
 		name = "On fire!";
 		cooldown = UPDATES_PER_SECOND * 10;
 		graphic = '!';
-		color = Color::red;
+		color = GCampColor::red;
 		damage.second = 7;
 		damageType = DAMAGE_FIRE;
 		break;
@@ -191,7 +191,7 @@ graphic(g),
 		name = "Cracked skull";
 		cooldown = -1;
 		graphic = 168;
-		color = Color::grey;
+		color = GCampColor::grey;
 		visible = false;
 		break;
 
@@ -247,7 +247,7 @@ graphic(g),
 		name = "Tripped";
 		cooldown = UPDATES_PER_SECOND*2;
 		graphic = 31;
-		color = Color::white;
+		color = GCampColor::white;
 		statChanges[MOVESPEED] = 0.2;
 		statChanges[DODGE] = 0.2;
 		break;

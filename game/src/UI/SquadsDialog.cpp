@@ -89,15 +89,15 @@ SquadsDialog* SquadsDialog::SquadDialog() {
 
 void SquadsDialog::DrawSquad(std::pair<std::string, boost::shared_ptr<Squad> > squadi, int i, int x, int y, int width, bool selected, TCODConsole *console) {
 	console->setBackgroundFlag(TCOD_BKGND_SET);
-	console->setDefaultBackground(selected ? Color::blue : Color::black);
+	console->setDefaultBackground(selected ? GCampColor::blue : GCampColor::black);
 	console->print(x, y, "%s (%d/%d)", squadi.first.c_str(), squadi.second->MemberCount(),
 		squadi.second->MemberLimit());    
-	console->setDefaultBackground(Color::black);
+	console->setDefaultBackground(GCampColor::black);
 }
 
 void SquadsDialog::GetSquadTooltip(std::pair<std::string, boost::shared_ptr<Squad> > squadi, Tooltip *tooltip) {
-	tooltip->AddEntry(TooltipEntry(squadi.first, Color::white));
-	tooltip->AddEntry(TooltipEntry((boost::format(" Priority: %d") % squadi.second->Priority()).str(), Color::grey));
+	tooltip->AddEntry(TooltipEntry(squadi.first, GCampColor::white));
+	tooltip->AddEntry(TooltipEntry((boost::format(" Priority: %d") % squadi.second->Priority()).str(), GCampColor::grey));
 
 	if(squadi.second->GetGeneralOrder() != NOORDER) {
 		std::string order;
@@ -115,10 +115,10 @@ void SquadsDialog::GetSquadTooltip(std::pair<std::string, boost::shared_ptr<Squa
 			//unreachable as we tested '!= NOORDER'
 			assert(false);
 		}
-		tooltip->AddEntry(TooltipEntry((boost::format(" Orders: %s") % order).str(), Color::grey));
+		tooltip->AddEntry(TooltipEntry((boost::format(" Orders: %s") % order).str(), GCampColor::grey));
 	}
-	tooltip->AddEntry(TooltipEntry((boost::format(" Weapon: %s") % Item::ItemCategoryToString(squadi.second->Weapon())).str(), Color::grey));
-	tooltip->AddEntry(TooltipEntry((boost::format(" Armor: %s") % Item::ItemCategoryToString(squadi.second->Armor())).str(), Color::grey));
+	tooltip->AddEntry(TooltipEntry((boost::format(" Weapon: %s") % Item::ItemCategoryToString(squadi.second->Weapon())).str(), GCampColor::grey));
+	tooltip->AddEntry(TooltipEntry((boost::format(" Armor: %s") % Item::ItemCategoryToString(squadi.second->Armor())).str(), GCampColor::grey));
 }
 
 boost::shared_ptr<Squad> SquadsDialog::GetSquad(int i) {
@@ -284,7 +284,7 @@ void SquadsDialog::RefreshMarkers() {
 	if (squad) {
 		int orderIndex = 0;
 		do { 
-			markers.push_back(Map::Inst()->AddMarker(MapMarker(FLASHINGMARKER, 'X', squad->TargetCoordinate(orderIndex), -1, Color::azure)));
+			markers.push_back(Map::Inst()->AddMarker(MapMarker(FLASHINGMARKER, 'X', squad->TargetCoordinate(orderIndex), -1, GCampColor::azure)));
 			squad->GetOrder(orderIndex);
 		} while (orderIndex != 0);
 	}

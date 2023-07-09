@@ -33,7 +33,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 NatureObjectPreset::NatureObjectPreset() :
 	name("NATUREOBJECT PRESET"),
 	graphic('?'),
-	color(Color::pink),
+	color(GCampColor::pink),
 	components(std::list<ItemType>()),
 	rarity(100),
 	cluster(1),
@@ -81,7 +81,7 @@ void NatureObject::Draw(Coordinate upleft, TCODConsole* console) {
 	int screenx = (pos - upleft).X();
 	int screeny = (pos - upleft).Y();
 	if (screenx >= 0 && screenx < console->getWidth() && screeny >= 0 && screeny < console->getHeight()) {
-		console->putCharEx(screenx, screeny, graphic, color, marked ? Color::white : Color::black);
+		console->putCharEx(screenx, screeny, graphic, color, marked ? GCampColor::white : GCampColor::black);
 	}
 }
 

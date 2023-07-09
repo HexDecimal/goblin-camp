@@ -37,7 +37,7 @@
 
 #include <libtcod.hpp>
 
-namespace Color{
+namespace GCampColor{
 
   static const TCOD_ColorRGB black        = tcod::ColorRGB{0,     0,   0};
   static const TCOD_ColorRGB darkestGrey  = tcod::ColorRGB{31,   31,  31};

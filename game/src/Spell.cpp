@@ -39,7 +39,7 @@ name(vname),
 	immaterial(false),
 	graphic('?'),
 	speed(1),
-	color(Color::pink),
+	color(GCampColor::pink),
 	fallbackGraphicsSet(""),
 	graphicsHint(-1)
 {}

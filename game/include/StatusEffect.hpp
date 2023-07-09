@@ -79,7 +79,7 @@ struct StatusEffect {
 private:
 	GC_SERIALIZABLE_CLASS
 public:
-	StatusEffect(StatusEffectType=HUNGER, int graphic = 'Y', TCODColor=Color::pink);
+	StatusEffect(StatusEffectType=HUNGER, int graphic = 'Y', TCODColor=GCampColor::pink);
 	
 	static StatusEffectType StringToStatusEffectType(std::string);
 	static std::string StatusEffectTypeToString(StatusEffectType);

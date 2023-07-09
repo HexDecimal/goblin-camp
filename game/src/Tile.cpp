@@ -53,9 +53,9 @@ Tile::Tile(TileType newType, int newCost) :
 	blocksWater(false),
 	water(boost::shared_ptr<WaterNode>()),
 	graphic('.'),
-	foreColor(Color::white),
-	originalForeColor(Color::white),
-	backColor(Color::black),
+	foreColor(GCampColor::white),
+	originalForeColor(GCampColor::white),
+	backColor(GCampColor::black),
 	natureObject(-1),
 	npcList(std::set<int>()),
 	itemList(std::set<int>()),
@@ -242,7 +242,7 @@ TCODColor Tile::GetBackColor() const {
 	if (blood)
 		result.r = std::min(255, backColor.r + blood->Depth());
 	if (marked)
-		result = result + Color::darkGrey;
+		result = result + GCampColor::darkGrey;
 	return result; 
 }
 

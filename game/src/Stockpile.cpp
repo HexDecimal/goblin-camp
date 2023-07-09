@@ -335,7 +335,7 @@ void Stockpile::Draw(Coordinate upleft, TCODConsole* console) {
 				screeny = y - upleft.Y();
 				if (screenx >= 0 && screenx < console->getWidth() && screeny >= 0 &&
 					screeny < console->getHeight()) {
-						if (dismantle) console->setCharBackground(screenx,screeny, Color::darkGrey);
+						if (dismantle) console->setCharBackground(screenx,screeny, GCampColor::darkGrey);
 						else {
 							int gray = static_cast<int>(50 - cos(strobe) * 50);
 							console->setCharBackground(screenx, screeny, TCODColor(gray, gray, gray));
@@ -608,7 +608,7 @@ void Stockpile::GetTooltip(int x, int y, Tooltip *tooltip) {
 		}
 	}
 
-	tooltip->AddEntry(TooltipEntry(name, Color::white));
+	tooltip->AddEntry(TooltipEntry(name, GCampColor::white));
 	std::vector<std::pair<ItemCategory, int> > vecView = std::vector<std::pair<ItemCategory, int> >();
 	for(std::map<ItemCategory, int>::iterator it = amount.begin(); it != amount.end(); it++) {
 		if(Item::Categories[it->first].parent < 0 && it->second > 0) {
@@ -620,20 +620,20 @@ void Stockpile::GetTooltip(int x, int y, Tooltip *tooltip) {
 		int count = 0;
 		for(size_t i = 0; i < vecView.size(); i++) {
 			if(++count > 30) {
-				tooltip->AddEntry(TooltipEntry(" ...", Color::grey));
+				tooltip->AddEntry(TooltipEntry(" ...", GCampColor::grey));
 				return;
 			}
-			tooltip->AddEntry(TooltipEntry((boost::format(" %s x%d") % Item::ItemCategoryToString(vecView[i].first) % vecView[i].second).str(), Color::grey));
+			tooltip->AddEntry(TooltipEntry((boost::format(" %s x%d") % Item::ItemCategoryToString(vecView[i].first) % vecView[i].second).str(), GCampColor::grey));
 
 			for(std::vector<ItemCat>::iterator cati = Item::Categories.begin(); cati != Item::Categories.end(); cati++) {
 				if(cati->parent >= 0 && Item::StringToItemCategory(Item::Categories[cati->parent].GetName()) == vecView[i].first) {
 					int amt = amount[Item::StringToItemCategory(cati->GetName())];
 					if (amt > 0) {
 						if(++count > 30) {
-							tooltip->AddEntry(TooltipEntry(" ...", Color::grey));
+							tooltip->AddEntry(TooltipEntry(" ...", GCampColor::grey));
 							return;
 						}
-						tooltip->AddEntry(TooltipEntry((boost::format("	 %s x%d") % cati->GetName() % amt).str(), Color::grey));
+						tooltip->AddEntry(TooltipEntry((boost::format("	 %s x%d") % cati->GetName() % amt).str(), GCampColor::grey));
 					}
 				}
 			}
