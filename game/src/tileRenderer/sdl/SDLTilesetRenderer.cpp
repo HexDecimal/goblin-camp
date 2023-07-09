@@ -27,7 +27,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include "MathEx.hpp"
 #include "Game.hpp"
 
-#include<libtcod_int.h>
+#include <libtcod/libtcod_int.h>
 
 
 boost::shared_ptr<TilesetRenderer> CreateSDLTilesetRenderer(TCODConsole * console, std::string tilesetName) {
