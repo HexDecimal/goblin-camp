@@ -1,5 +1,8 @@
 Goblin Camp Changelog
 
+-- version 0.24 (future release) --
+
+
 -- version 0.23 (2023-07-09) --
 
 * Fix support for graphical tiles in SDL2:
