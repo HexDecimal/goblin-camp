@@ -32,6 +32,8 @@ namespace Globals {
 
 #if ! GCAMP_VERSION_IS_RELEASE
 #define GCAMP_FULL_VERSION "v" GCAMP_VERSION " (dev)"
+#else
+#define GCAMP_FULL_VERSION "v" GCAMP_VERSION
 #endif
 	const char *gameVersion = "Goblin Camp " GCAMP_FULL_VERSION;
 }
