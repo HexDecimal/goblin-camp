@@ -1,36 +1,45 @@
-cmake_minimum_required(VERSION 2.8.9) # Do not raise it without a reason. Bump only when you use some feature that is not supported by older verions
+cmake_minimum_required(VERSION 3.12...3.26)
 
-# set the project name
+set(USE_VCPKG FALSE CACHE BOOL "Use Vcpkg for package management")
+
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  if (USE_VCPKG)
+    set(CMAKE_TOOLCHAIN_FILE
+        "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        CACHE STRING "Vcpkg toolchain file")
+  endif()
+endif()
+
 project(GoblinCamp C CXX)
+
+add_executable("goblin-camp")
 
 SET(GCAMP_VERSION "0.24")
 SET(GCAMP_VERSION_IS_RELEASE NO)
 
-SET(CMAKE_CXX_FLAGS "-std=c++17 -DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS")  # FIXME move to add_compile_options() later
+target_compile_features("goblin-camp" PRIVATE cxx_std_17)
+
+if (MSVC)
+  target_compile_options("goblin-camp" PRIVATE /bigobj)  # Game.cpp might be too large
+endif()
+
+target_compile_definitions("goblin-camp" PRIVATE "-DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS")
 #  -DBOOST_NO_CXX11_SCOPED_ENUMS -DBOOST_NO_SCOPED_ENUMS  https://stackoverflow.com/questions/18783790/boostfilesystemcopy-file-missing-symbol-in-c11 
 # and Goblin Camp/src/data/Data.cpp fs::copy_file(source, target);
 
 # Add the path for the script to find libtcod
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-#### Build wiht Address Sanitizer. Uncomment it manually
+#### Build with Address Sanitizer. Uncomment it manually
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fsanitize=address -g -O0")
 #SET(CMAKE_CXX_COMPILER "/usr/bin/clang++-11")
 
-IF (FORCE_PYTHON27)
-  MESSAGE("-- Trying to force python2.7 build")
-ENDIF()
-SET(FORCE_PYTHON27 ${FORCE_PYTHON27} CACHE BOOL "" FORCE)
-
-IF (NOT DEFINED USE_THREADS)
-  SET(USE_THREADS 1) # Default value
-ENDIF()
-SET(USE_THREADS ${USE_THREADS} CACHE BOOL "" FORCE)
+SET(USE_THREADS TRUE CACHE BOOL "Enable threads")
 
 IF (USE_THREADS)
-  MESSAGE("-- Using threads")
+  MESSAGE(STATUS "Using threads")
 ELSE()
-  MESSAGE("-- Using no threads")
+  MESSAGE(STATUS "Using no threads")
 ENDIF()
 
 SET(GOBLIN_CAMP_BINDIR ${CMAKE_INSTALL_PREFIX}/games CACHE PATH "Path to Goblin Camp binary")
@@ -41,67 +50,49 @@ SET(GOBLIN_CAMP_SHAREDIR "${GOBLIN_CAMP_DATA_BASE_DIR}/games/goblin-camp" CACHE 
 find_package(Boost REQUIRED)
 IF (USE_THREADS OR ( ${Boost_VERSION} LESS 106701) ) # for boost 1.67 we have to find threads anyway for some reason
   find_package(Boost REQUIRED COMPONENTS thread)
-ENDIF()
-
-find_package(Boost REQUIRED COMPONENTS system filesystem serialization iostreams)
-find_package(Boost COMPONENTS python REQUIRED)
-
-IF (FORCE_PYTHON27)
-  SET(USE_PYTHON27 YES)
-  SET(USE_PYTHON3 NO)
-ELSE()
-  find_package(Boost COMPONENTS python3)
-  IF(${Boost_PYTHON3_FOUND})
-    SET(USE_PYTHON27 NO)
-    SET(USE_PYTHON3 YES)
-  ELSE()
-    SET(USE_PYTHON27 YES)
-    SET(USE_PYTHON3 NO)
+  IF (USE_THREADS)
+    target_link_libraries("goblin-camp" PRIVATE Boost::thread)
   ENDIF()
 ENDIF()
 
-IF(USE_PYTHON3)
-  find_package(PythonLibs 3)
-ELSE()
-  if(${Boost_VERSION} GREATER 106699) # boost >= 1.67
-      find_package(Boost COMPONENTS python27 REQUIRED)
-      set(Boost_PYTHON_LIBRARY ${Boost_PYTHON27_LIBRARY})
-  else()
-      # boost python suffixes are determined by distributives
-      # try different alternatives
-      find_package(Boost OPTIONAL_COMPONENTS python27)
-      if(Boost_PYTHON27_FOUND)
-          set(Boost_PYTHON_LIBRARY ${Boost_PYTHON27_LIBRARY})
-      else()
-          find_package(Boost OPTIONAL_COMPONENTS python-py27)
-          if(Boost_PYTHON-PY27_FOUND)
-              set(Boost_PYTHON_LIBRARY ${Boost_PYTHON-PY27_LIBRARY})
-          else()
-              find_package(Boost COMPONENTS python REQUIRED)
-          endif()
-      endif()
-  endif()
-  find_package(PythonLibs 2.7)
-ENDIF()
+find_package(Boost REQUIRED COMPONENTS filesystem iostreams serialization system)
 
+set(FORCE_PYTHON27 FALSE CACHE BOOL "Build using Python 2")
+if (FORCE_PYTHON27)
+  find_package(Python2 COMPONENTS Development REQUIRED)
+  MESSAGE(STATUS "Using Python ${Python2_VERSION}")
+  set(PYTHON_COMPONENT python${Python2_VERSION_MAJOR}${Python2_VERSION_MINOR})
+else()
+  find_package(Python3 COMPONENTS Development REQUIRED)
+  MESSAGE(STATUS "Using Python ${Python3_VERSION}")
+  set(PYTHON_COMPONENT python${Python3_VERSION_MAJOR}${Python3_VERSION_MINOR})
+endif()
+
+find_package(Boost COMPONENTS ${PYTHON_COMPONENT} REQUIRED)
 
 if (POLICY CMP0072)
   set(OpenGL_GL_PREFERENCE GLVND)
 endif()
 
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(ZLIB)
+find_package(SDL2 CONFIG REQUIRED)
+find_package(SDL2_image CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(PNG REQUIRED)
-find_package(libtcod REQUIRED)
+find_package(libtcod CONFIG REQUIRED)
 
-include_directories(${SDL2_INCLUDE_DIR})
-include_directories(${PYTHON_INCLUDE_DIRS})
-include_directories(${PNG_INCLUDE_DIR})
-include_directories(${libtcod_INCLUDE_DIR})
-include_directories(${libtcod_INCLUDE_DIR}/libtcod)
-
+target_link_libraries("goblin-camp" PRIVATE
+  #$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>  # TODO: Setup SDLmain
+  $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+  $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>
+  Python3::Python
+  Boost::boost
+  Boost::filesystem
+  Boost::iostreams
+  Boost::${PYTHON_COMPONENT}
+  Boost::serialization
+  Boost::system
+  OpenGL::GL
+  libtcod::libtcod
+)
 
 ADD_SUBDIRECTORY("game")
 
@@ -212,78 +203,37 @@ SET (tileRenderer_SRC
 
 )
 
-SET (platform_SRC
-"game/src/platform/linux/DataImpl.cpp"
-)
-
-add_executable("goblin-camp" "game/src/platform/unix/main.cpp" "game/src/GCamp.cpp" ${main_SRC} ${data_SRC} ${scripting_SRC} ${libtcod_SRC} ${UI_SRC} ${tileRenderer_SRC} ${platform_SRC})
-include_directories("goblin-camp" "game/include")
-include_directories("goblin-camp" "vendor/python-modules")
-
-IF (USE_THREADS)
-  target_compile_definitions("goblin-camp" PRIVATE GCAMP_USE_THREADS=1)
-ELSE()
-  target_compile_definitions("goblin-camp" PRIVATE GCAMP_USE_THREADS=0)
+IF (UNIX)
+  target_sources("goblin-camp" PRIVATE
+    "game/src/platform/unix/main.cpp"
+    "game/src/platform/linux/DataImpl.cpp"
+  )
+ELSEIF(WIN32)
+  target_sources("goblin-camp" PRIVATE
+    "game/src/platform/windows/CommandLine.cpp"
+    "game/src/platform/windows/CrashHandler.cpp"
+    "game/src/platform/windows/DataImpl.cpp"
+    "game/src/platform/windows/DebugImpl.cpp"
+    "game/src/platform/windows/main.cpp"
+    "game/src/platform/windows/TSSCleanup.cpp"
+  )
+  target_include_directories("goblin-camp" PRIVATE "game")  # To include "goblin-camp.rch"
+  set_target_properties("goblin-camp" PROPERTIES WIN32_EXECUTABLE TRUE)  # Use WinMain
+  target_link_libraries("goblin-camp" PRIVATE DBGHELP)  # Link MiniDumpWriteDump function
 ENDIF()
+
+target_sources("goblin-camp" PRIVATE ${main_SRC} ${data_SRC} ${scripting_SRC} ${libtcod_SRC} ${UI_SRC} ${tileRenderer_SRC})
+target_include_directories("goblin-camp" PRIVATE BEFORE "game/include")
+target_include_directories("goblin-camp" PRIVATE "vendor/python-modules")
+
+target_compile_definitions("goblin-camp" PRIVATE GCAMP_USE_THREADS=$<BOOL:${USE_THREADS}>)
 target_compile_definitions("goblin-camp" PRIVATE GCAMP_VERSION=\"${GCAMP_VERSION}\")
-IF (GCAMP_VERSION_IS_RELEASE)
-  target_compile_definitions("goblin-camp" PRIVATE GCAMP_VERSION_IS_RELEASE=1)
-ENDIF()
+target_compile_definitions("goblin-camp" PRIVATE GCAMP_VERSION_IS_RELEASE=$<BOOL:${GCAMP_VERSION_IS_RELEASE}>)
 
-IF (${Boost_PYTHON3_FOUND})
-  # touch will force install of static python lib
-  # this will solve porblem with installing python3 version over python2.7 and vice versa
-  add_custom_command (TARGET "goblin-camp"
-                      POST_BUILD
-                      COMMAND touch -h "${PROJECT_SOURCE_DIR}/game/lib/__gcdevconsole__.py"
-                      )
-ELSE()
-  # touch will force install of static python lib
-  # this will solve porblem with installing python3 version over python2.7 and vice versa
-  add_custom_command (TARGET "goblin-camp"
-                      POST_BUILD
-                      COMMAND touch -h "${PROJECT_SOURCE_DIR}/game/lib/__gcdevconsole__.py_2.7"
-                      )
-ENDIF()
-
-
-target_link_libraries("goblin-camp"
-  ${SDL2_LIBRARY}
-  ${SDL2_IMAGE_LIBRARY}
-  ${PYTHON_LIBRARIES}
-  ${Boost_SYSTEM_LIBRARY}
-  ${Boost_FILESYSTEM_LIBRARY}
-  ${Boost_SERIALIZATION_LIBRARY}
-  ${Boost_IOSTREAMS_LIBRARY}
-  ${ZLIB_LIBRARIES}
-  ${OPENGL_LIBRARIES}
-  ${libtcod_LIBRARIES}
-)
-
-IF (USE_THREADS)
-  target_link_libraries("goblin-camp"
-    ${Boost_THREAD_LIBRARY}
-  )
-ENDIF()
-
-IF(USE_PYTHON3)
-  target_link_libraries("goblin-camp"
-    ${Boost_PYTHON3_LIBRARY}
-  )
-ELSE()
-  IF(${Boost_PYTHON27_FOUND})
-    target_link_libraries("goblin-camp"
-      ${Boost_PYTHON27_LIBRARY}
-    )
-  ELSE()
-    # older versions of boost does not know Boost_PYTHON[NN]_FOUND and Boost_PYTHON[NN]_LIBRARY so just link to ${Boost_PYTHON_LIBRARY} it is the only one
-    # This branch can be removed later
-    IF(${Boost_PYTHON_FOUND})
-      target_link_libraries("goblin-camp"
-        ${Boost_PYTHON_LIBRARY}
-      )
-    ENDIF()
-  ENDIF()
-ENDIF()
+# Workaround for missing pythonXX.lib
+# https://github.com/microsoft/vcpkg/issues/5097#issuecomment-719635582
+if(VCPKG_TOOLCHAIN)
+  target_link_directories("goblin-camp" PRIVATE ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib;${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/lib)
+endif()
 
 INSTALL(TARGETS "goblin-camp" RUNTIME DESTINATION ${GOBLIN_CAMP_BINDIR})

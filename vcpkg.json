@@ -1,0 +1,40 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "goblin-camp",
+  "version-semver": "0.0.0",
+  "dependencies": [
+    {
+      "name": "libtcod",
+      "default-features": true,
+      "features": [
+        "png",
+        "sdl",
+        "unicode",
+        "zlib"
+      ]
+    },
+    {
+      "name": "boost-python",
+      "features": [
+        "python3"
+      ]
+    },
+    "boost-assert",
+    "boost-assign",
+    "boost-bind",
+    "boost-config",
+    "boost-random",
+    "boost-multi-array",
+    "boost-ublas",
+    "boost-system",
+    "boost-filesystem",
+    "boost-serialization",
+    "boost-iostreams",
+    "boost-thread",
+    "boost-tuple",
+    "opengl",
+    "python3",
+    "sdl2",
+    "sdl2-image"
+  ]
+}
