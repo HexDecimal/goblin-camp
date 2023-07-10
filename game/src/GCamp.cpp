@@ -348,7 +348,7 @@ int MainMenu() {
 					Globals::gameVersion,
 					GCampColor::celadon, GCampColor::black, TCOD_CENTER);
 
-		for (unsigned int idx = 0; idx < entryCount; ++idx) {
+		for (int idx = 0; idx < entryCount; ++idx) {
 			TCOD_ColorRGB bg,fg;
 
 			const MainMenuEntry& entry = entries[idx];
