@@ -1381,8 +1381,8 @@ void Game::GenerateMap(uint32 seed) {
 	}
 	
 	{
-		std::auto_ptr<TCODRandom> tcodRandom = std::auto_ptr<TCODRandom>(new TCODRandom(random.GetSeed()));
-		map->heightMap->rainErosion(map->Width()*map->Height()*5, 0.005f, 0.30f, tcodRandom.get());
+		auto tcodRandom = TCODRandom{random.GetSeed()};
+		map->heightMap->rainErosion(map->Width()*map->Height()*5, 0.005f, 0.30f, &tcodRandom);
 	}
 
 	//This is a simple kernel transformation that does some horizontal smoothing (lifted straight from the libtcod docs)
