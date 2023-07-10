@@ -137,7 +137,7 @@ int GCMain(std::vector<std::string>& args) {
 void MainLoop() {
 	Game* game = Game::Inst();
 	if (!game->Running()) {
-		Announce::Inst()->AddMsg("Press 'h' for keyboard shortcuts", Color::cyan);
+		Announce::Inst()->AddMsg("Press 'h' for keyboard shortcuts", GCampColor::cyan);
 	}
 	game->Running(true);
 
@@ -250,7 +250,7 @@ void StartNewGame() {
 		int corpseuid = game->CreateItem(corpseLoc[c], Item::StringToItemType("corpse"));
 		boost::shared_ptr<Item> corpse = game->itemList[corpseuid];
 		corpse->Name("Corpse(Human woodsman)");
-		corpse->Color(Color::white);
+		corpse->Color(GCampColor::white);
 		for (int i = 0; i < 6; ++i)
 			game->CreateBlood(Random::ChooseInRadius(corpseLoc[c], 2));
 	}
@@ -337,16 +337,16 @@ int MainMenu() {
 	while (!exit) {
 		key = TCODConsole::checkForKeypress(TCOD_KEY_RELEASED);
 
-		TCODConsole::root->setDefaultForeground(Color::white);
-		TCODConsole::root->setDefaultBackground(Color::black);
+		TCODConsole::root->setDefaultForeground(GCampColor::white);
+		TCODConsole::root->setDefaultBackground(GCampColor::black);
 		TCODConsole::root->clear();
 
 		TCODConsole::root->printFrame(edgex, edgey, width, height, true, TCOD_BKGND_DEFAULT, "Main Menu");
 
-		TCODConsole::root->setDefaultForeground(Color::celadon);
+		TCODConsole::root->setDefaultForeground(GCampColor::celadon);
 		tcod::print(*TCODConsole::root, {edgex+width/2, edgey-3},
 					Globals::gameVersion,
-					Color::celadon, Color::black, TCOD_CENTER);
+					GCampColor::celadon, GCampColor::black, TCOD_CENTER);
 
 		for (unsigned int idx = 0; idx < entryCount; ++idx) {
 			TCOD_ColorRGB bg,fg;
@@ -354,15 +354,15 @@ int MainMenu() {
 			const MainMenuEntry& entry = entries[idx];
 
 			if (selected == (idx * 2)) {
-				fg = Color::black;
-				bg = Color::white;
+				fg = GCampColor::black;
+				bg = GCampColor::white;
 			} else {
-				fg = Color::white;
-				bg = Color::black;
+				fg = GCampColor::white;
+				bg = GCampColor::black;
 			}
 
 			if (!entry.isActive()) {
-				fg = Color::grey;
+				fg = GCampColor::grey;
 			}
 			tcod::print(*TCODConsole::root, {edgex + width / 2, edgey + ((idx + 1) * 2)},
 						entry.label,
@@ -440,24 +440,24 @@ void LoadMenu() {
 		
 		TCODConsole::root->clear();
 
-		TCODConsole::root->setDefaultForeground(Color::white);
-		TCODConsole::root->setDefaultBackground(Color::black);
+		TCODConsole::root->setDefaultForeground(GCampColor::white);
+		TCODConsole::root->setDefaultBackground(GCampColor::black);
 		TCODConsole::root->printFrame(edgex, edgey, width, height, true, TCOD_BKGND_SET, "Saved games");
 
 		tcod::print(*TCODConsole::root, {edgex + width/2, edgey + 1},
 					"ESC to cancel" ,
-					 Color::white, Color::black, TCOD_CENTER);
+					 GCampColor::white, GCampColor::black, TCOD_CENTER);
 
 		TCODConsole::root->setAlignment(TCOD_LEFT);
 
 		for (int i = 0; i < static_cast<int>(list.size()); ++i) {
 			TCOD_ColorRGB bg,fg;
 			if (selected == i) {
-				fg = Color::black;
-				bg = Color::white;
+				fg = GCampColor::black;
+				bg = GCampColor::white;
 			} else {
-				fg = Color::white;
-				bg = Color::black;
+				fg = GCampColor::white;
+				bg = GCampColor::black;
 			}
 
 			std::string label = list[i].filename;
@@ -470,10 +470,10 @@ void LoadMenu() {
 
 			// last modification date
 			tcod::print(*TCODConsole::root, {edgex + 1 + 20 + 2, edgey + 3 + i},
-						 tcod::stringf( "%-20s", list[i].date.c_str()), Color::azure, bg);
+						 tcod::stringf( "%-20s", list[i].date.c_str()), GCampColor::azure, bg);
 			// filesize
 			tcod::print(*TCODConsole::root, {edgex + 1 + 20 + 2 + 20 + 2, edgey + 3 + i},
-						 list[i].size, Color::azure, bg);
+						 list[i].size, GCampColor::azure, bg);
 		}
 
 		TCODConsole::root->flush();
@@ -497,12 +497,12 @@ void LoadMenu() {
 					tcod::print(*TCODConsole::root,
 							{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2},
 							"Could not load the game. Refer to the logfile",
-							Color::white, Color::black, TCOD_CENTER);
+							GCampColor::white, GCampColor::black, TCOD_CENTER);
 
 					tcod::print(*TCODConsole::root,
 							{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2 + 1},
 							"Press any key to return to the main menu",
-							Color::white, Color::black, TCOD_CENTER);
+							GCampColor::white, GCampColor::black, TCOD_CENTER);
 
 					TCODConsole::root->flush();
 					TCODConsole::waitForKeypress(true);
@@ -531,20 +531,20 @@ void SaveMenu() {
 		else if (key.vk == TCODK_ENTER || key.vk == TCODK_KPENTER) {
 			savesCount = -1;
 			if (!Data::SaveGame(saveName)) {
-				TCODConsole::root->setDefaultForeground(Color::white);
-				TCODConsole::root->setDefaultBackground(Color::black);
+				TCODConsole::root->setDefaultForeground(GCampColor::white);
+				TCODConsole::root->setDefaultBackground(GCampColor::black);
 				TCODConsole::root->setAlignment(TCOD_CENTER);
 				TCODConsole::root->clear();
 
 				tcod::print(*TCODConsole::root,
 						{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2},
 						"Could not save the game. Refer to the logfile",
-						Color::white, Color::black, TCOD_CENTER);
+						GCampColor::white, GCampColor::black, TCOD_CENTER);
 
 				tcod::print(*TCODConsole::root,
 						{Game::Inst()->ScreenWidth() / 2, Game::Inst()->ScreenHeight() / 2 + 1},
 						"Press any key to return to the main menu",
-						Color::white, Color::black, TCOD_CENTER);
+						GCampColor::white, GCampColor::black, TCOD_CENTER);
 
 				TCODConsole::root->flush();
 				TCODConsole::waitForKeypress(true);
@@ -553,18 +553,18 @@ void SaveMenu() {
 			break;
 		}
 
-		TCODConsole::root->setDefaultForeground(Color::white);
-		TCODConsole::root->setDefaultBackground(Color::black);
+		TCODConsole::root->setDefaultForeground(GCampColor::white);
+		TCODConsole::root->setDefaultBackground(GCampColor::black);
 		TCODConsole::root->clear();
 		TCODConsole::root->printFrame(Game::Inst()->ScreenWidth()/2-15,
 			Game::Inst()->ScreenHeight()/2-3, 30, 3, true, TCOD_BKGND_SET, "Save name");
 
-		TCODConsole::root->setDefaultBackground(Color::darkGrey); /*FIXME this one does not seem to work*/
+		TCODConsole::root->setDefaultBackground(GCampColor::darkGrey); /*FIXME this one does not seem to work*/
 		TCODConsole::root->rect(Game::Inst()->ScreenWidth()/2-14, Game::Inst()->ScreenHeight()/2-2, 28, 1, true);
 
 		tcod::print(*TCODConsole::root,
 					{Game::Inst()->ScreenWidth()/2, Game::Inst()->ScreenHeight()/2 - 2},
-					saveName, Color::white, Color::black, TCOD_CENTER);
+					saveName, GCampColor::white, GCampColor::black, TCOD_CENTER);
 		TCODConsole::root->flush();
 
 	}
@@ -644,76 +644,76 @@ void SettingsMenu() {
 
 		TCODConsole::root->clear();
 
-		TCODConsole::root->setDefaultForeground(Color::white);
-		TCODConsole::root->setDefaultBackground(Color::black);
+		TCODConsole::root->setDefaultForeground(GCampColor::white);
+		TCODConsole::root->setDefaultBackground(GCampColor::black);
 
 		TCODConsole::root->printFrame(x, y, w, h, true, TCOD_BKGND_SET, "Settings");
 		tcod::print(*TCODConsole::root,
 					{x + 1, y + 1,},
 					"ENTER to save changes, ESC to discard",
-					Color::white, Color::black, TCOD_LEFT);
+					GCampColor::white, GCampColor::black, TCOD_LEFT);
 
 		int currentY = y + 3;
 
 		TCOD_ColorRGB fg;
-		TCOD_ColorRGB bg = Color::black;
+		TCOD_ColorRGB bg = GCampColor::black;
 
 		for (unsigned int idx = 0; idx < fieldCount; ++idx) {
 			if (focus == &fields[idx]) {
-				TCODConsole::root->setDefaultForeground(Color::green);
-				fg = Color::green;
+				TCODConsole::root->setDefaultForeground(GCampColor::green);
+				fg = GCampColor::green;
 			} else {
-				fg = Color::white;
+				fg = GCampColor::white;
 			}
 
 			tcod::print(*TCODConsole::root, {x + 1, currentY},
 						fields[idx].label, fg, bg, TCOD_LEFT);
 
-			TCODConsole::root->setDefaultForeground(Color::white);
-			TCODConsole::root->setDefaultBackground(Color::darkGrey);
+			TCODConsole::root->setDefaultForeground(GCampColor::white);
+			TCODConsole::root->setDefaultBackground(GCampColor::darkGrey);
 
 			TCODConsole::root->rect(x + 3, currentY + 1, w - 7, 1, true);
-			fg = Color::white;
+			fg = GCampColor::white;
 
 			tcod::print(*TCODConsole::root, {x + 3, currentY + 1},
 						fields[idx].value->c_str(), fg, bg, TCOD_LEFT);
 
-			TCODConsole::root->setDefaultBackground(Color::black);
+			TCODConsole::root->setDefaultBackground(GCampColor::black);
 
 			currentY += 3;
 		}
-		fg = fullscreen ? Color::green : Color::grey;
+		fg = fullscreen ? GCampColor::green : GCampColor::grey;
 		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Fullscreen mode", fg, bg, TCOD_LEFT);
 
 		currentY += 2;
-		fg = tutorial ? Color::green : Color::grey;
+		fg = tutorial ? GCampColor::green : GCampColor::grey;
 		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Tutorial", fg, bg, TCOD_LEFT);
 
 		currentY += 2;
-		fg = translucentUI ? Color::green : Color::grey;
+		fg = translucentUI ? GCampColor::green : GCampColor::grey;
 		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Translucent UI", fg, bg, TCOD_LEFT);
 
 		currentY += 2;
-		fg = compressSaves ? Color::green : Color::grey;
+		fg = compressSaves ? GCampColor::green : GCampColor::grey;
 		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Compress saves", fg, bg, TCOD_LEFT);
 
 		currentY += 2;
-		fg = autosave ? Color::green : Color::grey;
+		fg = autosave ? GCampColor::green : GCampColor::grey;
 		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Autosave", fg, bg, TCOD_LEFT);
 
 		currentY += 2;
-		fg = pauseOnDanger ? Color::green : Color::grey;
+		fg = pauseOnDanger ? GCampColor::green : GCampColor::grey;
 		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Pause on danger", fg, bg, TCOD_LEFT);
 
 		currentY += 2;
-		fg = Color::white;
+		fg = GCampColor::white;
 		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Renderer", fg, bg, TCOD_LEFT);
 
 		for (unsigned int idx = 0; idx < rendererCount; ++idx) {
 			if (renderer == renderers[idx].renderer && useTileset == renderers[idx].useTileset) {
-				fg = Color::green;
+				fg = GCampColor::green;
 			} else {
-				fg = Color::grey;
+				fg = GCampColor::grey;
 			}
 			tcod::print(*TCODConsole::root, {x + 3, currentY + idx + 1}, renderers[idx].label, fg, bg, TCOD_LEFT);
 		}
@@ -800,14 +800,14 @@ void ModsMenu() {
 	int currentY = 0;
 
 	BOOST_FOREACH(Mods::Metadata mod, modList) {
-		tcod::print(sub, {w / 2, currentY}, mod.mod.c_str(), Color::azure, Color::black, TCOD_CENTER);
+		tcod::print(sub, {w / 2, currentY}, mod.mod.c_str(), GCampColor::azure, GCampColor::black, TCOD_CENTER);
 
 		tcod::print(sub, {3, currentY + 2}, tcod::stringf("Name:    %s", mod.name.c_str()),
-					Color::white, Color::black, TCOD_LEFT);
+					GCampColor::white, GCampColor::black, TCOD_LEFT);
 		tcod::print(sub, {3, currentY + 4}, tcod::stringf("Author:  %s", mod.author.c_str()),
-					Color::white, Color::black, TCOD_LEFT);
+					GCampColor::white, GCampColor::black, TCOD_LEFT);
 		tcod::print(sub, {3, currentY + 6}, tcod::stringf("Version: %s", mod.version.c_str()),
-					Color::white, Color::black, TCOD_LEFT);
+					GCampColor::white, GCampColor::black, TCOD_LEFT);
 		currentY += 9;
 	}
 
@@ -823,8 +823,8 @@ void ModsMenu() {
 
 		TCODConsole::root->clear();
 
-		TCODConsole::root->setDefaultForeground(Color::white);
-		TCODConsole::root->setDefaultBackground(Color::black);
+		TCODConsole::root->setDefaultForeground(GCampColor::white);
+		TCODConsole::root->setDefaultBackground(GCampColor::black);
 
 		TCODConsole::root->printFrame(x, y, w, h, true, TCOD_BKGND_SET, "Loaded mods");
 		TCODConsole::blit(&sub, 0, scroll, w - 2, h - 3, TCODConsole::root, x + 1, y + 2);
@@ -867,16 +867,16 @@ void TilesetsMenu() {
 	TCODConsole sub(listWidth - 2, std::max(1, subH + 1));
 
 
-	sub.setDefaultBackground(Color::black);
+	sub.setDefaultBackground(GCampColor::black);
 	sub.setAlignment(TCOD_LEFT);
-	sub.setDefaultForeground(Color::azure);
+	sub.setDefaultForeground(GCampColor::azure);
 
 	int currentY = 0;
-	tcod::print(sub, {0, currentY}, "Classical Text Mode", Color::azure, Color::black, TCOD_LEFT);
+	tcod::print(sub, {0, currentY}, "Classical Text Mode", GCampColor::azure, GCampColor::black, TCOD_LEFT);
 	currentY += 1;
 
 	BOOST_FOREACH(TileSetMetadata tileset, tilesetsList) {
-		tcod::print(sub, {0, currentY}, tileset.name.c_str(), Color::azure, Color::black, TCOD_LEFT);
+		tcod::print(sub, {0, currentY}, tileset.name.c_str(), GCampColor::azure, GCampColor::black, TCOD_LEFT);
 		currentY += 1;
 	}
 
@@ -911,8 +911,8 @@ void TilesetsMenu() {
 
 		TCODConsole::root->clear();
 
-		TCODConsole::root->setDefaultForeground(Color::white);
-		TCODConsole::root->setDefaultBackground(Color::black);
+		TCODConsole::root->setDefaultForeground(GCampColor::white);
+		TCODConsole::root->setDefaultBackground(GCampColor::black);
 
 		// Left frame
 		TCODConsole::root->printFrame(0, 0, listWidth, screenHeight, true, TCOD_BKGND_SET, "Tilesets");
@@ -934,36 +934,36 @@ void TilesetsMenu() {
 		{
 			tcod::print(*TCODConsole::root, {listWidth + 3, 2},
 					tcod::stringf("Name:    %s", tilesetsList.at(selection - 1).name.c_str()),
-					Color::white, Color::black, TCOD_LEFT);
+					GCampColor::white, GCampColor::black, TCOD_LEFT);
 			tcod::print(*TCODConsole::root, {listWidth + 3, 4},
 					tcod::stringf("Size:    %dx%d", tilesetsList.at(selection - 1).width, tilesetsList.at(selection - 1).height),
-					Color::white, Color::black, TCOD_LEFT);
+					GCampColor::white, GCampColor::black, TCOD_LEFT);
 			tcod::print(*TCODConsole::root, {listWidth + 3, 6},
 					tcod::stringf("Author:  %s", tilesetsList.at(selection - 1).author.c_str()),
-					Color::white, Color::black, TCOD_LEFT);
+					GCampColor::white, GCampColor::black, TCOD_LEFT);
 			tcod::print(*TCODConsole::root, {listWidth + 3, 8},
 					tcod::stringf("Version: %s",tilesetsList.at(selection - 1).version.c_str()),
-					Color::white, Color::black, TCOD_LEFT);
-			tcod::print(*TCODConsole::root, {listWidth + 3, 10}, "Description:", Color::white, Color::black, TCOD_LEFT);
+					GCampColor::white, GCampColor::black, TCOD_LEFT);
+			tcod::print(*TCODConsole::root, {listWidth + 3, 10}, "Description:", GCampColor::white, GCampColor::black, TCOD_LEFT);
 			TCODConsole::root->printRect(listWidth + 3, 12, screenWidth - listWidth - 6, screenHeight - 19, "%s", tilesetsList.at(selection - 1).description.c_str());
 		} else {
 			int charX, charY;
 			TCODSystem::getCharSize(&charX, &charY);
 
-			tcod::print(*TCODConsole::root, {listWidth + 3, 2}, "Name:    Classical Text Mode", Color::white, Color::black, TCOD_LEFT);
+			tcod::print(*TCODConsole::root, {listWidth + 3, 2}, "Name:    Classical Text Mode", GCampColor::white, GCampColor::black, TCOD_LEFT);
 			tcod::print(*TCODConsole::root, {listWidth + 3, 4},
 					tcod::stringf("Size:    %dx%d", charX, charY),
-					Color::white, Color::black, TCOD_LEFT);
-			tcod::print(*TCODConsole::root, {listWidth + 3, 6}, "Description: Use font glyphs as game tiles", Color::white, Color::black, TCOD_LEFT);
+					GCampColor::white, GCampColor::black, TCOD_LEFT);
+			tcod::print(*TCODConsole::root, {listWidth + 3, 6}, "Description: Use font glyphs as game tiles", GCampColor::white, GCampColor::black, TCOD_LEFT);
 		}
 
 		// Buttons
 		int buttonDist = (screenWidth - listWidth) / 3;
 		TCODConsole::root->printFrame(listWidth + buttonDist - 4, screenHeight - 6, 8, 3);
-		tcod::print(*TCODConsole::root, {listWidth + buttonDist - 1,  screenHeight - 5}, "Ok", Color::white, Color::black, TCOD_LEFT);
+		tcod::print(*TCODConsole::root, {listWidth + buttonDist - 1,  screenHeight - 5}, "Ok", GCampColor::white, GCampColor::black, TCOD_LEFT);
 
 		TCODConsole::root->printFrame(listWidth + 2 * buttonDist - 4, screenHeight - 6, 8, 3);
-		tcod::print(*TCODConsole::root, {listWidth + 2 * buttonDist - 3, screenHeight - 5}, "Cancel", Color::white, Color::black, TCOD_LEFT);
+		tcod::print(*TCODConsole::root, {listWidth + 2 * buttonDist - 3, screenHeight - 5}, "Cancel", GCampColor::white, GCampColor::black, TCOD_LEFT);
 		mouse = TCODMouse::getStatus();
 		if (mouse.lbutton) {
 			clicked = true;
@@ -1041,24 +1041,24 @@ void KeysMenu() {
 
 		TCODConsole::root->clear();
 
-		TCODConsole::root->setDefaultForeground(Color::white);
-		TCODConsole::root->setDefaultBackground(Color::black);
+		TCODConsole::root->setDefaultForeground(GCampColor::white);
+		TCODConsole::root->setDefaultBackground(GCampColor::black);
 
 		TCODConsole::root->printFrame(x, y, w, h, true, TCOD_BKGND_SET, "Keys");
-		tcod::print(*TCODConsole::root, {x + 1, y + 1}, "ENTER to save changes, ESC to discard", Color::white, Color::black, TCOD_LEFT);
+		tcod::print(*TCODConsole::root, {x + 1, y + 1}, "ENTER to save changes, ESC to discard", GCampColor::white, GCampColor::black, TCOD_LEFT);
 		TCOD_ColorRGB fg;
 		for (int idx = 0; idx < static_cast<int>(labels.size()); ++idx) {
 			if (focus == idx)
-				fg = Color::green;
+				fg = GCampColor::green;
 			else
-				fg = Color::white;
+				fg = GCampColor::white;
 
-			tcod::print(*TCODConsole::root, {x + 1, y + idx + 3}, labels[idx].c_str(), fg, Color::black, TCOD_LEFT);
+			tcod::print(*TCODConsole::root, {x + 1, y + idx + 3}, labels[idx].c_str(), fg, GCampColor::black, TCOD_LEFT);
 
 			char key = keyMap[labels[idx]];
 			tcod::print(*TCODConsole::root, {x + w - 6, y + idx + 3},
 					tcod::stringf((key == ' ' ? "[SPC]" : "[ %c ]"), key),
-					fg, Color::black, TCOD_LEFT);
+					fg, GCampColor::black, TCOD_LEFT);
 		}
 
 		mouse = TCODMouse::getStatus();

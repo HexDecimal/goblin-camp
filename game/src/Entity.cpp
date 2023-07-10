@@ -69,7 +69,7 @@ int Entity::GetFaction() const { return faction; }
 void Entity::SetFaction(int val) { faction = val; }
 
 void Entity::GetTooltip(int x, int y, Tooltip *tooltip) {
-	tooltip->AddEntry(TooltipEntry(name, Color::white));
+	tooltip->AddEntry(TooltipEntry(name, GCampColor::white));
 }
 
 int Entity::GetVelocity() { return velocity; }

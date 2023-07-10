@@ -36,7 +36,7 @@ class MapMarker {
 	float counter;
 public:
 	MapMarker(MarkerType=FLASHINGMARKER, int graphic='?', Coordinate position=Coordinate(0,0), 
-		int duration=1, TCODColor color=Color::pink);
+		int duration=1, TCODColor color=GCampColor::pink);
 	bool Update();
 	int X() const;
 	int Y() const;

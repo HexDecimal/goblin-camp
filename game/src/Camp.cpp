@@ -172,7 +172,7 @@ void Camp::UpdateTier() {
 		}
 
 		Announce::Inst()->AddMsg("Your "+oldName+" is now " + article + " " + name + "!", 
-			positive ? Color::lightGreen : Color::yellow);
+			positive ? GCampColor::lightGreen : GCampColor::yellow);
 		Script::Event::TierChanged(tier, name);
 	}
 }
@@ -187,7 +187,7 @@ void Camp::ConstructionBuilt(int type) {
 void Camp::DisableAutoTerritory() { autoTerritory = false; }
 void Camp::ToggleAutoTerritory() {
 	autoTerritory = !autoTerritory;
-	Announce::Inst()->AddMsg((boost::format("Automatic territory handling %s") % (autoTerritory ? "enabled" : "disabled")).str(), Color::cyan);
+	Announce::Inst()->AddMsg((boost::format("Automatic territory handling %s") % (autoTerritory ? "enabled" : "disabled")).str(), GCampColor::cyan);
 }
 
 bool Camp::IsAutoTerritoryEnabled() { return autoTerritory; }

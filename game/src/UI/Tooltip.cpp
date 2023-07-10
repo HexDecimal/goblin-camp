@@ -41,7 +41,7 @@ void Tooltip::AddEntry(TooltipEntry entry) {
 void Tooltip::Draw(int x, int y, TCODConsole *console) {
 	x += offsetX;
 	y += offsetY;
-	console->setDefaultBackground(Color::darkestYellow);
+	console->setDefaultBackground(GCampColor::darkestYellow);
 	int width = 0;
 	for(std::vector<TooltipEntry>::iterator it = entries.begin(); it != entries.end(); it++) {
 		width = std::max(width, (int)it->text.length());
@@ -57,8 +57,8 @@ void Tooltip::Draw(int x, int y, TCODConsole *console) {
 			y++;
 		}
 	}
-	console->setDefaultBackground(Color::black);
-	console->setDefaultForeground(Color::white);
+	console->setDefaultBackground(GCampColor::black);
+	console->setDefaultForeground(GCampColor::white);
 }
 
 void Tooltip::OffsetPosition(int x, int y) { offsetX = x; offsetY = y; }

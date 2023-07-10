@@ -230,7 +230,7 @@ public:
 	virtual void GetTooltip(int x, int y, Tooltip *tooltip);
 	void speed(unsigned int);
 	unsigned int speed() const;
-	void color(TCODColor,TCODColor=Color::black);
+	void color(TCODColor,TCODColor=GCampColor::black);
 	void graphic(int);
 
 	int GetGraphicsHint() const;

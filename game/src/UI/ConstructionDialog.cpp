@@ -116,9 +116,9 @@ void ConstructionDialog::CancelJob(int job) {
 }
 
 void ConstructionDialog::DrawJob(ItemType category, int i, int x, int y, int width, bool selected, TCODConsole *console) {
-	console->setDefaultForeground(i == 0 ? Color::white : Color::grey);
+	console->setDefaultForeground(i == 0 ? GCampColor::white : GCampColor::grey);
 	console->print(x, y, Item::ItemTypeToString(category).c_str());
-	console->setDefaultForeground(Color::white);
+	console->setDefaultForeground(GCampColor::white);
 }
 
 void ConstructionDialog::ProductList::Draw(int x, int _y, int scroll, int width, int _height, TCODConsole *console) {
@@ -126,15 +126,15 @@ void ConstructionDialog::ProductList::Draw(int x, int _y, int scroll, int width,
 		int y = 0;
 		for (int prodi = 0; prodi < (signed int)cons->Products()->size() && y < scroll + _height; ++prodi) {
 			if (y >= scroll) {
-				console->setDefaultForeground(Color::white);
+				console->setDefaultForeground(GCampColor::white);
 				console->print(x, _y + y - scroll, "%s x%d", Item::ItemTypeToString(cons->Products(prodi)).c_str(), Item::Presets[cons->Products(prodi)].multiplier);
 			}
 			++y;
 			for (int compi = 0; compi < (signed int)Item::Components(cons->Products(prodi)).size() && y < scroll + _height; ++compi) {
 				if (y >= scroll) {
-					console->setDefaultForeground(Color::white);
+					console->setDefaultForeground(GCampColor::white);
 					console->putChar(x + 1, _y + y - scroll, compi+1 < (signed int)Item::Components(cons->Products(prodi)).size() ? TCOD_CHAR_TEEE : TCOD_CHAR_SW, TCOD_BKGND_SET);
-					console->setDefaultForeground(Color::grey);
+					console->setDefaultForeground(GCampColor::grey);
 					console->print(x + 2, _y + y - scroll, Item::ItemCategoryToString(Item::Components(cons->Products(prodi), compi)).c_str());
 				}
 				++y;
@@ -142,7 +142,7 @@ void ConstructionDialog::ProductList::Draw(int x, int _y, int scroll, int width,
 			++y;
 		}
 	}
-	console->setDefaultForeground(Color::white);
+	console->setDefaultForeground(GCampColor::white);
 }
 
 int ConstructionDialog::ProductList::TotalHeight() {

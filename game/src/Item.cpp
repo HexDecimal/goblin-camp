@@ -733,7 +733,7 @@ std::string ItemCat::GetName() {
 }
 
 ItemPreset::ItemPreset() : graphic('?'),
-	color(Color::pink),
+	color(GCampColor::pink),
 	name("Preset default"),
 	categories(std::set<ItemCategory>()),
 	nutrition(-1),

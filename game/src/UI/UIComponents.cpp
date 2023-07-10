@@ -36,44 +36,44 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 
 void Label::Draw(int x, int y, TCODConsole *console) {
 	console->setAlignment(align);
-	console->setDefaultForeground(Color::white);
+	console->setDefaultForeground(GCampColor::white);
 	console->print(x + _x, y + _y, text.c_str());
 }
 
 void LiveLabel::Draw(int x, int y, TCODConsole *console) {
 	console->setAlignment(align);
-	console->setDefaultForeground(Color::white);
+	console->setDefaultForeground(GCampColor::white);
 	console->print(x + _x, y + _y, text().c_str());
 }
 
 void Button::Draw(int x, int y, TCODConsole *console) {
 	console->setBackgroundFlag(TCOD_BKGND_SET);
 	if(selected) {
-		console->setDefaultForeground(Color::black);
-		console->setDefaultBackground(Color::white);
+		console->setDefaultForeground(GCampColor::black);
+		console->setDefaultBackground(GCampColor::white);
 	} else {
-		console->setDefaultForeground(Color::white);
-		console->setDefaultBackground(Color::black);
+		console->setDefaultForeground(GCampColor::white);
+		console->setDefaultBackground(GCampColor::black);
 	}
 	console->setAlignment(TCOD_CENTER);
 	console->printFrame(x + _x, y + _y, width, 3);
 	console->print(x + _x + width/2, y + _y + 1, text.c_str());
-	console->setDefaultForeground(Color::white);
-	console->setDefaultBackground(Color::black);
+	console->setDefaultForeground(GCampColor::white);
+	console->setDefaultBackground(GCampColor::black);
 }
 
 void LiveButton::Draw(int x, int y, TCODConsole *console) {
 	Button::Draw(x, y, console);
 	if(selected) {
-		console->setDefaultForeground(Color::black);
-		console->setDefaultBackground(Color::white);
+		console->setDefaultForeground(GCampColor::black);
+		console->setDefaultBackground(GCampColor::white);
 	} else {
-		console->setDefaultForeground(Color::white);
-		console->setDefaultBackground(Color::black);
+		console->setDefaultForeground(GCampColor::white);
+		console->setDefaultBackground(GCampColor::black);
 	}
 	console->print(x + _x + width/2, y + _y + 1, textFunc().c_str());
-	console->setDefaultForeground(Color::white);
-	console->setDefaultBackground(Color::black);
+	console->setDefaultForeground(GCampColor::white);
+	console->setDefaultBackground(GCampColor::black);
 }
 
 MenuResult Button::Update(int x, int y, bool clicked, TCOD_key_t key) {
@@ -99,17 +99,17 @@ MenuResult Button::Update(int x, int y, bool clicked, TCOD_key_t key) {
 void ToggleButton::Draw(int x, int y, TCODConsole *console) {
 	console->setBackgroundFlag(TCOD_BKGND_SET);
 	if(selected) {
-		console->setDefaultForeground(Color::black);
-		console->setDefaultBackground(Color::white);
+		console->setDefaultForeground(GCampColor::black);
+		console->setDefaultBackground(GCampColor::white);
 	} else {
-		console->setDefaultForeground(Color::white);
-		console->setDefaultBackground(isOn() ? Color::blue : Color::black);
+		console->setDefaultForeground(GCampColor::white);
+		console->setDefaultBackground(isOn() ? GCampColor::blue : GCampColor::black);
 	}
 	console->setAlignment(TCOD_CENTER);
 	console->printFrame(x + _x, y + _y, width, 3);
 	console->print(x + _x + width/2, y + _y + 1, text.c_str());
-	console->setDefaultForeground(Color::white);
-	console->setDefaultBackground(Color::black);
+	console->setDefaultForeground(GCampColor::white);
+	console->setDefaultBackground(GCampColor::black);
 }
 
 inline int numDigits(int num) {
@@ -159,9 +159,9 @@ MenuResult Spinner::Update(int x, int y, bool clicked, TCOD_key_t key) {
 
 void TextBox::Draw(int x, int y, TCODConsole *console) {
 	console->setAlignment(TCOD_CENTER);
-	console->setDefaultBackground(Color::darkGrey);
+	console->setDefaultBackground(GCampColor::darkGrey);
 	console->rect(x + _x, y + _y, width, 1, true, TCOD_BKGND_SET);
-	console->setDefaultBackground(Color::black);
+	console->setDefaultBackground(GCampColor::black);
 	if(value) {
 		console->print(x + _x + width / 2, y + _y, value->c_str());
 	} else {
@@ -372,8 +372,8 @@ void Panel::ShowModal() {
 	TCODMouse::showCursor(true);
 	while (true) {
 		TCODConsole::root->clear();
-		TCODConsole::root->setDefaultForeground(Color::white);
-		TCODConsole::root->setDefaultBackground(Color::black);
+		TCODConsole::root->setDefaultForeground(GCampColor::white);
+		TCODConsole::root->setDefaultBackground(GCampColor::black);
 		TCODConsole::blit(background, 0, 0, Game::Inst()->ScreenWidth(), Game::Inst()->ScreenHeight(),
 			TCODConsole::root, 0, 0, 0.7F, 1.0F);
 

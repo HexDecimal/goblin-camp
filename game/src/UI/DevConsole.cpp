@@ -103,11 +103,11 @@ struct DevConsole {
 		
 		canvas.clear();
 		canvas.setAlignment(TCOD_LEFT);
-		canvas.setDefaultBackground(Color::black);
-		canvas.setDefaultForeground(Color::white);
+		canvas.setDefaultBackground(GCampColor::black);
+		canvas.setDefaultForeground(GCampColor::white);
 		
 		canvas.print(0, 0, "[In  %d]", inputID);
-		canvas.setDefaultForeground(Color::sky);
+		canvas.setDefaultForeground(GCampColor::sky);
 		
 		unsigned y = 1;
 		BOOST_FOREACH(std::string token, inTok) {
@@ -117,9 +117,9 @@ struct DevConsole {
 		
 		++y;
 		
-		canvas.setDefaultForeground(Color::white);
+		canvas.setDefaultForeground(GCampColor::white);
 		canvas.print(0, y, "[Out %d]", inputID);
-		canvas.setDefaultForeground(error ? Color::amber : Color::chartreuse);
+		canvas.setDefaultForeground(error ? GCampColor::amber : GCampColor::chartreuse);
 		
 		++y;
 		BOOST_FOREACH(std::string token, outTok) {
@@ -214,8 +214,8 @@ void ShowDevConsole() {
 			console.input.push_back(key.c);
 		}
 		
-		c->setDefaultForeground(Color::white);
-		c->setDefaultBackground(Color::black);
+		c->setDefaultForeground(GCampColor::white);
+		c->setDefaultBackground(GCampColor::black);
 		c->printFrame(x, y, w, h, true, TCOD_BKGND_SET, "Developer console");
 		c->setAlignment(TCOD_LEFT);
 		
