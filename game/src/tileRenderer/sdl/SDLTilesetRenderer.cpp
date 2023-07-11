@@ -184,10 +184,12 @@ void SDLTilesetRenderer::render(void *surf) {
 	}
 	/* If we are in Loading screen thread we should not do complex SDL rendering */
 	/* FIXME this is a hack, we need better way to do it */
+#if GCAMP_USE_THREADS
 	if (Game::loadingScreenMutex.try_lock())
 	{
 		SDL_BlitSurface(tcod, &srcRect, mapSurface.get(), &dstRect);
 		SDL_BlitSurface(mapSurface.get(), &srcRect, screen, &dstRect);
 		Game::loadingScreenMutex.unlock();
 	}
+#endif
 }
