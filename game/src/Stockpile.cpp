@@ -18,6 +18,7 @@ along with Goblin Camp. If not, see <http://www.gnu.org/licenses/>.*/
 #include <boost/algorithm/string.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/shared_ptr.hpp>
+#include <random>
 
 #include "Random.hpp"
 #include "Stockpile.hpp"
@@ -374,7 +375,9 @@ bool Stockpile::Allowed(std::set<ItemCategory> cats) {
 static bool FindAdjacentTo(const Coordinate& p, int uid, Coordinate *out) {
 	//TODO factorize adjacent traversal over multiple files
 	Direction dirs[4] = { WEST, EAST, NORTH, SOUTH };
-	std::random_shuffle(dirs, dirs+4); //avoid predictabiliy
+	std::random_device rd;
+	std::minstd_rand rnd_generator(rd());
+	std::shuffle(dirs, dirs + 4, rnd_generator); //avoid predictability
 	for (int i = 0; i < 4; ++i) {
 		Coordinate candidate = p + Coordinate::DirectionToCoordinate(dirs[i]);
 		if (Map::Inst()->GetConstruction(candidate) == uid) {
