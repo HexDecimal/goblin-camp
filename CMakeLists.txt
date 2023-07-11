@@ -93,6 +93,8 @@ target_link_libraries("goblin-camp" PRIVATE
   OpenGL::GL
   libtcod::libtcod
 )
+# Explciitly include header-only Boost libraries for the configuration provider
+target_include_directories("goblin-camp" PRIVATE ${Boost_INCLUDE_DIRS})
 
 ADD_SUBDIRECTORY("game")
 
