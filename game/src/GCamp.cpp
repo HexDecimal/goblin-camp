@@ -709,7 +709,7 @@ void SettingsMenu() {
 		fg = GCampColor::white;
 		tcod::print(*TCODConsole::root, {x + 1, currentY}, "Renderer", fg, bg, TCOD_LEFT);
 
-		for (unsigned int idx = 0; idx < rendererCount; ++idx) {
+		for (int idx = 0; idx < rendererCount; ++idx) {
 			if (renderer == renderers[idx].renderer && useTileset == renderers[idx].useTileset) {
 				fg = GCampColor::green;
 			} else {
