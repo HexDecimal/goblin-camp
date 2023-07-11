@@ -226,6 +226,10 @@ target_sources("goblin-camp" PRIVATE ${main_SRC} ${data_SRC} ${scripting_SRC} ${
 target_include_directories("goblin-camp" PRIVATE BEFORE "game/include")
 target_include_directories("goblin-camp" PRIVATE "vendor/python-modules")
 
+# Add headers as sources for the configuration provider
+file(GLOB_RECURSE game_headers CONFIGURE_DEPENDS "game/include/*.hpp")
+target_sources("goblin-camp" PRIVATE ${game_headers})
+
 target_compile_definitions("goblin-camp" PRIVATE GCAMP_USE_THREADS=$<BOOL:${USE_THREADS}>)
 target_compile_definitions("goblin-camp" PRIVATE GCAMP_VERSION=\"${GCAMP_VERSION}\")
 target_compile_definitions("goblin-camp" PRIVATE GCAMP_VERSION_IS_RELEASE=$<BOOL:${GCAMP_VERSION_IS_RELEASE}>)
